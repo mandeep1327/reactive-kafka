@@ -1,0 +1,2394 @@
+{
+  "type" : "record",
+  "name" : "GEMSPubType",
+  "namespace" : "com.maersk.jaxb.pojo",
+  "fields" : [ {
+    "name" : "partner",
+    "type" : [ "null", {
+      "type" : "record",
+      "name" : "PartnerType",
+      "fields" : [ {
+        "name" : "ampscntlNo",
+        "type" : [ "null", "string" ]
+      }, {
+        "name" : "ampsmsgType",
+        "type" : [ "null", "string" ]
+      }, {
+        "name" : "ampsrcvrID",
+        "type" : [ "null", "string" ]
+      }, {
+        "name" : "ampssndrID",
+        "type" : [ "null", "string" ]
+      }, {
+        "name" : "gemssubID",
+        "type" : [ "null", "string" ]
+      }, {
+        "name" : "languageCode",
+        "type" : [ "null", "string" ]
+      }, {
+        "name" : "sendAMPSIsaCntlNoToGEMS",
+        "type" : [ "null", "string" ]
+      } ]
+    } ]
+  }, {
+    "name" : "pubSet",
+    "type" : [ "null", {
+      "type" : "array",
+      "items" : {
+        "type" : "record",
+        "name" : "PubSetType",
+        "fields" : [ {
+          "name" : "cargo",
+          "type" : [ "null", {
+            "type" : "record",
+            "name" : "CargoType",
+            "fields" : [ {
+              "name" : "totCargQuan",
+              "type" : [ "null", {
+                "type" : "string",
+                "java-class" : "java.math.BigDecimal"
+              } ]
+            }, {
+              "name" : "totCargVol",
+              "type" : [ "null", {
+                "type" : "array",
+                "items" : {
+                  "type" : "record",
+                  "name" : "TotCargVolType",
+                  "fields" : [ {
+                    "name" : "qual",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "value",
+                    "type" : [ "null", {
+                      "type" : "string",
+                      "java-class" : "java.math.BigDecimal"
+                    } ]
+                  } ]
+                }
+              } ]
+            }, {
+              "name" : "totCargWgt",
+              "type" : [ "null", {
+                "type" : "array",
+                "items" : {
+                  "type" : "record",
+                  "name" : "TotCargWgtType",
+                  "fields" : [ {
+                    "name" : "qual",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "value",
+                    "type" : [ "null", {
+                      "type" : "string",
+                      "java-class" : "java.math.BigDecimal"
+                    } ]
+                  } ]
+                }
+              } ]
+            } ]
+          } ]
+        }, {
+          "name" : "customs",
+          "type" : [ "null", {
+            "type" : "array",
+            "items" : {
+              "type" : "record",
+              "name" : "CustomsType",
+              "fields" : [ {
+                "name" : "actVsslArrDte",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "amsstat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "arrBrkStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "arrCarStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "arrHldDiscPort",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "atsstatCde",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "brkAuth",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "brkAuthDte",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "brkAuthTim",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "brkInbNo",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "brkInbTyp",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "cargoBrkExpStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "cargoExpAuth",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "cargoExpAuthDte",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "cargoExpAuthTim",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "cdsstat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "clearPort",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "cnruInbNo",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "customsStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "delLoc",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "discPort",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "examStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "examTransStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "freeTmExpDte",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "freightRelInd",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "genOrdDte",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "genOrdExtStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "genOrdNo",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "genOrdOrdStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "genOrdPendStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "impCntryCde",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "inbAuth",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "inbAuthDte",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "inbAuthTim",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "inbMIB",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "inbNo",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "inbTyp",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "mskHld",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "mskHldDte",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "otherDte",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "otherStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "otherTim",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "pickupNo",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "pttauthDte",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "pttauthStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "pttauthTim",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "railBondNo",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "relCargoPcs",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "relStatCde",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "scac",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "uscustDte",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "uscustHldDelLocStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "uscustHldDiscPortStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "uscustHldLoadPortStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "uscustStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "uscustTim",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "usdadte",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "usdahldDiscPortStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "usdahldLoadPortStat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "usdastat",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "usdatim",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "vesselId",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "voyageId",
+                "type" : [ "null", "string" ]
+              } ]
+            }
+          } ]
+        }, {
+          "name" : "deadline",
+          "type" : [ "null", {
+            "type" : "record",
+            "name" : "DeadlineType",
+            "fields" : [ {
+              "name" : "eta",
+              "type" : [ "null", {
+                "type" : "long",
+                "java-class" : "java.util.Calendar"
+              } ]
+            }, {
+              "name" : "etd",
+              "type" : [ "null", {
+                "type" : "long",
+                "java-class" : "java.util.Calendar"
+              } ]
+            }, {
+              "name" : "group",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "inboundGeoDirection",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "inboundVoyage",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "loc",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "newProposedCuttoff",
+              "type" : [ "null", {
+                "type" : "long",
+                "java-class" : "java.util.Calendar"
+              } ]
+            }, {
+              "name" : "offsetMode",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "offsetType",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "oldProposedCuttoff",
+              "type" : [ "null", {
+                "type" : "long",
+                "java-class" : "java.util.Calendar"
+              } ]
+            }, {
+              "name" : "outboundGeoDirection",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "outboundVoyage",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "serviceCode",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "terminalCode",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "terminalName",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "userEmail",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "vesselCode",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "vesselName",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "vesselOperator",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "vesselPortCallUserID",
+              "type" : [ "null", "string" ]
+            } ]
+          } ]
+        }, {
+          "name" : "equipment",
+          "type" : [ "null", {
+            "type" : "array",
+            "items" : {
+              "type" : "record",
+              "name" : "EquipmentType",
+              "fields" : [ {
+                "name" : "beamHgt",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "cargo",
+                "type" : [ "null", {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "record",
+                    "name" : "CargoDetailType",
+                    "fields" : [ {
+                      "name" : "cargoUVol",
+                      "type" : [ "null", {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "record",
+                          "name" : "CargoUVolType",
+                          "fields" : [ {
+                            "name" : "qual",
+                            "type" : [ "null", "string" ]
+                          }, {
+                            "name" : "value",
+                            "type" : [ "null", {
+                              "type" : "string",
+                              "java-class" : "java.math.BigDecimal"
+                            } ]
+                          } ]
+                        }
+                      } ]
+                    }, {
+                      "name" : "cargoUWgt",
+                      "type" : [ "null", {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "record",
+                          "name" : "CargoUWgtType",
+                          "fields" : [ {
+                            "name" : "qual",
+                            "type" : [ "null", "string" ]
+                          }, {
+                            "name" : "value",
+                            "type" : [ "null", {
+                              "type" : "string",
+                              "java-class" : "java.math.BigDecimal"
+                            } ]
+                          } ]
+                        }
+                      } ]
+                    }, {
+                      "name" : "pkgQuan",
+                      "type" : [ "null", {
+                        "type" : "string",
+                        "java-class" : "java.math.BigDecimal"
+                      } ]
+                    }, {
+                      "name" : "reference",
+                      "type" : [ "null", {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "record",
+                          "name" : "ReferenceType",
+                          "fields" : [ {
+                            "name" : "name",
+                            "type" : [ "null", "string" ]
+                          }, {
+                            "name" : "typ",
+                            "type" : [ "null", "string" ]
+                          }, {
+                            "name" : "value",
+                            "type" : [ "null", "string" ]
+                          } ]
+                        }
+                      } ]
+                    } ]
+                  }
+                } ]
+              }, {
+                "name" : "eqcolFld",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "eqcollap",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "eqctlAtm",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "eqptCargo",
+                "type" : [ "null", {
+                  "type" : "record",
+                  "name" : "EqptCargoType",
+                  "fields" : [ {
+                    "name" : "cargoUVol",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : "CargoUVolType"
+                    } ]
+                  }, {
+                    "name" : "cargoUWgt",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : "CargoUWgtType"
+                    } ]
+                  }, {
+                    "name" : "pkgQuan",
+                    "type" : [ "null", {
+                      "type" : "string",
+                      "java-class" : "java.math.BigDecimal"
+                    } ]
+                  }, {
+                    "name" : "reference",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : "ReferenceType"
+                    } ]
+                  } ]
+                } ]
+              }, {
+                "name" : "eqptNo",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "isocode",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "material",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "miscInfo",
+                "type" : [ "null", {
+                  "type" : "record",
+                  "name" : "MiscInfoType",
+                  "fields" : [ {
+                    "name" : "type",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "value",
+                    "type" : [ "null", "string" ]
+                  } ]
+                } ]
+              }, {
+                "name" : "move",
+                "type" : [ "null", {
+                  "type" : "record",
+                  "name" : "MoveType",
+                  "fields" : [ {
+                    "name" : "actArvDestTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actCntry",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actDiscTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actDte",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actFor",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actGateInTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actGateOutTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actLoadTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actLoc",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actSysLCTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actSysLCUsr",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actTim",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actVesAtvTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "actVesDepTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "carrier",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "chassis",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "delTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "estArvDestTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "fdiscTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "finalDestLoc",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "fportDisc",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "grossWgt",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "record",
+                        "name" : "GrossWgtType",
+                        "fields" : [ {
+                          "name" : "qual",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "value",
+                          "type" : [ "null", {
+                            "type" : "string",
+                            "java-class" : "java.math.BigDecimal"
+                          } ]
+                        } ]
+                      }
+                    } ]
+                  }, {
+                    "name" : "imo1",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "imo2",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "imo3",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "lineCde",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "loadPort",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "loadTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "offRailPort",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "offRailPortTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "operator",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "partnerRailInfo",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "record",
+                        "name" : "PartnerRailInfoType",
+                        "fields" : [ {
+                          "name" : "destinationRailIntermodalTerminal",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "originRailIntermodalTerminal",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "railLastFreeDate",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "railPickNumber",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "train",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "trainRailcarNumber",
+                          "type" : [ "null", "string" ]
+                        } ]
+                      }
+                    } ]
+                  }, {
+                    "name" : "placeDel",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "portDisc",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "portLoad",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "portReceipt",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "receiptTS",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "refNo",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "seal",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "record",
+                        "name" : "SealType",
+                        "fields" : [ {
+                          "name" : "typ",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "value",
+                          "type" : [ "null", "string" ]
+                        } ]
+                      }
+                    } ]
+                  }, {
+                    "name" : "statEmpty",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "statLivReef",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "statOOG",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "statSound",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "tcn",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "tcnGroup",
+                    "type" : [ "null", {
+                      "type" : "record",
+                      "name" : "TcnGroupType",
+                      "fields" : [ {
+                        "name" : "tcnData",
+                        "type" : [ "null", {
+                          "type" : "array",
+                          "items" : "string"
+                        } ]
+                      } ]
+                    } ]
+                  }, {
+                    "name" : "transDay",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "truckerReference",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "unNum1",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "unNum2",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "unNum3",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "vesselCde",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "voyage",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "workOrd",
+                    "type" : [ "null", "string" ]
+                  } ]
+                } ]
+              }, {
+                "name" : "outHgt",
+                "type" : [ "null", {
+                  "type" : "string",
+                  "java-class" : "java.math.BigDecimal"
+                } ]
+              }, {
+                "name" : "outHgtUnit",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "ownTyp",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "reference",
+                "type" : [ "null", {
+                  "type" : "array",
+                  "items" : "ReferenceType"
+                } ]
+              }, {
+                "name" : "rkembolNo",
+                "type" : [ "null", {
+                  "type" : "record",
+                  "name" : "RKEMBolNoType",
+                  "fields" : [ {
+                    "name" : "bolNo",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : "string"
+                    } ]
+                  } ]
+                } ]
+              }, {
+                "name" : "rkemshipNo",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "size",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "subType",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "type",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "vent",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "vgmmethod",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "vgmsourceFlag",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "vgmwgt",
+                "type" : [ "null", {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "record",
+                    "name" : "VGMWgtType",
+                    "fields" : [ {
+                      "name" : "qual",
+                      "type" : [ "null", "string" ]
+                    }, {
+                      "name" : "value",
+                      "type" : [ "null", {
+                        "type" : "string",
+                        "java-class" : "java.math.BigDecimal"
+                      } ]
+                    } ]
+                  }
+                } ]
+              } ]
+            }
+          } ]
+        }, {
+          "name" : "event",
+          "type" : [ "null", {
+            "type" : "record",
+            "name" : "EventType",
+            "fields" : [ {
+              "name" : "eventAct",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "eventId",
+              "type" : [ "null", {
+                "type" : "long",
+                "java-class" : "java.lang.Long"
+              } ]
+            }, {
+              "name" : "gemstsutc",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "reasons",
+              "type" : [ "null", {
+                "type" : "record",
+                "name" : "RefReasonsType",
+                "fields" : [ {
+                  "name" : "reason",
+                  "type" : [ "null", {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "record",
+                      "name" : "RefReasonType",
+                      "fields" : [ {
+                        "name" : "code",
+                        "type" : [ "null", "string" ]
+                      }, {
+                        "name" : "description",
+                        "type" : [ "null", "string" ]
+                      }, {
+                        "name" : "ref",
+                        "type" : [ "null", "string" ]
+                      } ]
+                    }
+                  } ]
+                } ]
+              } ]
+            }, {
+              "name" : "rkemmove",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "srcSys",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "srcSysTimeStamp",
+              "type" : [ "null", "string" ]
+            } ]
+          } ]
+        }, {
+          "name" : "gttsvessel",
+          "type" : [ "null", {
+            "type" : "record",
+            "name" : "GTTSVesselType",
+            "fields" : [ {
+              "name" : "arvDepInd",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "gttsdte",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "gttsterm",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "gttstim",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "gttsusrId",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "port",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "vessel",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "voyage",
+              "type" : [ "null", "string" ]
+            } ]
+          } ]
+        }, {
+          "name" : "hermesEvent",
+          "type" : [ "null", {
+            "type" : "record",
+            "name" : "HermesEventType",
+            "fields" : [ {
+              "name" : "complianceRequired",
+              "type" : [ "null", {
+                "type" : "enum",
+                "name" : "BoolType",
+                "symbols" : [ "Y", "N" ]
+              } ]
+            }, {
+              "name" : "hasDataQualityErrors",
+              "type" : [ "null", "BoolType" ]
+            }, {
+              "name" : "hermesCompliance",
+              "type" : [ "null", {
+                "type" : "array",
+                "items" : {
+                  "type" : "record",
+                  "name" : "HermesComplianceType",
+                  "fields" : [ {
+                    "name" : "amendComments",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "amendOriginalMessageID",
+                    "type" : {
+                      "type" : "long",
+                      "java-class" : "java.lang.Long"
+                    }
+                  }, {
+                    "name" : "amendReasonCode",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "amendReasonDesc",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compATDLoadPort",
+                    "type" : [ "null", {
+                      "type" : "long",
+                      "java-class" : "java.util.Calendar"
+                    } ]
+                  }, {
+                    "name" : "compCRN",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compDischargePort",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compDischargePortEta",
+                    "type" : [ "null", {
+                      "type" : "long",
+                      "java-class" : "java.util.Calendar"
+                    } ]
+                  }, {
+                    "name" : "compFinalSubDeadline",
+                    "type" : [ "null", {
+                      "type" : "long",
+                      "java-class" : "java.util.Calendar"
+                    } ]
+                  }, {
+                    "name" : "compImportManifestClosureState",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compImportVoyageFPOE",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compIsImportManifest",
+                    "type" : [ "null", "BoolType" ]
+                  }, {
+                    "name" : "compIsLoadMandatory",
+                    "type" : [ "null", "BoolType" ]
+                  }, {
+                    "name" : "compLoadPort",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compMessageId",
+                    "type" : {
+                      "type" : "long",
+                      "java-class" : "java.lang.Long"
+                    }
+                  }, {
+                    "name" : "compMessageStatusCd",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compMessageStatusId",
+                    "type" : {
+                      "type" : "long",
+                      "java-class" : "java.lang.Long"
+                    }
+                  }, {
+                    "name" : "compMessageTypeCd",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compMessageTypeDesc",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compReceiverPort",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compReceiverPortImportVoyage",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compVesselAgentStatusDispositionCd",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compVesselAgentStatusDispositionCdDesc",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compVesselName",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compVesselNbr",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "compVoyageNbr",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "complianceMessage",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "record",
+                        "name" : "ComplianceMessageType",
+                        "fields" : [ {
+                          "name" : "tag",
+                          "type" : [ "null", {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "record",
+                              "name" : "TAGType",
+                              "fields" : [ {
+                                "name" : "action",
+                                "type" : [ "null", "string" ]
+                              }, {
+                                "name" : "value",
+                                "type" : [ "null", "string" ]
+                              } ]
+                            }
+                          } ]
+                        } ]
+                      }
+                    } ]
+                  }, {
+                    "name" : "hermesDataQualityError",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "record",
+                        "name" : "HermesDataQualityErrorType",
+                        "fields" : [ {
+                          "name" : "attributeName",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "errorMessage",
+                          "type" : [ "null", "string" ]
+                        } ]
+                      }
+                    } ]
+                  }, {
+                    "name" : "respCustomsReferenceNbr",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "respDispositionCd",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "respDispositionCdDesc",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "respDispositionSubCd",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "respDispositionSubCdDesc",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "respMessage",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "shipment",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "record",
+                        "name" : "ComplianceShipmentType",
+                        "fields" : [ {
+                          "name" : "bookedByEMail",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "bookingCountry",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "businessUnitCode",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "operRouteReference",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "shipmentNbr",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "versionId",
+                          "type" : [ "null", "string" ]
+                        } ]
+                      }
+                    } ]
+                  } ]
+                }
+              } ]
+            }, {
+              "name" : "hermesEventId",
+              "type" : [ "null", "string" ]
+            }, {
+              "name" : "hermesEventTimestamp",
+              "type" : [ "null", {
+                "type" : "long",
+                "java-class" : "java.util.Calendar"
+              } ]
+            }, {
+              "name" : "operator",
+              "type" : [ "null", "string" ]
+            } ]
+          } ]
+        }, {
+          "name" : "initialTransportPlan",
+          "type" : [ "null", {
+            "type" : "array",
+            "items" : {
+              "type" : "record",
+              "name" : "TransportPlanType",
+              "fields" : [ {
+                "name" : "endCustomsLoc",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "endLoc",
+                "type" : [ "null", {
+                  "type" : "record",
+                  "name" : "EndLocType",
+                  "fields" : [ {
+                    "name" : "func",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "value",
+                    "type" : [ "null", "string" ]
+                  } ]
+                } ]
+              }, {
+                "name" : "endLocCntry",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "endState",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "endTerm",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "gcssexpArvTS",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "gcssexpArvTSUTC",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "gcssexpDepTS",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "gcssexpDepTSUTC",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "gsisexpArvTS",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "gsisexpDepTS",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "gttsactArvTS",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "gttsactDepTS",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "gttsexpArvTS",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "gttsexpDepTS",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "legSeq",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "startCustomsLoc",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "startLoc",
+                "type" : [ "null", {
+                  "type" : "record",
+                  "name" : "StartLocType",
+                  "fields" : [ {
+                    "name" : "func",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "value",
+                    "type" : [ "null", "string" ]
+                  } ]
+                } ]
+              }, {
+                "name" : "startLocCntry",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "startState",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "startTerm",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "transMode",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "vesselCde",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "voyDoc",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "voyage",
+                "type" : [ "null", "string" ]
+              } ]
+            }
+          } ]
+        }, {
+          "name" : "lctransportPlan",
+          "type" : [ "null", {
+            "type" : "array",
+            "items" : "TransportPlanType"
+          } ]
+        }, {
+          "name" : "motherTransportPlan",
+          "type" : [ "null", {
+            "type" : "array",
+            "items" : "TransportPlanType"
+          } ]
+        }, {
+          "name" : "operationalCAT",
+          "type" : [ "null", {
+            "type" : "array",
+            "items" : {
+              "type" : "record",
+              "name" : "CATElementsType",
+              "fields" : [ {
+                "name" : "cargoAvailTime",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "cargoAvailTimeEnd",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "catadvManiCutoff",
+                "type" : [ "null", {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "record",
+                    "name" : "CATAdvManiCutoffType",
+                    "fields" : [ {
+                      "name" : "advanceManiCutoff",
+                      "type" : [ "null", "string" ]
+                    }, {
+                      "name" : "hermesComplianceId",
+                      "type" : [ "null", "string" ]
+                    } ]
+                  }
+                } ]
+              }, {
+                "name" : "catgateTimes",
+                "type" : [ "null", {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "record",
+                    "name" : "CATGateTimesType",
+                    "fields" : [ {
+                      "name" : "dayOfWeek",
+                      "type" : [ "null", "string" ]
+                    }, {
+                      "name" : "gateClosingHr",
+                      "type" : [ "null", "string" ]
+                    }, {
+                      "name" : "gateOpeningHr",
+                      "type" : [ "null", "string" ]
+                    }, {
+                      "name" : "gateType",
+                      "type" : [ "null", "string" ]
+                    } ]
+                  }
+                } ]
+              }, {
+                "name" : "cattype",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "destEIT",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "earliestFirstLoadPortCutoff",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "exportCustDocCutoff",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "finalCY",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "firstCY",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "firstLoadPort",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "latestFirstLoadPortCutoff",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "latestInlandExpCYCutoff",
+                "type" : [ "null", "string" ]
+              } ]
+            }
+          } ]
+        }, {
+          "name" : "productCAT",
+          "type" : [ "null", {
+            "type" : "array",
+            "items" : "CATElementsType"
+          } ]
+        }, {
+          "name" : "referenceShipments",
+          "type" : [ "null", {
+            "type" : "array",
+            "items" : {
+              "type" : "record",
+              "name" : "ReferenceShipmentType",
+              "fields" : [ {
+                "name" : "equipment",
+                "type" : [ "null", {
+                  "type" : "array",
+                  "items" : "EquipmentType"
+                } ]
+              }, {
+                "name" : "initialTransportPlan",
+                "type" : [ "null", {
+                  "type" : "array",
+                  "items" : "TransportPlanType"
+                } ]
+              }, {
+                "name" : "lctransportPlan",
+                "type" : [ "null", {
+                  "type" : "array",
+                  "items" : "TransportPlanType"
+                } ]
+              }, {
+                "name" : "shipment",
+                "type" : [ "null", {
+                  "type" : "record",
+                  "name" : "ShipmentType",
+                  "fields" : [ {
+                    "name" : "bookNo",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "breakBulk",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "cargoTypes",
+                    "type" : [ "null", {
+                      "type" : "record",
+                      "name" : "CargoTypesType",
+                      "fields" : [ {
+                        "name" : "cargoType",
+                        "type" : [ "null", {
+                          "type" : "record",
+                          "name" : "CargoTypeType",
+                          "fields" : [ {
+                            "name" : "applies",
+                            "type" : [ "null", "string" ]
+                          }, {
+                            "name" : "typ",
+                            "type" : [ "null", "string" ]
+                          } ]
+                        } ]
+                      } ]
+                    } ]
+                  }, {
+                    "name" : "cargoes",
+                    "type" : [ "null", {
+                      "type" : "record",
+                      "name" : "CargoesShipmenType",
+                      "fields" : [ {
+                        "name" : "cargo",
+                        "type" : [ "null", {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "record",
+                            "name" : "CargoShipType",
+                            "fields" : [ {
+                              "name" : "cargoConditionings",
+                              "type" : [ "null", {
+                                "type" : "record",
+                                "name" : "CargoConditioningsType",
+                                "fields" : [ {
+                                  "name" : "cargoConditioning",
+                                  "type" : [ "null", {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "record",
+                                      "name" : "CargoConditioningType",
+                                      "fields" : [ {
+                                        "name" : "atmosphereControlRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "co2Percentage",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "co2PercentageRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "coldTreatmentRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "containerConditioningType",
+                                        "type" : [ "null", {
+                                          "type" : "record",
+                                          "name" : "ContainerConditioningTypeType",
+                                          "fields" : [ {
+                                            "name" : "typ",
+                                            "type" : [ "null", "string" ]
+                                          }, {
+                                            "name" : "value",
+                                            "type" : [ "null", "string" ]
+                                          } ]
+                                        } ]
+                                      }, {
+                                        "name" : "containerTypeRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "dataLoggerRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "drainHolesOpen",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "ethyleneFilterCount",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "fishloaderService",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "freezerStuffContainerRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "gensetFromOrigin",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "gensetNumberDestination",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "gensetNumberOrigin",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "gensetToDestination",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "highValueCargo",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "hotStuffing",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "humidityPerCentage",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "humidityRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "individualQuickFrozen",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "manualReviewCompleted",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "measureUnitTemperature",
+                                        "type" : [ "null", {
+                                          "type" : "record",
+                                          "name" : "MeasureUnitTemperatureType",
+                                          "fields" : [ {
+                                            "name" : "typ",
+                                            "type" : [ "null", "string" ]
+                                          }, {
+                                            "name" : "value",
+                                            "type" : [ "null", "string" ]
+                                          } ]
+                                        } ]
+                                      }, {
+                                        "name" : "measureUnitVentilation",
+                                        "type" : [ "null", {
+                                          "type" : "record",
+                                          "name" : "MeasureUnitVentilationType",
+                                          "fields" : [ {
+                                            "name" : "typ",
+                                            "type" : [ "null", "string" ]
+                                          }, {
+                                            "name" : "value",
+                                            "type" : [ "null", "string" ]
+                                          } ]
+                                        } ]
+                                      }, {
+                                        "name" : "multipleSetpointsRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "o2Percentage",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "o2PercentageRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "preCoolingRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "probesCount",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "reeferTemplateVersion",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "reeferValidationStatus",
+                                        "type" : [ "null", {
+                                          "type" : "record",
+                                          "name" : "ReeferValidationStatusType",
+                                          "fields" : [ {
+                                            "name" : "typ",
+                                            "type" : [ "null", "string" ]
+                                          }, {
+                                            "name" : "value",
+                                            "type" : [ "null", "string" ]
+                                          } ]
+                                        } ]
+                                      }, {
+                                        "name" : "sortieContainerRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "temperature",
+                                        "type" : [ "null", {
+                                          "type" : "array",
+                                          "items" : {
+                                            "type" : "record",
+                                            "name" : "TemperatureType",
+                                            "fields" : [ {
+                                              "name" : "typ",
+                                              "type" : [ "null", "string" ]
+                                            }, {
+                                              "name" : "value",
+                                              "type" : [ "null", "string" ]
+                                            } ]
+                                          }
+                                        } ]
+                                      }, {
+                                        "name" : "temperatureLo",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "temperatureRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "timePropertiesValidated",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "ventilationRequired",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "ventilationVolume",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "ventilationVolumeCbmHr",
+                                        "type" : [ "null", "string" ]
+                                      } ]
+                                    }
+                                  } ]
+                                } ]
+                              } ]
+                            } ]
+                          }
+                        } ]
+                      } ]
+                    } ]
+                  }, {
+                    "name" : "delSvc",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "equipmentAssignments",
+                    "type" : [ "null", {
+                      "type" : "record",
+                      "name" : "EquipmentAssignmentsType",
+                      "fields" : [ {
+                        "name" : "equipmentAssignment",
+                        "type" : [ "null", {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "record",
+                            "name" : "EquipmentAssignmentType",
+                            "fields" : [ {
+                              "name" : "cargoes",
+                              "type" : [ "null", {
+                                "type" : "record",
+                                "name" : "EquipmentAssignmentCargos",
+                                "fields" : [ {
+                                  "name" : "cargo",
+                                  "type" : [ "null", {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "record",
+                                      "name" : "EquipmentAssignmentCargoType",
+                                      "fields" : [ {
+                                        "name" : "commodityCode",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "commodityName",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "customerSpecifiedHSCode",
+                                        "type" : [ "null", "string" ]
+                                      } ]
+                                    }
+                                  } ]
+                                } ]
+                              } ]
+                            }, {
+                              "name" : "eqptInstance",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "eqptNo",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "grossWgt",
+                              "type" : [ "null", {
+                                "type" : "array",
+                                "items" : {
+                                  "type" : "record",
+                                  "name" : "EqptGrossWgtType",
+                                  "fields" : [ {
+                                    "name" : "qual",
+                                    "type" : [ "null", "string" ]
+                                  }, {
+                                    "name" : "value",
+                                    "type" : [ "null", {
+                                      "type" : "string",
+                                      "java-class" : "java.math.BigDecimal"
+                                    } ]
+                                  } ]
+                                }
+                              } ]
+                            }, {
+                              "name" : "isocode",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "outHgtUnit",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "ownTyp",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "size",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "subType",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "tareWgt",
+                              "type" : [ "null", {
+                                "type" : "array",
+                                "items" : {
+                                  "type" : "record",
+                                  "name" : "EqptTareWgtType",
+                                  "fields" : [ {
+                                    "name" : "qual",
+                                    "type" : [ "null", "string" ]
+                                  }, {
+                                    "name" : "value",
+                                    "type" : [ "null", {
+                                      "type" : "string",
+                                      "java-class" : "java.math.BigDecimal"
+                                    } ]
+                                  } ]
+                                }
+                              } ]
+                            }, {
+                              "name" : "vent",
+                              "type" : [ "null", "string" ]
+                            } ]
+                          }
+                        } ]
+                      } ]
+                    } ]
+                  }, {
+                    "name" : "haulageArrangements",
+                    "type" : [ "null", {
+                      "type" : "record",
+                      "name" : "HaulageArrangementsType",
+                      "fields" : [ {
+                        "name" : "haulageArrangement",
+                        "type" : [ "null", {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "record",
+                            "name" : "HaulageArrangementType",
+                            "fields" : [ {
+                              "name" : "arrangementType",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "carrierBond",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "clearanceSameAsPickup",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "createTimestamp",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "haulageArrangeEquipments",
+                              "type" : [ "null", {
+                                "type" : "record",
+                                "name" : "HaulageArrangeEquipmentsType",
+                                "fields" : [ {
+                                  "name" : "haulageArrangeEquipment",
+                                  "type" : [ "null", {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "record",
+                                      "name" : "HaulageArrangeEquipmentType",
+                                      "fields" : [ {
+                                        "name" : "createTimestamp",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "equipmentAssignment",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "haulageEquipments",
+                                        "type" : [ "null", {
+                                          "type" : "record",
+                                          "name" : "HaulageEquipmentsType",
+                                          "fields" : [ {
+                                            "name" : "haulageEquipment",
+                                            "type" : [ "null", {
+                                              "type" : "array",
+                                              "items" : {
+                                                "type" : "record",
+                                                "name" : "HaulageEquipmentType",
+                                                "fields" : [ {
+                                                  "name" : "createTimestamp",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "haulageArrangeEquipment",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "haulageArrangementDepot",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "haulageSiteArrive",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "haulageSiteDepart",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "haulageSiteVisit",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "sequenceInEquipment",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "timingArriveFromLocal",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "timingArriveToLocal",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "timingDepartFromLocal",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "timingDepartToLocal",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "truckerPreference",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "updateTimeStamp",
+                                                  "type" : [ "null", "string" ]
+                                                } ]
+                                              }
+                                            } ]
+                                          } ]
+                                        } ]
+                                      }, {
+                                        "name" : "instanceID",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "operationalStage",
+                                        "type" : [ "null", {
+                                          "type" : "record",
+                                          "name" : "OpStageType",
+                                          "fields" : [ {
+                                            "name" : "typ",
+                                            "type" : [ "null", "string" ]
+                                          }, {
+                                            "name" : "value",
+                                            "type" : [ "null", "string" ]
+                                          } ]
+                                        } ]
+                                      }, {
+                                        "name" : "updateTimeStamp",
+                                        "type" : [ "null", "string" ]
+                                      } ]
+                                    }
+                                  } ]
+                                } ]
+                              } ]
+                            }, {
+                              "name" : "haulageNumber",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "haulageSites",
+                              "type" : [ "null", {
+                                "type" : "record",
+                                "name" : "HaulageSitesType",
+                                "fields" : [ {
+                                  "name" : "haulageSite",
+                                  "type" : [ "null", {
+                                    "type" : "array",
+                                    "items" : {
+                                      "type" : "record",
+                                      "name" : "HaulageSiteType",
+                                      "fields" : [ {
+                                        "name" : "address",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "address1",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "address2",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "address3",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "addressName",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "changeTimestamp",
+                                        "type" : [ "null", {
+                                          "type" : "long",
+                                          "java-class" : "java.util.Calendar"
+                                        } ]
+                                      }, {
+                                        "name" : "city",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "contactCellPhone",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "contactEmail",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "contactFax",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "contactHomeEmail",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "contactHomePhone",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "contactInitials",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "contactJobTitle",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "contactName",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "contactPhone",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "contactSex",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "country",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "createTimestamp",
+                                        "type" : [ "null", {
+                                          "type" : "long",
+                                          "java-class" : "java.util.Calendar"
+                                        } ]
+                                      }, {
+                                        "name" : "crtUser",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "emailAddress",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "extReferenceId",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "faxNumber",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "fkGeoArea",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "fkGeoAreaCountry",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "fkGeoAreaState",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "fkHaulageSiteType",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "fkRoutePoint",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "fkScvCustContact",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "fkScvCustNumberDoor",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "fkShipHaulage",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "fkSite",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "fxtRoutePoint",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "genericSiteAddresses",
+                                        "type" : [ "null", {
+                                          "type" : "record",
+                                          "name" : "GenericSiteAddressesType",
+                                          "fields" : [ {
+                                            "name" : "genericSiteAddress",
+                                            "type" : [ "null", {
+                                              "type" : "array",
+                                              "items" : {
+                                                "type" : "record",
+                                                "name" : "GenericSiteAddressType",
+                                                "fields" : [ {
+                                                  "name" : "address1",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "address2",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "address3",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "addressName",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "changeTimestamp",
+                                                  "type" : [ "null", {
+                                                    "type" : "long",
+                                                    "java-class" : "java.util.Calendar"
+                                                  } ]
+                                                }, {
+                                                  "name" : "city",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "country",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "createTimestamp",
+                                                  "type" : [ "null", {
+                                                    "type" : "long",
+                                                    "java-class" : "java.util.Calendar"
+                                                  } ]
+                                                }, {
+                                                  "name" : "crtUser",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "doDaac",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "emailAddress",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "extHaulaSite",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "extReferenceId",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "extShipParty",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "fax",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "fkHaulaSite",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "fkShipParty",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "importFax",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "instId",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "keyExchangeId",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "kind",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "name",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "phone",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "poBox",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "printableAddress1",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "printableAddress2",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "printableAddress3",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "printableAddress4",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "state",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "streetNo",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "updtuser",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "url",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "zipCity",
+                                                  "type" : [ "null", "string" ]
+                                                }, {
+                                                  "name" : "zipCode",
+                                                  "type" : [ "null", "string" ]
+                                                } ]
+                                              }
+                                            } ]
+                                          } ]
+                                        } ]
+                                      }, {
+                                        "name" : "geoArea",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "geoAreaAltText",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "geoAreaCountry",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "geoAreaState",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "haulgeSiteType",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "importFax",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "instanceID",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "instructions",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "keyExchangeId",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "kind",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "name",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "ownerName",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "phoneNumber",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "poBox",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "presentationSequence",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "rkstCityCode",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "rkstCountryCode",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "rkstSiteCode",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "rkstStateCode",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "site",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "state",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "streetNo",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "updtuser",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "url",
+                                        "type" : [ "null", "string" ]
+                                      }, {
+                                        "name" : "zipCode",
+                                        "type" : [ "null", "string" ]
+                                      } ]
+                                    }
+                                  } ]
+                                } ]
+                              } ]
+                            }, {
+                              "name" : "inbondNeeded",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "instanceID",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "isMerchantInspiredCarrier",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "operationalStage",
+                              "type" : [ "null", "OpStageType" ]
+                            }, {
+                              "name" : "shipment",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "tpdoc",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "truckerPreference",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "updateTimeStamp",
+                              "type" : [ "null", "string" ]
+                            } ]
+                          }
+                        } ]
+                      } ]
+                    } ]
+                  }, {
+                    "name" : "historyOfReasonsForTransportPlan",
+                    "type" : [ "null", {
+                      "type" : "record",
+                      "name" : "HistoryOfRollReasonType",
+                      "fields" : [ {
+                        "name" : "reason",
+                        "type" : [ "null", {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "record",
+                            "name" : "RollReasonsType",
+                            "fields" : [ {
+                              "name" : "code",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "reasonCategory",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "reasonCustomerView",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "reasonDescription",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "reasonDetailsCustomerView",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "routeUpdateReasonAction",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "routeUpdateReasonDetails",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "routeUpdateReasonTrigger",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "updateTimeStamp",
+                              "type" : [ "null", "string" ]
+                            } ]
+                          }
+                        } ]
+                      } ]
+                    } ]
+                  }, {
+                    "name" : "milTStamp",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "operationalRouteRef",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "operator",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "party",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "record",
+                        "name" : "PartyType",
+                        "fields" : [ {
+                          "name" : "addrLn1",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "addrLn2",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "addrLn3",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "city",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "cntry",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "concernCode",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "custName",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "custNo",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "custRefNo",
+                          "type" : [ "null", {
+                            "type" : "array",
+                            "items" : "string"
+                          } ]
+                        }, {
+                          "name" : "dodaac",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "postCde",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "roletyp",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "state",
+                          "type" : [ "null", "string" ]
+                        } ]
+                      }
+                    } ]
+                  }, {
+                    "name" : "pcfn",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "publishSpotROTPNotification",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "rcvSvc",
+                    "type" : [ "null", "string" ]
+                  }, {
+                    "name" : "reference",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : "ReferenceType"
+                    } ]
+                  }, {
+                    "name" : "tpchangeReason",
+                    "type" : [ "null", {
+                      "type" : "record",
+                      "name" : "TPChangeReasonType",
+                      "fields" : [ {
+                        "name" : "reason",
+                        "type" : [ "null", {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "record",
+                            "name" : "ReasonType",
+                            "fields" : [ {
+                              "name" : "code",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "type",
+                              "type" : [ "null", "string" ]
+                            }, {
+                              "name" : "value",
+                              "type" : [ "null", "string" ]
+                            } ]
+                          }
+                        } ]
+                      } ]
+                    } ]
+                  }, {
+                    "name" : "tpinfo",
+                    "type" : [ "null", {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "record",
+                        "name" : "TPInfoType",
+                        "fields" : [ {
+                          "name" : "email",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "lastEtaComm",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "lastEtdComm",
+                          "type" : [ "null", "string" ]
+                        }, {
+                          "name" : "xlsub",
+                          "type" : [ "null", "string" ]
+                        } ]
+                      }
+                    } ]
+                  } ]
+                } ]
+              }, {
+                "name" : "transportPlan",
+                "type" : [ "null", {
+                  "type" : "array",
+                  "items" : "TransportPlanType"
+                } ]
+              } ]
+            }
+          } ]
+        }, {
+          "name" : "shipment",
+          "type" : [ "null", "ShipmentType" ]
+        }, {
+          "name" : "tpdoc",
+          "type" : [ "null", {
+            "type" : "array",
+            "items" : {
+              "type" : "record",
+              "name" : "TPDocType",
+              "fields" : [ {
+                "name" : "bolNo",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "haulageArrangements",
+                "type" : [ "null", "HaulageArrangementsType" ]
+              }, {
+                "name" : "operator",
+                "type" : [ "null", "string" ]
+              }, {
+                "name" : "party",
+                "type" : [ "null", {
+                  "type" : "array",
+                  "items" : "PartyType"
+                } ]
+              }, {
+                "name" : "reference",
+                "type" : [ "null", {
+                  "type" : "array",
+                  "items" : "ReferenceType"
+                } ]
+              } ]
+            }
+          } ]
+        }, {
+          "name" : "transportPlan",
+          "type" : [ "null", {
+            "type" : "array",
+            "items" : "TransportPlanType"
+          } ]
+        } ]
+      }
+    } ]
+  } ]
+}
