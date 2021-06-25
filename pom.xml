@@ -23,7 +23,7 @@
         <project.scm.id>github</project.scm.id>
     </properties>
     <scm>
-        <connection>scm:git:https://github.com/Maersk-Global/external-dcsa-events-processor.git</connection>
+        <connection>scm:github:https://github.com/Maersk-Global/external-dcsa-events-processor.git</connection>
         <tag>HEAD</tag>
     </scm>
     <repositories>
