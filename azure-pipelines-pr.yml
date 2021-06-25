@@ -1,0 +1,22 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+pr:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: External Apis/external-common-build-pipeline
+
+extends:
+  template: common.yml@templates
+  parameters:
+    sonarScanProject: external-dcsa-events-processor
+    failIfCoverageEmpty: false
+    blackduckScanTags: dcsaevents
