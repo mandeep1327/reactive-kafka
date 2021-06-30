@@ -9,7 +9,7 @@
     </parent>
     <groupId>net.apmoller.crb.microservices</groupId>
     <artifactId>external-dcsa-event-processor</artifactId>
-    <version>0.0.7-SNAPSHOT</version>
+    <version>0.0.7</version>
     <description>Processor for GEMS events for the external track and trace service</description>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -22,7 +22,7 @@
     </properties>
     <scm>
         <connection>scm:git:https://github.com/Maersk-Global/external-dcsa-events-processor.git</connection>
-        <tag>HEAD</tag>
+        <tag>external-dcsa-event-processor-0.0.7</tag>
     </scm>
     <distributionManagement>
         <repository>
