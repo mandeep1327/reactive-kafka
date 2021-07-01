@@ -1,2 +1,4 @@
+ENABLE_AZURE_VAULT: true
+AZURE_VAULT_ADDRESS: https://dcsakvexternalapissit.vault.azure.net/
 AZURE_COSMOS_URI: https://externalapisdcsadbsit.documents.azure.com:443/
 AZURE_COSMOS_DATABASE: externalapisdcsadbsit
