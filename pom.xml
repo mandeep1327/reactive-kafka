@@ -15,7 +15,6 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <spring-cloud.version>2020.0.1</spring-cloud.version>
-        <azure.spring.data.cosmos.version>3.7.0</azure.spring.data.cosmos.version>
         <spring-cloud-sleuth-otel.version>1.0.0-M5</spring-cloud-sleuth-otel.version>
         <unit-tests.skip>false</unit-tests.skip>
         <integration-tests.skip>false</integration-tests.skip>
@@ -96,7 +95,6 @@
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-spring-data-cosmos</artifactId>
-            <version>${azure.spring.data.cosmos.version}</version>
         </dependency>
         <dependency>
             <groupId>com.azure.spring</groupId>
