@@ -1,0 +1,15 @@
+ENABLE_AZURE_VAULT: false
+AZURE_COSMOS_URI:
+AZURE_COSMOS_DATABASE:
+azureCosmosKey:
+azureCosmosSecondarykey:
+
+azure:
+  keyvault:
+    enabled: ${ENABLE_AZURE_VAULT}
+    uri: ${AZURE_VAULT_ADDRESS}
+  cosmos:
+    uri: ${AZURE_COSMOS_URI}
+    key: ${azureCosmosKey}
+    secondaryKey: ${azureCosmosSecondarykey}
+    database: ${AZURE_COSMOS_DATABASE}

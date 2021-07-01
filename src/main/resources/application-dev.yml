@@ -1,0 +1,2 @@
+AZURE_COSMOS_URI: https://externalapisdcsadbdev.documents.azure.com:443/
+AZURE_COSMOS_DATABASE: externalapisdcsadbdev
