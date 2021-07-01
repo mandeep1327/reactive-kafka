@@ -1,8 +1,8 @@
 ENABLE_AZURE_VAULT: false
 AZURE_COSMOS_URI:
 AZURE_COSMOS_DATABASE:
-azureCosmosKey:
-azureCosmosSecondarykey:
+azureCosmosKey: dummyKey
+azureCosmosSecondarykey: DummySecondaryKey
 
 azure:
   keyvault:
