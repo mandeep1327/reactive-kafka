@@ -3,7 +3,6 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.m
 import com.azure.spring.data.cosmos.core.mapping.Container;
 import com.azure.spring.data.cosmos.core.mapping.PartitionKey;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -11,17 +10,24 @@ import org.springframework.data.annotation.Id;
 @Container(containerName = "Events", ru = "400")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
 public abstract class Event {
+
+    private enum  EventType {
+        EQUIPMENT, SHIPMENT, TRANSPORT;
+    }
+
+    private enum  EventClassifierCode {
+        PLN, ACT, EST;
+    }
 
     @Id
     private String eventID;
     @PartitionKey
     private String bookingReference;
     private String eventDateTime;
-    private String eventType;
+    private EventType eventType;
     private String eventCreatedDateTime;
-    private String eventClassifierCode;
+    private EventClassifierCode eventClassifierCode;
 
 }

@@ -1,13 +1,26 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 import java.util.Map;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
 public class TransportEvent extends Event {
 
-    private String transportEventType;
+    private enum TransportEventType {
+        ARRI, DEPA, OMIT;
+    }
+
+    private TransportEventType transportEventType;
     private String delayReasonCode;
     private String changeRemark;
-    private List<Map<String, String>> documentReferences;
+    private List<DocumentReference> documentReferences;
     private TransportCall transportCall;
 }

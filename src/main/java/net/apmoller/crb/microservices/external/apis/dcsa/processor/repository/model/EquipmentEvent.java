@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,9 +13,17 @@ import java.util.Map;
 @Data
 public class EquipmentEvent extends Event {
 
-    private String equipmentEventType;
-    private String emptyIndicatorCode;
-    private List<Map<String, String>> documentReferences;
+    private enum EquipmentEventType {
+        LOAD, DISC, GTIN, GTOT, STUF, STRP
+    }
+
+    private enum EmptyIndicatorCode {
+        EMPTY, LADEN;
+    }
+
+    private EquipmentEventType equipmentEventType;
+    private EmptyIndicatorCode emptyIndicatorCode;
+    private List<DocumentReference> documentReferences;
     private Equipment equipment;
     private TransportCall transportCall;
 }
