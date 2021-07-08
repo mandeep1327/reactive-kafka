@@ -13,7 +13,7 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @Builder
 @Data
-public class Event {
+public abstract class Event {
 
     @Id
     private String eventID;
