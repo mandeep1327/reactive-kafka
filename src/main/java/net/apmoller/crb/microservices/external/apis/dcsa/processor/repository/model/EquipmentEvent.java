@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.Map;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -13,7 +16,7 @@ public class EquipmentEvent extends Event {
 
     private String equipmentEventType;
     private String emptyIndicatorCode;
-    private List<DocumentReference> documentReferences;
+    private List<Map<String, String>> documentReferences;
     private Equipment equipment;
     private TransportCall transportCall;
 }
