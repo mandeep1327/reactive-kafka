@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +14,7 @@ import java.util.Map;
 public class TransportEvent extends Event {
 
     private enum TransportEventType {
-        ARRI, DEPA, OMIT;
+        ARRI, DEPA, OMIT
     }
 
     private TransportEventType transportEventType;

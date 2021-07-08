@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 public class TransportCall {
 
     private enum FacilityTypeCode {
-        BOCR, CLOC, COFS, COYA, OFFD, DEPO, INTE, POTE, PBPL, BRTH;
+        BOCR, CLOC, COFS, COYA, OFFD, DEPO, INTE, POTE, PBPL, BRTH
     }
 
     private enum TransPortMode {
-        VESSEL, RAIL, TRUCK, BARGE;
+        VESSEL, RAIL, TRUCK, BARG
     }
 
     private Integer transportCallSequenceNumber;

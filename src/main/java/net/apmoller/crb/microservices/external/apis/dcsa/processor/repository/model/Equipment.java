@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class Equipment {
 
     private enum WeightUnit {
-        KGM, LBR;
+        KGM, LBR
     }
 
     private String equipmentReference;

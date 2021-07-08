@@ -16,7 +16,7 @@ public class ShipmentEvent extends Event {
     }
 
     private enum ShipmentInformationTypeCode{
-        BOK, SHI, VGM ,SRM, TRD, ARN;
+        BOK, SHI, VGM ,SRM, TRD, ARN
     }
 
     private ShipmentInformationTypeCode shipmentInformationTypeCode;

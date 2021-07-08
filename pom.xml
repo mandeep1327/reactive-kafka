@@ -19,6 +19,7 @@
         <unit-tests.skip>false</unit-tests.skip>
         <integration-tests.skip>false</integration-tests.skip>
         <project.scm.id>github</project.scm.id>
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
     </properties>
     <scm>
         <connection>scm:git:https://github.com/Maersk-Global/external-dcsa-events-processor.git</connection>
@@ -83,6 +84,17 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
+        <!-- Mapstruct dependencies -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>

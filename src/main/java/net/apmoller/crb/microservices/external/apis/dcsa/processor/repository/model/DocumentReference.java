@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class DocumentReference {
 
     private enum Key {
-        BKG, TRD;
+        BKG, TRD
     }
 
     private Key key;

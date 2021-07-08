@@ -13,7 +13,7 @@ import org.springframework.data.annotation.Id;
 @Data
 public abstract class Event {
 
-    private enum  EventType {
+    public enum  EventType {
         EQUIPMENT, SHIPMENT, TRANSPORT;
     }
 

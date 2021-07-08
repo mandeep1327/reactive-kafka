@@ -18,7 +18,7 @@ public class EquipmentEvent extends Event {
     }
 
     private enum EmptyIndicatorCode {
-        EMPTY, LADEN;
+        EMPTY, LADEN
     }
 
     private EquipmentEventType equipmentEventType;
