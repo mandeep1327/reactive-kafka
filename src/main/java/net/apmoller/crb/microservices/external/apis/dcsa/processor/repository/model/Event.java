@@ -17,7 +17,7 @@ public abstract class Event {
         EQUIPMENT, SHIPMENT, TRANSPORT;
     }
 
-    private enum  EventClassifierCode {
+    public enum  EventClassifierCode {
         PLN, ACT, EST;
     }
 
