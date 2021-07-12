@@ -5,17 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
-public class DocumentReference {
 
-    public enum Key {
-        BKG, TRD
+@NoArgsConstructor
+@Builder
+@Data
+@AllArgsConstructor
+public class Seals {
+
+    public enum SealSourceEnum {
+        CAR, SHI, PHI, VET, CUS
     }
 
-    private Key key;
-    private String value;
+    private String sealNumber;
+    private SealSourceEnum sealSource;
 }
-

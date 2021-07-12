@@ -7,15 +7,13 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Builder
-public class DocumentReference {
+@Data
+public class References {
 
-    public enum Key {
-        BKG, TRD
+    public enum RefTypeEnum {
+        FF, SI, PO, AAO,CR
     }
-
-    private Key key;
-    private String value;
+    private RefTypeEnum referenceType;
+    private String referenceValue;
 }
-

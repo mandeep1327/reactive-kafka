@@ -11,22 +11,30 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TransportCall {
 
-    private enum FacilityTypeCode {
+    public enum FacilityTypeCode {
         BOCR, CLOC, COFS, COYA, OFFD, DEPO, INTE, POTE, PBPL, BRTH
     }
 
-    private enum TransPortMode {
-        VESSEL, RAIL, TRUCK, BARG
+    public enum TransPortMode {
+        VESSEL, RAIL, TRUCK, BARGE
     }
 
-    private Integer transportCallSequenceNumber;
+
     private String carrierServiceCode;
     private String carrierVoyageNumber;
-    private String facilityCode;
     private FacilityTypeCode facilityTypeCode;
     private String otherFacility;
     private TransPortMode modeOfTransport;
+    private String carrierCode;
+
+    //Not specified in Excel
+    private String facilityCode;
+    private Integer transportCallSequenceNumber;
+
+   //These should be part of the Get service
+    private String unLocationCode;
     private Location location;
     private Vessel vessel;
+
 
 }
