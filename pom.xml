@@ -17,6 +17,9 @@
         <spring-cloud.version>2020.0.1</spring-cloud.version>
         <spring-cloud-sleuth-otel.version>1.0.0-M5</spring-cloud-sleuth-otel.version>
         <confluent.version>6.1.1</confluent.version>
+        <avro.version>1.10.2</avro.version>
+        <lombok.version>1.18.20</lombok.version>
+        <azure-spring-boot-bom.version>3.3.0</azure-spring-boot-bom.version>
         <unit-tests.skip>false</unit-tests.skip>
         <integration-tests.skip>false</integration-tests.skip>
         <project.scm.id>github</project.scm.id>
@@ -71,7 +74,7 @@
             <dependency>
                 <groupId>com.azure.spring</groupId>
                 <artifactId>azure-spring-boot-bom</artifactId>
-                <version>3.3.0</version>
+                <version>${azure-spring-boot-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -99,7 +102,7 @@
         <dependency>
             <groupId>org.apache.avro</groupId>
             <artifactId>avro</artifactId>
-            <version>1.10.2</version>
+            <version>${avro.version}</version>
         </dependency>
         <dependency>
             <groupId>io.confluent</groupId>
@@ -128,7 +131,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.18</version>
+            <version>${lombok.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -138,7 +141,6 @@
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
-            <version>2.7.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -168,10 +170,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>
-                    </mainClass>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>

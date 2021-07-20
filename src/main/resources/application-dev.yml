@@ -1,7 +1,5 @@
 ENABLE_AZURE_VAULT: true
 AZURE_VAULT_ADDRESS: https://dcsakvexternalapisdev.vault.azure.net/
-AZURE_COSMOS_URI: https://externalapisdcsadbdev.documents.azure.com:443/
-AZURE_COSMOS_DATABASE: externalapisdcsadbdev
 
 ##Kafka
 KAFKA_BOOTSTRAP_SERVERS: "pkc-lq8gm.westeurope.azure.confluent.cloud:9092"
