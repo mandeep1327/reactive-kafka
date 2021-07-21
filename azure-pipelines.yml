@@ -19,3 +19,4 @@ extends:
   parameters:
     sonarScanProject: external-dcsa-events-processor
     blackduckScanTags: dcsaevents
+    deployable: true
