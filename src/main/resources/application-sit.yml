@@ -1,6 +1,5 @@
 ENABLE_AZURE_VAULT: true
-AZURE_VAULT_ADDRESS: https://dcsakvexternalapissit.vault.azure.net/
-
+AZURE_VAULT_ADDRESS: https://extapissharedlowerkv.vault.azure.net/
 #Kafka
 KAFKA_BOOTSTRAP_SERVERS: "pkc-lq8gm.westeurope.azure.confluent.cloud:9092"
 KAFKA_CONSUMER_TOPIC: MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1

@@ -1,4 +1,4 @@
-package net.apmoller.crb.microservices.external.apis.dcsa.processor.kafka;
+package net.apmoller.crb.microservices.external.apis.dcsa.processor.service;
 
 import com.maersk.jaxb.pojo.GEMSPubType;
 import lombok.RequiredArgsConstructor;
