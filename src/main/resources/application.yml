@@ -1,15 +1,64 @@
 ENABLE_AZURE_VAULT: false
-AZURE_COSMOS_URI:
-AZURE_COSMOS_DATABASE:
-azureCosmosKey: dummyKey
-azureCosmosSecondarykey: DummySecondaryKey
-
+KAFKA_BOOTSTRAP_SERVERS: "localhost:9092"
+KAFKA_CONSUMER_TOPIC: MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1
+KAFKA_CONSUMER_GROUP: MSK.external.dcsa.consumerGroup.v1
+KAFKA_SCHEMA_REGISTRY_URL: "http://localhost:8081"
+kafkaSchemaRegistryUsername:
+kafkaSchemaRegistryPassword:
+kafkaConsumerUsername:
+kafkaConsumerPassword:
+#KAFKA_BOOTSTRAP_SERVERS: pkc-lq8gm.westeurope.azure.confluent.cloud:9092
+#CONSUMER_TOPIC: MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1
 azure:
   keyvault:
     enabled: ${ENABLE_AZURE_VAULT}
     uri: ${AZURE_VAULT_ADDRESS}
-  cosmos:
-    uri: ${AZURE_COSMOS_URI}
-    key: ${azureCosmosKey}
-    secondaryKey: ${azureCosmosSecondarykey}
-    database: ${AZURE_COSMOS_DATABASE}
+
+kafka:
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+  login-module: org.apache.kafka.common.security.plain.PlainLoginModule
+  security-protocol: SASL_SSL
+  sasl-mechanism: PLAIN
+  client-id: external-dcsa-events-processor
+  schemaRegistry:
+    url: ${KAFKA_SCHEMA_REGISTRY_URL}
+    username: ${kafkaSchemaRegistryUsername}
+    password: ${kafkaSchemaRegistryPassword}
+  consumer:
+    topic: ${KAFKA_CONSUMER_TOPIC}
+    group: ${KAFKA_CONSUMER_GROUP}
+    username: ${kafkaConsumerUsername}
+    password: ${kafkaConsumerPassword}
+    offset-auto-reset: latest
+    concurrency: 1
+    max-poll-records: 5
+    max-poll-timeout: 5000
+    max-fetch-size-bytes: 2097164
+    retry:
+      max-attempts: 3
+      initial-interval-secs: 2
+management:
+  health:
+    kafka:
+      enabled: true
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: "readinessState,diskSpace,ping,kafka"
+          show-details: always
+
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+server.port: 9999
