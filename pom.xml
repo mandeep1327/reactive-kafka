@@ -16,10 +16,18 @@
         <maven.compiler.target>11</maven.compiler.target>
         <spring-cloud.version>2020.0.1</spring-cloud.version>
         <spring-cloud-sleuth-otel.version>1.0.0-M5</spring-cloud-sleuth-otel.version>
+        <confluent.version>6.1.1</confluent.version>
+        <avro.version>1.10.2</avro.version>
+        <lombok.version>1.18.20</lombok.version>
+        <azure-spring-boot-bom.version>3.3.0</azure-spring-boot-bom.version>
         <unit-tests.skip>false</unit-tests.skip>
         <integration-tests.skip>false</integration-tests.skip>
         <project.scm.id>github</project.scm.id>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <sonar.coverage.exclusions>
+            **net/apmoller/crb/microservices/external/apis/dcsa/processor/config/**/*,
+            **net/apmoller/crb/microservices/external/apis/dcsa/processor/models/**/*,
+        </sonar.coverage.exclusions>
     </properties>
     <scm>
         <connection>scm:git:https://github.com/Maersk-Global/external-dcsa-events-processor.git</connection>
@@ -57,13 +65,17 @@
             <id>spring-milestones</id>
             <url>https://repo.spring.io/milestone</url>
         </repository>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
     </repositories>
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.azure.spring</groupId>
                 <artifactId>azure-spring-boot-bom</artifactId>
-                <version>3.3.0</version>
+                <version>${azure-spring-boot-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -102,11 +114,27 @@
         <dependency>
             <groupId>org.apache.avro</groupId>
             <artifactId>avro</artifactId>
-            <version>1.10.2</version>
+            <version>${avro.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-spring-data-cosmos</artifactId>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>${confluent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor.kafka</groupId>
+            <artifactId>reactor-kafka</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.kafka</groupId>
+                    <artifactId>kafka-clients</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>${confluent.version}-ccs</version>
         </dependency>
         <dependency>
             <groupId>com.azure.spring</groupId>
@@ -121,12 +149,22 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok-mapstruct-binding</artifactId>
             <version>0.2.0</version>
+            <version>${lombok.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator</artifactId>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
@@ -158,10 +196,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>
-                    </mainClass>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
