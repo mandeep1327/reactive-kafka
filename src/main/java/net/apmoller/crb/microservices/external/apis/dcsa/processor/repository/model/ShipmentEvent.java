@@ -1,19 +1,18 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.experimental.SuperBuilder;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
+@SuperBuilder
 public class ShipmentEvent extends Event {
+
 
     public enum ShipmentEventType{
         RECE, DRFT, PENA, PENU, REJE, APPR, ISSU, SURR, SUBM, VOID, CONF
@@ -27,8 +26,4 @@ public class ShipmentEvent extends Event {
     private ShipmentEventType shipmentEventTypeCode;
     private String documentID;
     private String reason;
-    private List<References> references;
-    private List<Party> parties;
-    private String equipmentReference;
-    private EquipmentEvent.CarrierCodeEnum carrierCode;
 }

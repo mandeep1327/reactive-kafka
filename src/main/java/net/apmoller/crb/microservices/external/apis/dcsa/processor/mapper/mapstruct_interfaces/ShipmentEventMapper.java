@@ -3,6 +3,7 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapst
 import com.maersk.jaxb.pojo.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility;
 import org.jetbrains.annotations.NotNull;
@@ -26,14 +27,24 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.reposi
 
 @Mapper(componentModel = "spring", imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class})
 public interface ShipmentEventMapper {
-
-    //TODO: reason is Missing in the mapping
     @Mapping(expression = "java(getShipmentEventType(pubSetType.getEvent().getEventAct().toString()))", target = "shipmentEventTypeCode")
     @Mapping(expression = "java(getShipmentInformationTypeCode(pubSetType.getEvent().getEventAct().toString()))", target = "documentTypeCode")
     @Mapping(expression = "java(getDocumentId(pubSetType))", target = "documentID")
-
-
-    ShipmentEvent fromPubSetTypeToShipmentEvent(PubSetType pubSetType);
+    @Mapping(source = "baseData.eventID", target = "eventID")
+    @Mapping(source = "baseData.bookingReference", target = "bookingReference")
+    @Mapping(source = "baseData.eventDateTime", target = "eventDateTime")
+    @Mapping(source = "baseData.eventType", target = "eventType")
+    @Mapping(source = "baseData.eventCreatedDateTime", target = "eventCreatedDateTime")
+    @Mapping(source = "baseData.eventClassifierCode", target = "eventClassifierCode")
+    @Mapping(source = "baseData.parties", target = "parties")
+    @Mapping(source = "baseData.references", target = "references")
+    @Mapping(source = "baseData.equipmentReference", target = "equipmentReference")
+    @Mapping(source = "baseData.carrierBookingReference", target = "carrierBookingReference")
+    @Mapping(source = "baseData.transportDocumentReference", target = "transportDocumentReference")
+    @Mapping(source = "baseData.sourceSystem", target = "sourceSystem")
+    @Mapping(source = "baseData.serviceType", target = "serviceType")
+    @Mapping(source = "baseData.carrierCode", target = "carrierCode")
+    ShipmentEvent fromPubSetTypeToShipmentEvent(PubSetType pubSetType, Event baseData);
 
     default String getDocumentId (PubSetType pubSetType){
         switch (pubSetType.getEvent().getEventAct().toString()) {

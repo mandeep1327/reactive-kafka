@@ -36,7 +36,7 @@ public interface EventMapper {
     @Mapping(expression = "java(ServiceTypeMapper.getServiceTypeFromPubSetType(details))", target = "serviceType")
 
 
-    Event fromEventTypeToEvent(PubSetType details);
+    Event fromPubSetTypeToEvent(PubSetType details);
 
     default Event.EventType getDCSAEventType(String act) {
         if (SHIPMENT_EVENTS.contains(act)) {

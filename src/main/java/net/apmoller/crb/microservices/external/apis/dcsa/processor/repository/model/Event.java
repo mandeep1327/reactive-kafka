@@ -1,18 +1,17 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model;
 
-import com.azure.spring.data.cosmos.core.mapping.PartitionKey;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public class Event {
-
     public enum  EventType {
         EQUIPMENT, SHIPMENT, TRANSPORT
     }
@@ -25,9 +24,7 @@ public class Event {
         MAEU, SAFM, MCCQ, SEJJ, SEAU
     }
 
-    @Id
     private String eventID;
-    @PartitionKey
     private String bookingReference;
     private String eventDateTime;
     private EventType eventType;
@@ -41,5 +38,4 @@ public class Event {
     private String sourceSystem;
     private String serviceType;
     private CarrierCodeEnum carrierCode;
-
 }

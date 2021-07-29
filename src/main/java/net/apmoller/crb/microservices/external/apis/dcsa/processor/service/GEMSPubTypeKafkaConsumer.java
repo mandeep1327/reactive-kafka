@@ -27,6 +27,7 @@ import java.util.Optional;
 public class GEMSPubTypeKafkaConsumer {
 
     private final KafkaReceiver<String, GEMSPubType> kafkaReceiver;
+    private final EventDelegator eventDelegator;
 
     @EventListener(ApplicationStartedEvent.class)
     public Disposable startKafkaConsumer() {
@@ -49,7 +50,7 @@ public class GEMSPubTypeKafkaConsumer {
                     .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(5)))
                     .doOnError(ex -> log.error("Error processing event after all retries {}", record.key(), ex))
                     .onErrorResume(ex -> Mono.empty())
-                    .doOnNext(__ -> log.info("Successfully processed event"))
+                    .doOnNext(event -> log.info("Successfully processed event"))
                     .then(Mono.just(record));
         } catch (Exception ex) {
             log.error("Error processing event {}", record.key(), ex);
@@ -91,7 +92,8 @@ public class GEMSPubTypeKafkaConsumer {
 
     private Mono<Void> handleSubscriptionResponse(GEMSPubType gemsPubType) {
         log.info("GEMS Event received:::: {}", gemsPubType);
-        return Mono.empty()
+        return Mono.just(gemsPubType)
+                .doOnNext(eventDelegator::checkCorrectEvent)
                 .then();
     }
 
