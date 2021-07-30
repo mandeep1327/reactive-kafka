@@ -23,6 +23,6 @@ resources:
 extends:
   template: maven-docker.yml@templates
   parameters:
-    sonarScanProject: external-dcsa-events-processor
+    sonarQubeProject: external-dcsa-events-processor
     blackduckScanTags: dcsaevents
     deployable: true
