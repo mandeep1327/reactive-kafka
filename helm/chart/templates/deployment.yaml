@@ -29,26 +29,22 @@ spec:
         - name: {{ .Values.appName }}
           image: {{ .Values.image }}:{{ .Values.version }}
           env:
-            - name: DD_AGENT_HOST
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.hostIP
-              - name: KAFKA_BOOTSTRAP_SERVERS
-                value: {{ .Values.kafka.bootstrapServers }}
-              - name: KAFKA_TOPIC
-                value: {{ .Values.kafka.topic }}
-              - name: KAFKA_USERNAME
-                value: {{ .Values.kafka.username }}
-              - name: KAFKA_PASSWORD
-                value: {{ .Values.kafka.password }}
-              - name: KAFKA_CONSUMER_GROUP
-                value: {{ .Values.kafka.consumerGroup }}
-              - name: KAFKA_SCHEMA_REGISTRY_URL
-                value: {{ .Values.kafka.schemaRegistryUrl }}
-              - name: KAFKA_SCHEMA_REGISTRY_USERNAME
-                value: {{ .Values.kafka.schemaRegistryUsername }}
-              - name: KAFKA_SCHEMA_REGISTRY_PASSWORD
-                value: {{ .Values.kafka.schemaRegistryPassword }}
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: {{ .Values.kafka.bootstrapServers }}
+            - name: KAFKA_TOPIC
+              value: {{ .Values.kafka.topic }}
+            - name: KAFKA_USERNAME
+              value: {{ .Values.kafka.username }}
+            - name: KAFKA_PASSWORD
+              value: {{ .Values.kafka.password }}
+            - name: KAFKA_CONSUMER_GROUP
+              value: {{ .Values.kafka.consumerGroup }}
+            - name: KAFKA_SCHEMA_REGISTRY_URL
+              value: {{ .Values.kafka.schemaRegistryUrl }}
+            - name: KAFKA_SCHEMA_REGISTRY_USERNAME
+              value: {{ .Values.kafka.schemaRegistryUsername }}
+            - name: KAFKA_SCHEMA_REGISTRY_PASSWORD
+              value: {{ .Values.kafka.schemaRegistryPassword }}
           imagePullPolicy: Always
           ports:
             - name: http
