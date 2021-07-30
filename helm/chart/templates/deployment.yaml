@@ -24,7 +24,7 @@ spec:
         k8s-app: {{ .Values.appName }}
     spec:
       imagePullSecrets:
-        - name: shipment-mobile-acr
+        - name: external-apis-acr
       containers:
         - name: {{ .Values.appName }}
           image: {{ .Values.image }}:{{ .Values.version }}
