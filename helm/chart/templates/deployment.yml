@@ -1,36 +1,79 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ .Values.appName }}
   labels:
-    app: dcsa-test
-  name: dcsa-test
+    product: {{ .Values.product }}
+    k8s-app: {{ .Values.appName }}
 spec:
-  replicas: 3
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # maxUnavailable will set up how many pods we can add at a time
+      maxUnavailable: 50%
+      # maxSurge define how many pods can be unavailable during the rolling update
+      maxSurge: 1
   selector:
     matchLabels:
-      app: dcsa-test
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+      k8s-app: {{ .Values.appName }}
   template:
     metadata:
       labels:
-        app: dcsa-test
+        product: {{ .Values.product }}
+        k8s-app: {{ .Values.appName }}
     spec:
+      imagePullSecrets:
+        - name: shipment-mobile-acr
       containers:
-        - image: nginx
+        - name: {{ .Values.appName }}
+          image: {{ .Values.image }}:{{ .Values.version }}
+          env:
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+              - name: KAFKA_BOOTSTRAP_SERVERS
+                value: {{ .Values.kafka.bootstrapServers }}
+              - name: KAFKA_TOPIC
+                value: {{ .Values.kafka.topic }}
+              - name: KAFKA_USERNAME
+                value: {{ .Values.kafka.username }}
+              - name: KAFKA_PASSWORD
+                value: {{ .Values.kafka.password }}
+              - name: KAFKA_CONSUMER_GROUP
+                value: {{ .Values.kafka.consumerGroup }}
+              - name: KAFKA_SCHEMA_REGISTRY_URL
+                value: {{ .Values.kafka.schemaRegistryUrl }}
+              - name: KAFKA_SCHEMA_REGISTRY_USERNAME
+                value: {{ .Values.kafka.schemaRegistryUsername }}
+              - name: KAFKA_SCHEMA_REGISTRY_PASSWORD
+                value: {{ .Values.kafka.schemaRegistryPassword }}
           imagePullPolicy: Always
-          name: nginx
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+              scheme: HTTP
+            failureThreshold: 5
+            periodSeconds: 10
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+              scheme: HTTP
+            failureThreshold: 5
+            periodSeconds: 10
+            initialDelaySeconds: 10
           resources:
             requests:
-              memory: 512Mi
-              cpu: 500m
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
             limits:
-              memory: 512Mi
-              cpu: 1000m
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
