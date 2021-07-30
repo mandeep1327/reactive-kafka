@@ -27,4 +27,3 @@ extends:
     blackduckScanTags: dcsaevents
     deployable: true
     dockerRepository: 'external-dcsa-events-processor'
-
