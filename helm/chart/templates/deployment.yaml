@@ -60,14 +60,6 @@ spec:
             failureThreshold: 5
             periodSeconds: 10
             initialDelaySeconds: 300
-          readinessProbe:
-            httpGet:
-              path: /actuator/health/readiness
-              port: 8080
-              scheme: HTTP
-            failureThreshold: 5
-            periodSeconds: 10
-            initialDelaySeconds: 300
           resources:
             requests:
               cpu: {{ .Values.resources.requests.cpu }}
