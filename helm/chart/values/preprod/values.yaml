@@ -7,12 +7,12 @@ vaultRole: dcsatracktrace-dev
 kafka:
   bootstrapServers: pkc-lq8gm.westeurope.azure.confluent.cloud:9092
   topic: MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1
-  username: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/username#username
-  password: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/username#username
+  username: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka#username
+  password: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka#username
   consumerGroup: MSK.shipment.mobile.consumerGroup.v1
   schemaRegistryUrl: https://psrc-4kk0p.westeurope.azure.confluent.cloud/
-  schemaRegistryUsername: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/username#username
-  schemaRegistryPassword: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/username#username
+  schemaRegistryUsername: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka#username
+  schemaRegistryPassword: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka#username
 resources:
   requests:
     memory: 512Mi
