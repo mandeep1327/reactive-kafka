@@ -1,7 +1,7 @@
 {
   "type" : "record",
   "name" : "GEMSPubType",
-  "namespace" : "com.maersk.jaxb.pojo",
+  "namespace": "MSK.com.gems",
   "fields" : [ {
     "name" : "partner",
     "type" : [ "null", {
