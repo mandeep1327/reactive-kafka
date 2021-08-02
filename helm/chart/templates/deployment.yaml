@@ -22,6 +22,8 @@ spec:
       labels:
         product: {{ .Values.product }}
         k8s-app: {{ .Values.appName }}
+      annotations:
+        vault.security.banzaicloud.io/vault-role: "{{ .Values.vaultRole }}"
     spec:
       imagePullSecrets:
         - name: external-apis-acr
