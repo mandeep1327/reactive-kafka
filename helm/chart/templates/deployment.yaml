@@ -33,19 +33,19 @@ spec:
           env:
             - name: KAFKA_BOOTSTRAP_SERVERS
               value: {{ .Values.kafka.bootstrapServers }}
-            - name: KAFKA_TOPIC
+            - name: KAFKA_CONSUMER_TOPIC
               value: {{ .Values.kafka.topic }}
-            - name: KAFKA_USERNAME
+            - name: kafkaConsumerUsername
               value: {{ .Values.kafka.username }}
-            - name: KAFKA_PASSWORD
+            - name: kafkaConsumerPassword
               value: {{ .Values.kafka.password }}
             - name: KAFKA_CONSUMER_GROUP
               value: {{ .Values.kafka.consumerGroup }}
             - name: KAFKA_SCHEMA_REGISTRY_URL
               value: {{ .Values.kafka.schemaRegistryUrl }}
-            - name: KAFKA_SCHEMA_REGISTRY_USERNAME
+            - name: kafkaSchemaRegistryUsername
               value: {{ .Values.kafka.schemaRegistryUsername }}
-            - name: KAFKA_SCHEMA_REGISTRY_PASSWORD
+            - name: kafkaSchemaRegistryPassword
               value: {{ .Values.kafka.schemaRegistryPassword }}
           imagePullPolicy: Always
           ports:
