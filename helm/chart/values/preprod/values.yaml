@@ -11,8 +11,8 @@ kafka:
   password: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/username#username
   consumerGroup: MSK.shipment.mobile.consumerGroup.v1
   schemaRegistryUrl: https://psrc-4kk0p.westeurope.azure.confluent.cloud/
-  schemaRegistryUsername: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/schemaRegistryUsername#schemaRegistryUsername
-  schemaRegistryPassword: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/schemaRegistryUsername#schemaRegistryUsername
+  schemaRegistryUsername: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/username#username
+  schemaRegistryPassword: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/username#username
 resources:
   requests:
     memory: 512Mi
