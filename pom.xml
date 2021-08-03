@@ -248,8 +248,9 @@
                     <version>${jib-maven-plugin.version}</version>
                     <executions>
                         <execution>
+                            <phase>package</phase>
                             <goals>
-                                <goal>release:prepare</goal>
+                                <goal>build</goal>
                             </goals>
                         </execution>
                     </executions>
