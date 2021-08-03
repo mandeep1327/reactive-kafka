@@ -9,7 +9,7 @@
     </parent>
     <groupId>net.apmoller.crb.microservices</groupId>
     <artifactId>external-dcsa-event-processor</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.16-SNAPSHOT</version>
     <description>Processor for GEMS events for the external track and trace service</description>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
