@@ -158,6 +158,7 @@
                     <configuration>
                         <sourceDirectory>${project.basedir}/src/main/resources/avro/</sourceDirectory>
                         <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+                        <stringType>String</stringType>
                     </configuration>
                 </execution>
             </executions>
@@ -222,6 +223,7 @@
                     </from>
                     <to>
                         <image>${docker.image.prefix}/${project.artifactId}</image>
+                        <tags>${project.version}</tags>
                     </to>
                 </configuration>
             </plugin>
