@@ -247,6 +247,14 @@
                     <artifactId>jib-maven-plugin</artifactId>
                     <groupId>com.google.cloud.tools</groupId>
                     <version>${jib-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>release:prepare</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                     <configuration>
                         <from>
                             <image>mcr.microsoft.com/java/jdk:8-zulu-alpine</image>
