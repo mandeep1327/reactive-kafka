@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appName }}
+  labels:
+    product: {{ .Values.product }}
+    k8s-app: {{ .Values.appName }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # maxUnavailable will set up how many pods we can add at a time
+      maxUnavailable: 50%
+      # maxSurge define how many pods can be unavailable during the rolling update
+      maxSurge: 1
+  selector:
+    matchLabels:
+      k8s-app: {{ .Values.appName }}
+  template:
+    metadata:
+      labels:
+        product: {{ .Values.product }}
+        k8s-app: {{ .Values.appName }}
+      annotations:
+        vault.security.banzaicloud.io/vault-role: "{{ .Values.vaultRole }}"
+    spec:
+      imagePullSecrets:
+        - name: external-apis-acr
+      containers:
+        - name: {{ .Values.appName }}
+          image: {{ .Values.image }}:{{ .Values.version }}
+          env:
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: {{ .Values.kafka.bootstrapServers }}
+            - name: KAFKA_CONSUMER_TOPIC
+              value: {{ .Values.kafka.topic }}
+            - name: kafkaConsumerUsername
+              value: {{ .Values.kafka.username }}
+            - name: kafkaConsumerPassword
+              value: {{ .Values.kafka.password }}
+            - name: KAFKA_CONSUMER_GROUP
+              value: {{ .Values.kafka.consumerGroup }}
+            - name: KAFKA_SCHEMA_REGISTRY_URL
+              value: {{ .Values.kafka.schemaRegistryUrl }}
+            - name: kafkaSchemaRegistryUsername
+              value: {{ .Values.kafka.schemaRegistryUsername }}
+            - name: kafkaSchemaRegistryPassword
+              value: {{ .Values.kafka.schemaRegistryPassword }}
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+              scheme: HTTP
+            failureThreshold: 5
+            periodSeconds: 10
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+              scheme: HTTP
+            failureThreshold: 5
+            periodSeconds: 10
+            initialDelaySeconds: 10
+          resources:
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}

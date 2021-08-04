@@ -29,9 +29,9 @@ public class ReactiveKafkaMonitoringConfig {
     @Value("${kafka.security-protocol:SASL_SSL}")
     private String securityProtocol;
 
-    @Value("${kafka.username:}")
+    @Value("${kafka.consumer.username:}")
     private String username;
-    @Value("${kafka.password:}")
+    @Value("${kafka.consumer.password:}")
     private String password;
     @Value("${kafka.client-id}")
     private String clientId;
