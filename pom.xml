@@ -8,7 +8,7 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>net.apmoller.crb.microservices</groupId>
-    <artifactId>external-dcsa-event-processor</artifactId>
+    <artifactId>external-dcsa-events-processor</artifactId>
     <version>0.0.16-SNAPSHOT</version>
     <description>Processor for GEMS events for the external track and trace service</description>
     <properties>
@@ -23,9 +23,6 @@
         <unit-tests.skip>false</unit-tests.skip>
         <integration-tests.skip>false</integration-tests.skip>
         <project.scm.id>github</project.scm.id>
-
-        <docker.image.prefix>sharedacrweexternalapis.azurecr.io</docker.image.prefix>
-        <java.version>1.8</java.version>
         <jib-maven-plugin.version>2.2.0</jib-maven-plugin.version>
         <sonar.coverage.exclusions>
             **net/apmoller/crb/microservices/external/apis/dcsa/processor/config/**/*,
@@ -159,6 +156,7 @@
                     <configuration>
                         <sourceDirectory>${project.basedir}/src/main/resources/avro/</sourceDirectory>
                         <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+                        <stringType>String</stringType>
                     </configuration>
                 </execution>
             </executions>
@@ -241,27 +239,6 @@
                         <excludes>
                             <exclude>**/*IT.java</exclude>
                         </excludes>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <artifactId>jib-maven-plugin</artifactId>
-                    <groupId>com.google.cloud.tools</groupId>
-                    <version>${jib-maven-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>release:prepare</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <from>
-                            <image>mcr.microsoft.com/java/jdk:8-zulu-alpine</image>
-                        </from>
-                        <to>
-                            <image>${docker.image.prefix}/${project.artifactId}</image>
-                        </to>
                     </configuration>
                 </plugin>
             </plugins>
