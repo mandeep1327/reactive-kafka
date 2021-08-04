@@ -23,7 +23,6 @@
         <unit-tests.skip>false</unit-tests.skip>
         <integration-tests.skip>false</integration-tests.skip>
         <project.scm.id>github</project.scm.id>
-        <jib-maven-plugin.version>2.2.0</jib-maven-plugin.version>
         <sonar.coverage.exclusions>
             **net/apmoller/crb/microservices/external/apis/dcsa/processor/config/**/*,
             **net/apmoller/crb/microservices/external/apis/dcsa/processor/models/**/*,

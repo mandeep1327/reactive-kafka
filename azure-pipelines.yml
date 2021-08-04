@@ -2,12 +2,6 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
-
-trigger:
-  paths:
-    exclude:
-      - helm
-
 pr:
 - master
 
@@ -25,5 +19,4 @@ extends:
   parameters:
     sonarQubeProject: external-dcsa-events-processor
     blackduckScanTags: dcsaevents
-    deployable: true
     dockerRepository: 'external-dcsa-events-processor'
