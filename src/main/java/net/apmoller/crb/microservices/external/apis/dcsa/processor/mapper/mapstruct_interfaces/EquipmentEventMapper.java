@@ -7,6 +7,7 @@ import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyM
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ServiceTypeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Seals;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility;
@@ -39,7 +40,7 @@ public interface EquipmentEventMapper {
     @Mapping(expression = "java(fromPubSetTypeToIsoEquipmentCode(pubSetType))", target = "isoEquipmentCode")
     @Mapping(expression = "java(fromPubSetTypeToSeals(pubSetType))", target = "seals")
 
-    EquipmentEvent fromPubSetToEquipmentEvent(PubSetType pubSetType);
+    EquipmentEvent fromPubSetToEquipmentEvent(PubSetType pubSetType, Event baseEvent);
 
 
     default EquipmentEvent.EquipmentEventType getEquipmentEventTypeFromEventAct(String eventAct) {

@@ -6,7 +6,10 @@ import lombok.Data;
 @Data
 @Builder
 public class ElasticDataDump {
+    //primary Key
     private String uniqueEventId;
+    //SHIPMENT,EQUIPMENT,TRANSPORT
     private String typeOfEvent;
+    private String bookingNumber;
     private String eventDocument;
 }

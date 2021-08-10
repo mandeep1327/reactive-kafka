@@ -50,6 +50,7 @@ public interface EventMapper {
     }
 
     default String getDCSAEventDateTime(PubSetType pubSetType) {
+        //This is something we need to format the timestamp
         CharSequence eventAct = pubSetType.getEvent().getEventAct();
         if (SHIPMENT_EVENTS.contains(eventAct.toString())) {
             return pubSetType.getEvent().getGemstsutc().toString();

@@ -50,10 +50,10 @@ public class EventDelegator {
         switch (baseEvent.getEventType()){
             case SHIPMENT:
                 shipmentEventDelegator.createAndPushShipmentEvent(baseEvent, pubSetType);
-/*            case TRANSPORT:
+            case TRANSPORT:
                 transportEventDelegator.createAndPushTransportEvent(baseEvent, pubSetType);
             case EQUIPMENT:
-                equipmentEventDelegator.createAndPushEquipmentEvent(baseEvent, pubSetType);*/
+                equipmentEventDelegator.createAndPushEquipmentEvent(baseEvent, pubSetType);
         }
     }
 }

@@ -69,45 +69,53 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.reposi
 
 public final class EventUtility {
 
+    public final static String TRANSPORT_EVENT = "TRANSPORT";
+    public final static String EQUIPMENT_EVENT = "EQUIPMENT";
+    public final static String SHIPMENT_EVENT = "SHIPMENT";
+
+
+
+
     private EventUtility() {
     }
 
     public static final List<String> SHIPMENT_EVENTS = List.of(
             "Confirm_Shipment_Closed",
-            "Shipment-Cancelled",
+            "Shipment_Cancelled",
             "Receive_Transport_Document_Instructions_Closed",
             "Equipment_VGM_Details_Updated",
             "Arrange_Cargo_Release_Closed",
             "Arrange_Cargo_Release_Open",
             "Issue_Original_TPDOC_Closed",
-            "Issue_Verify_Copy_of_TPDOC_Closed");
+            "Issue_Verify_Copy_of_TPDOC_Closed",
+            "ARRIVAL_NOTICE",
+            "RELEASE");
 
     public static final List<String> TRANSPORT_EVENTS = List.of(
-            "CONTAINER_ARRIVAL",
-            "ETA_Changed_After_final_water_leg",
-            "DROPCUST",
-            "ARRIVECU",
+            "CONTAINER ARRIVAL",
+            "CONTAINER DEPARTURE",
             "RAIL_ARRIVAL_AT_DESTINATION",
-            "DEPARTCU",
-            "PICKCUST",
             "RAIL_DEPARTURE",
-            "SHIPMENT_ETA",
-            "SHIPMENT_ETD");
+            "RAIL_ARRIVAL_AT_DESTINATION",
+            "RAIL_DEPARTURE",
+            "Shipment_ETA",
+            "Shipment_ETD");
 
     public static final List<String> EQUIPMENT_EVENTS = List.of(
-            "LOAD",
-            "DISCHARG",
-            "GATE-IN",
-            "GATE-OUT",
-            "DEPARTCU",
-            "ON-RAIL",
-            "OFF-RAIL",
-            "STUFFING",
-            "STRIPPIN");
+            "ARRIVECUIMPN",
+            "DEPARTCUEXPN",
+            "DISCHARG   N",
+            "GATE-IN EXPN",
+            "GATE-OUTEXPY",
+            "LOAD       N",
+            "OFF-RAILIMPN",
+            "ON-RAIL EXPN",
+            "STRIPPIN   Y",
+            "STUFFINGEXPN");
 
     public static final List<String> EST_EVENTS = List.of(
-            "SHIPMENT_ETA",
-            "SHIPMENT_ETD");
+            "Shipment_ETA",
+            "Shipment_ETD");
 
     public static final List<String> ACT_EVENTS = List.of(
             "RAIL_ARRIVAL_AT_DESTINATION",
