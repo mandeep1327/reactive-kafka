@@ -19,6 +19,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.reposi
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.RECE;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.REJE;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.SURR;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.ARN;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.BOK;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.SHI;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.SRM;
@@ -46,7 +47,7 @@ public interface ShipmentEventMapper {
     @Mapping(source = "baseData.carrierCode", target = "carrierCode")
     ShipmentEvent fromPubSetTypeToShipmentEvent(PubSetType pubSetType, Event baseData);
 
-    default String getDocumentId (PubSetType pubSetType){
+    default String getDocumentId(PubSetType pubSetType) {
         switch (pubSetType.getEvent().getEventAct().toString()) {
             case "Confirm_Shipment_Closed":
             case "Shipment_Cancelled":
@@ -57,6 +58,7 @@ public interface ShipmentEventMapper {
             case "Issue_Verify_Copy_of_TPDOC_Closed":
             case "RELEASE":
             case "Receive_Transport_Document_Instructions_Closed":
+            case "ARRIVAL_NOTICE":
                 return getDocumentIdForOthers(pubSetType);
             default:
                 throw new MappingException("Booking Number is not available for Document ID");
@@ -65,7 +67,7 @@ public interface ShipmentEventMapper {
 
     @NotNull
     private String getDocumentIdForOthers(PubSetType pubSetType) {
-        if (!isNull(pubSetType.getTpdoc()) && !isNull(pubSetType.getTpdoc().get(0).getBolNo())){
+        if (!isNull(pubSetType.getTpdoc()) && !isNull(pubSetType.getTpdoc().get(0).getBolNo())) {
             return pubSetType.getTpdoc().get(0).getBolNo().toString();
         }
         throw new MappingException("Booking Number is not available for Document ID");
@@ -73,7 +75,7 @@ public interface ShipmentEventMapper {
 
     @NotNull
     private String getDocumentIdForBookingEvents(PubSetType pubSetType) {
-        if (!isNull(pubSetType.getShipment()) && !isNull(pubSetType.getShipment().getBookNo())){
+        if (!isNull(pubSetType.getShipment()) && !isNull(pubSetType.getShipment().getBookNo())) {
             return pubSetType.getShipment().getBookNo().toString();
         }
         throw new MappingException("Booking Number is not available for Document ID");
@@ -88,6 +90,7 @@ public interface ShipmentEventMapper {
             case "Arrange_Cargo_Release_Open":
                 return PENA;
             case "Issue_Original_TPDOC_Closed":
+            case "ARRIVAL_NOTICE":
                 return ISSU;
             case "Issue_Verify_Copy_of_TPDOC_Closed":
                 return DRFT;
@@ -111,14 +114,14 @@ public interface ShipmentEventMapper {
             case "Confirm_Shipment_Closed":
             case "Shipment_Cancelled":
                 return BOK;
-            case "Equipment_VGM_Details_Updated":
-                return VGM;
             case "Issue_Original_TPDOC_Closed":
             case "Issue_Verify_Copy_of_TPDOC_Closed":
             case "RELEASE":
                 return TRD;
             case "Receive_Transport_Document_Instructions_Closed":
                 return SHI;
+            case "ARRIVAL_NOTICE":
+                return ARN;
             default:
                 throw new MappingException("Could not map Shipment Information Type Code ".concat(eventAct));
         }

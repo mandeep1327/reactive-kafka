@@ -31,6 +31,9 @@ public final class EquipmentTestDataBuilder {
         moveType.setOperator("MSK");
         moveType.setActDte("2021-09-23 ");
         moveType.setActTim("23:45");
+        moveType.setLineCde("LineCode");
+        //TO match the Transportplantype in Transport event test data End Location
+        moveType.setActLoc("Copenhagen");
         return moveType;
 
     }

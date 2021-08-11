@@ -1,14 +1,13 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders;
 
-import com.maersk.jaxb.pojo.EquipmentType;
+import com.maersk.jaxb.pojo.EndLocType;
 import com.maersk.jaxb.pojo.EventType;
 import com.maersk.jaxb.pojo.GEMSPubType;
 import com.maersk.jaxb.pojo.GTTSVesselType;
-import com.maersk.jaxb.pojo.MoveType;
 import com.maersk.jaxb.pojo.PubSetType;
-import com.maersk.jaxb.pojo.RefReasonType;
-import com.maersk.jaxb.pojo.RefReasonsType;
+import com.maersk.jaxb.pojo.StartLocType;
 import com.maersk.jaxb.pojo.TransportPlanType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -20,10 +19,10 @@ public final class GEMSPubTestDataBuilder {
 
     private GEMSPubTestDataBuilder(){}
 
-    public static GEMSPubType getGemsData(){
+    public static GEMSPubType getGemsData(List<PubSetType> pubSetList){
 
         var gemsPubType = new GEMSPubType();
-        gemsPubType.setPubSet(List.of(getPubSetTypeWithArrange_Cargo_Release_ClosedEventAct()));
+        gemsPubType.setPubSet(pubSetList);
         return gemsPubType;
 
     }
@@ -42,10 +41,77 @@ public final class GEMSPubTestDataBuilder {
 
     public static PubSetType getPubSetWithVesselData(EventType eventType) {
 
+        PubSetType pubSetType = getCommonPubSetTypeWithVesselData(eventType);
+        pubSetType.setTransportPlan(List.of(getTransportPlan()));
+        return pubSetType;
+
+    }
+
+    private static PubSetType getPubSetForDepartureWithVesselData(EventType eventType) {
+        var pubSetType = getPubSetWithVesselData(eventType);
+        pubSetType.setTransportPlan(List.of(getTransportPlanForDeparture()));
+        return pubSetType;
+    }
+
+    private static PubSetType getPubSetForDepartureWithVesselDataAndBargeTransportMode(EventType eventType) {
+        var pubSetType = getPubSetWithVesselData(eventType);
+        pubSetType.setTransportPlan(List.of(getTransportPlanForDeparture()));
+        return pubSetType;
+    }
+
+    @NotNull
+    private static PubSetType getCommonPubSetTypeWithVesselData(EventType eventType) {
         var pubSetType = getPubSet(eventType);
         pubSetType.setGttsvessel(getVesselData());
         return pubSetType;
+    }
 
+
+
+    private static TransportPlanType getTransportPlan() {
+        TransportPlanType transportPlan = getCommonTransportPlanType(getStartLoc(), getEndLoc());
+        transportPlan.setTransMode("MVS");
+        return transportPlan;
+    }
+
+
+    private static TransportPlanType getTransportPlanForDeparture() {
+        TransportPlanType transportPlan = getCommonTransportPlanType(getStartLocWithCopenhagen(), getEndLocWithKolkata());
+        transportPlan.setTransMode("BAR");
+        return transportPlan;
+    }
+
+    @NotNull
+    private static TransportPlanType getCommonTransportPlanType(StartLocType startLocWithCopenhagen, EndLocType endLocWithKolkata) {
+        var transportPlan = new TransportPlanType();
+        transportPlan.setStartLoc(startLocWithCopenhagen);
+        transportPlan.setEndLoc(endLocWithKolkata);
+        transportPlan.setVesselCde("MUMMRSK");
+        return transportPlan;
+    }
+
+    private static StartLocType getStartLoc() {
+        var startLocation = new StartLocType();
+        startLocation.setValue("Kolkata");
+        return startLocation;
+    }
+
+    private static StartLocType getStartLocWithCopenhagen() {
+        var startLocation = new StartLocType();
+        startLocation.setValue("Copenhagen");
+        return startLocation;
+    }
+
+    private static EndLocType getEndLoc() {
+        var endLocation = new EndLocType();
+        endLocation.setValue("Copenhagen");
+        return endLocation;
+    }
+
+    private static EndLocType getEndLocWithKolkata() {
+        var endLocation = new EndLocType();
+        endLocation.setValue("Kolkata");
+        return endLocation;
     }
 
     private static GTTSVesselType getVesselData() {
@@ -81,6 +147,9 @@ public final class GEMSPubTestDataBuilder {
     }
     public static PubSetType getPubSetTypeWithShipment_CancelledEventAct(){
         return getPubSet(getEventTypeData("Shipment_Cancelled"));
+    }
+    public static PubSetType getPubSetTypeWithDemoEventAct(){
+        return getPubSet(getEventTypeData("NA_Event_Act"));
     }
 
 
@@ -128,20 +197,25 @@ public final class GEMSPubTestDataBuilder {
         return getPubSetWithVesselData(getEventTypeData("CONTAINER ARRIVAL"));
     }
     public static PubSetType getPubSetTypeWithCONTAINER_DEPARTUREEventAct(){
-        return getPubSetWithVesselData(getEventTypeData("CONTAINER DEPARTURE"));
+        return getPubSetForDepartureWithVesselData(getEventTypeData("CONTAINER DEPARTURE"));
     }
+
     public static PubSetType getPubSetTypeWithRAIL_ARRIVAL_AT_DESTINATIONEventAct(){
         return getPubSetWithVesselData(getEventTypeData("RAIL_ARRIVAL_AT_DESTINATION"));
     }
     public static PubSetType getPubSetTypeWithRAIL_DEPARTUREEventAct(){
-        return getPubSetWithVesselData(getEventTypeData("RAIL_DEPARTURE"));
+        return getPubSetForDepartureWithVesselData(getEventTypeData("RAIL_DEPARTURE"));
     }
     public static PubSetType getPubSetTypeWithShipment_ETAEventAct(){
         return getPubSetWithVesselData(getEventTypeData("Shipment_ETA"));
     }
     public static PubSetType getPubSetTypeWithShipment_ETDEventAct(){
-        return getPubSetWithVesselData(getEventTypeData("Shipment_ETD"));
+        return getPubSetForDepartureWithVesselData(getEventTypeData("Shipment_ETD"));
     }
+    public static PubSetType getPubSetTypeWithShipment_ETDEventActAndBargeTransportMode(){
+        return getPubSetForDepartureWithVesselDataAndBargeTransportMode(getEventTypeData("Shipment_ETD"));
+    }
+
 
 
     private static EventType getEventTypeData(String eventAct) {

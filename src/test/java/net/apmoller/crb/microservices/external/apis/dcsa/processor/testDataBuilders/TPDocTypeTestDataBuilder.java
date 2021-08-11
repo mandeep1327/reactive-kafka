@@ -15,6 +15,7 @@ public final class TPDocTypeTestDataBuilder {
 
         var tpDocType = new TPDocType();
         tpDocType.setBolNo("293156737");
+        tpDocType.setOperator("Operator");
         return tpDocType;
 
     }
