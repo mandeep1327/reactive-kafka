@@ -124,12 +124,15 @@ public final class TransportCallMapper {
 
     protected static Map<String, TransportPlanType> getProperLocationFromTransportPlan(List<TransportPlanType> transportPlan, EventType eventType) {
         var typeOfTransport = getArrivalOrDepartureEventType(eventType.getEventAct().toString());
+        var transportPlans = Optional.ofNullable(transportPlan)
+                .filter(transportPlanTypes -> !transportPlanTypes.isEmpty())
+                .orElseThrow(() -> new MappingException("TransportPlan can not be empty for the Transport Event"));
         switch (typeOfTransport){
             case ARRI:
-                return transportPlan.stream()
+                return transportPlans.stream()
                         .collect(Collectors.toMap(e -> getEndLocation(e.getEndLoc()), Function.identity()));
             case DEPA:
-                return transportPlan.stream()
+                return transportPlans.stream()
                         .collect(Collectors.toMap(e -> getStartLocation(e.getStartLoc()), Function.identity()));
             default:
                 return null;

@@ -8,6 +8,7 @@ import com.maersk.jaxb.pojo.PubSetType;
 import com.maersk.jaxb.pojo.ShipmentType;
 import com.maersk.jaxb.pojo.TPDocType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportEvent;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.dto.PartyFunctionDTO;
 import org.springframework.data.mapping.MappingException;
@@ -69,11 +70,9 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.reposi
 
 public final class EventUtility {
 
-    public final static String TRANSPORT_EVENT = "TRANSPORT";
-    public final static String EQUIPMENT_EVENT = "EQUIPMENT";
-    public final static String SHIPMENT_EVENT = "SHIPMENT";
-
-
+    public static final String TRANSPORT_EVENT = "TRANSPORT";
+    public static final String EQUIPMENT_EVENT = "EQUIPMENT";
+    public static final String SHIPMENT_EVENT = "SHIPMENT";
 
 
     private EventUtility() {
@@ -164,7 +163,7 @@ public final class EventUtility {
             case "Shipment_ETD":
                 return DEPA;
             default:
-                throw new MappingException("Could not map Shipment Event Type of ".concat(eventAct));
+                throw new MappingException("Could not map Transport Event Type of ".concat(eventAct));
         }
     }
 
@@ -276,7 +275,7 @@ public final class EventUtility {
                 .orElse(null);
     }
 
-    public static EquipmentEvent.CarrierCodeEnum fromPubSetTypeToCarrierCode(PubSetType pubSetType) {
+    public static Event.CarrierCodeEnum fromPubSetTypeToCarrierCode(PubSetType pubSetType) {
 
         switch (getCarrierCodes(pubSetType)) {
             case "MSK":
