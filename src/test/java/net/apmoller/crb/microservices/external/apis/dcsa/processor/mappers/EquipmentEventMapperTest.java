@@ -19,16 +19,25 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.reposi
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.DocumentReference.Key.TRD;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.GTIN;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.GTOT;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.LOAD;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.CLOC;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.DEPO;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.INTE;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.POTE;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithARRIVECUIMPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDEPARTCUEXPNEventAct;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForTransportEventType;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_IN_EXPNEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_OUTEXPYEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithLOAD_NEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithOFF_RAILIMPNEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithON_RAIL_EXPNEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForEquipmentEventType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EquipmentEventMapperTest {
 
-    private final static Event baseEventData = getEventForTransportEventType() ;
+    private final static Event baseEventData = getEventForEquipmentEventType();
     private EquipmentEventMapperImpl equipmentEventMapper = new EquipmentEventMapperImpl();
 
     @ParameterizedTest
@@ -41,29 +50,32 @@ public class EquipmentEventMapperTest {
 
     private static Stream<Arguments> createEquipmentEventTestData() {
         return Stream.of(
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithARRIVECUIMPNEventAct())), getEquipmentEventTestData(GTIN)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithDEPARTCUEXPNEventAct())), getEquipmentEventTestData(GTOT))
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithARRIVECUIMPNEventAct())), getEquipmentEventTestData(GTIN, CLOC)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_IN_EXPNEventAct())), getEquipmentEventTestData(GTIN, POTE)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithOFF_RAILIMPNEventAct())), getEquipmentEventTestData(GTIN, INTE)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithDEPARTCUEXPNEventAct())), getEquipmentEventTestData(GTOT, CLOC)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithON_RAIL_EXPNEventAct())), getEquipmentEventTestData(GTOT, INTE)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventAct())), getEquipmentEventTestData(GTOT, DEPO)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithLOAD_NEventAct())), getEquipmentEventTestData(LOAD, POTE))
         );
     }
 
-    private static TransportCall getTransportCall(TransportCall.FacilityTypeCode facilityCode, TransportCall.TransPortMode transPortMode) {
+    private static TransportCall getTransportCall(TransportCall.FacilityTypeCode facilityCode) {
         return TransportCall.builder()
                 .facilityTypeCode(facilityCode)
                 .carrierServiceCode("LineCode")
-                .carrierVoyageNumber(null)
                 .otherFacility("Copenhagen")
-                .modeOfTransport(transPortMode)
                 .build();
     }
 
-    private static EquipmentEvent getEquipmentEventTestData(EquipmentEvent.EquipmentEventType eventType) {
+    private static EquipmentEvent getEquipmentEventTestData(EquipmentEvent.EquipmentEventType eventType, TransportCall.FacilityTypeCode facilityTypeCode) {
         return EquipmentEvent.builder()
                 .equipmentEventType(eventType)
                 .emptyIndicatorCode(EquipmentEvent.EmptyIndicatorCode.LADEN)
                 .documentReferences(getDocumentRef())
                 .seals(new ArrayList<>())
                 .eventID(baseEventData.getEventID())
-                .transportCall(getTransportCall(CLOC, null))
+                .transportCall(getTransportCall(facilityTypeCode))
                 .bookingReference(baseEventData.getBookingReference())
                 .eventDateTime(baseEventData.getEventDateTime())
                 .eventType(baseEventData.getEventType())

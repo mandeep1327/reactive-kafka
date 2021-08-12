@@ -21,6 +21,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.CLOC;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.DEPO;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.INTE;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.POTE;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDepartureEventType;
@@ -31,19 +32,29 @@ public final class TransportCallMapper {
 
     protected TransportCallMapper() {}
 
-    public static TransportCall fromPubsetToTransportCall(PubSetType pubSetType) {
+    public static TransportCall fromPubsetToTransportCallBase(PubSetType pubSetType) {
         var event = pubSetType.getEvent();
         var eventAct = event.getEventAct().toString();
         var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
-        var transportPlanTypeList = pubSetType.getTransportPlan();
-        var transportPlan = Optional.ofNullable(getProperLocationFromTransportPlan(transportPlanTypeList, event))
-                .map(e -> e.get(getActLocation(equipmentFirstElement))).orElse(null);
         return TransportCall.builder()
                 .facilityTypeCode(getFacilityCodeType(eventAct))
                 .carrierServiceCode(getCarrierServiceCode(equipmentFirstElement))
+                .otherFacility(getLocation(equipmentFirstElement))
+                .build();
+    }
+
+    public static TransportCall fromPubsetToTransportCall(PubSetType pubSetType) {
+        var base = fromPubsetToTransportCallBase(pubSetType);
+        var transportPlanTypeList = pubSetType.getTransportPlan();
+        var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
+        var transportPlan = Optional.ofNullable(getProperLocationFromTransportPlan(transportPlanTypeList, pubSetType.getEvent()))
+                .map(e -> e.get(getActLocation(equipmentFirstElement))).orElse(null);
+        return TransportCall.builder()
+                .facilityTypeCode(base.getFacilityTypeCode())
+                .carrierServiceCode(base.getCarrierServiceCode())
                 .carrierVoyageNumber(getVoyageNumberFromTransportPlan(transportPlan))
                 .modeOfTransport(getModeOfTransport(transportPlan))
-                .otherFacility(getLocation(equipmentFirstElement))
+                .otherFacility(base.getOtherFacility())
                 .build();
     }
 
@@ -97,10 +108,18 @@ public final class TransportCallMapper {
             case "CONTAINER DEPARTURE":
             case "Shipment_ETA":
             case "Shipment_ETD":
+            case "GATE-IN EXPN":
+            case "LOAD       N":
+            case "STRIPPIN   Y":
+            case "STUFFINGEXPN":
                 return POTE;
             case "RAIL_ARRIVAL_AT_DESTINATION":
             case "RAIL_DEPARTURE":
+            case "OFF-RAILIMPN":
+            case "ON-RAIL EXPN":
                 return INTE;
+            case "GATE-OUTEXPY":
+                return DEPO;
             default:
                 throw new MappingException("Could not map Facility Code Type ".concat(eventAct));
         }

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.TransportCallMapper.fromPubsetToTransportCall;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.TransportCallMapper.fromPubsetToTransportCallBase;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EmptyIndicatorCode.EMPTY;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EmptyIndicatorCode.LADEN;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Seals.SealSourceEnum.CAR;
@@ -57,7 +58,7 @@ public interface EquipmentEventMapper {
     }
 
     default TransportCall fromPubSetTypeToTransportCall(PubSetType pubSetType) {
-        var transportCall = fromPubsetToTransportCall(pubSetType);
+        var transportCall = fromPubsetToTransportCallBase(pubSetType);
         return TransportCall.builder()
                 .carrierServiceCode(transportCall.getCarrierServiceCode())
                 .facilityTypeCode(transportCall.getFacilityTypeCode())

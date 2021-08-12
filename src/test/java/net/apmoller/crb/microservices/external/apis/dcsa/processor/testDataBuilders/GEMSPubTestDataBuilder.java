@@ -180,19 +180,12 @@ public final class GEMSPubTestDataBuilder {
     public static PubSetType getPubSetTypeWithDemoEventAct(){
         return getPubSet(getEventTypeData("NA_Event_Act"));
     }
-
-    ///////
-
     public static PubSetType getPubSetTypeWithARRIVECUIMPNEventAct(){
         return getPubSetWithTransportPlan(getEventTypeData("ARRIVECUIMPN"));
     }
-
     public static PubSetType getPubSetTypeWithDEPARTCUEXPNEventAct(){
         return getPubSetForDepartureWithTransportPlanAndBARTransportMode(getEventTypeData("DEPARTCUEXPN"));
     }
-
-    ///////
-
     public static PubSetType getPubSetTypeWithDISCHARG_NEventAct(){
         return getPubSet(getEventTypeData("DISCHARG   N"));
     }
