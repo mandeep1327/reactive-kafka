@@ -199,7 +199,7 @@ public final class EventUtility {
             case "STUFFINGEXPN":
                 return STUF;
             default:
-                throw new MappingException("Could not map Shipment Event Type of ".concat(eventAct));
+                throw new MappingException("Could not map Equipment Event Type of ".concat(eventAct));
         }
     }
 

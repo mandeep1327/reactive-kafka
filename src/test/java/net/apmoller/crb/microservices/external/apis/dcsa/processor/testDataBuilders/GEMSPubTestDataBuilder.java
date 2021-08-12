@@ -181,15 +181,18 @@ public final class GEMSPubTestDataBuilder {
         return getPubSet(getEventTypeData("NA_Event_Act"));
     }
 
+    ///////
 
-
-
-/*    public static PubSetType getPubSetTypeWithARRIVECUIMPNEventAct(){
-        return getPubSet(getEventTypeData("ARRIVECUIMPN"));
+    public static PubSetType getPubSetTypeWithARRIVECUIMPNEventAct(){
+        return getPubSetWithVesselData(getEventTypeData("ARRIVECUIMPN"));
     }
+
     public static PubSetType getPubSetTypeWithDEPARTCUEXPNEventAct(){
-        return getPubSet(getEventTypeData("DEPARTCUEXPN"));
-    }*/
+        return getPubSetForDepartureWithVesselDataAndBargeTransportMode(getEventTypeData("DEPARTCUEXPN"));
+    }
+
+    ///////
+
     public static PubSetType getPubSetTypeWithDISCHARG_NEventAct(){
         return getPubSet(getEventTypeData("DISCHARG   N"));
     }
