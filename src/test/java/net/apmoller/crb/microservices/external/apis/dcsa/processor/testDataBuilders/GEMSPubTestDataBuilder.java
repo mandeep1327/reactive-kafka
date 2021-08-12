@@ -184,11 +184,11 @@ public final class GEMSPubTestDataBuilder {
     ///////
 
     public static PubSetType getPubSetTypeWithARRIVECUIMPNEventAct(){
-        return getPubSetWithVesselData(getEventTypeData("ARRIVECUIMPN"));
+        return getPubSetWithTransportPlan(getEventTypeData("ARRIVECUIMPN"));
     }
 
     public static PubSetType getPubSetTypeWithDEPARTCUEXPNEventAct(){
-        return getPubSetForDepartureWithVesselDataAndBargeTransportMode(getEventTypeData("DEPARTCUEXPN"));
+        return getPubSetForDepartureWithTransportPlanAndBARTransportMode(getEventTypeData("DEPARTCUEXPN"));
     }
 
     ///////

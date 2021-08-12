@@ -5,7 +5,7 @@ import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstr
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.DocumentReference;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent;
+
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -19,11 +19,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.reposi
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.DocumentReference.Key.TRD;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.GTIN;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.GTOT;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.CONF;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.SRM;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.CLOC;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.POTE;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.TransPortMode.VESSEL;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithARRIVECUIMPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDEPARTCUEXPNEventAct;
