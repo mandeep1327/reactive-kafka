@@ -1,17 +1,17 @@
 package util;
 
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import org.junit.Assert;
+import org.junit.jupiter.api.BeforeAll;
 
 public class DcsaStepDefinition extends CucumberSpringConfiguration {
-    @Given("place holder")
-    public void iHelloWorld() {
-        System.out.println("placeholder");
+
+    @BeforeAll
+    public static void setup() throws Exception {
+        KafkaTestContainer.setupKafkaContainer();
     }
 
-    @Then("placeholder")
-    public void trueIsTrue() {
-        Assert.assertTrue(true);
+    @Given("set a message on kafka")
+    public void send() throws Exception {
+       /// KafkaTestContainer.sendToProducer("Test", "test");
     }
 }
