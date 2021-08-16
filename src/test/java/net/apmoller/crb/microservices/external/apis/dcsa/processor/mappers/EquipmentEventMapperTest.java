@@ -1,6 +1,7 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mappers;
 
 import com.maersk.jaxb.pojo.GEMSPubType;
+import com.maersk.jaxb.pojo.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapperImpl;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.DocumentReference;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent;
@@ -10,6 +11,7 @@ import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.mo
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.data.mapping.MappingException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +29,18 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.reposi
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithARRIVECUIMPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDEPARTCUEXPNEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDemoEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_IN_EXPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_OUTEXPYEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithLOAD_NEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithOFF_RAILIMPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithON_RAIL_EXPNEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_CancelledEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithoutTransportPlan;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithoutVesselData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForEquipmentEventType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class EquipmentEventMapperTest {
 
@@ -48,6 +55,13 @@ public class EquipmentEventMapperTest {
         assertEquals(expectedShipmentEvent, actualEquipmentEvent, "Equipment Event does not match");
     }
 
+    @ParameterizedTest
+    @MethodSource("createEquipmentEventBadTestData")
+    void testEquipmentEventDataForBadData(String expectedExceptionMessage, PubSetType pubSetData) {
+        var exception = assertThrows(MappingException.class, () -> equipmentEventMapper.fromPubSetToEquipmentEvent(pubSetData, baseEventData));
+        assertEquals(expectedExceptionMessage, exception.getMessage(), "Exception thrown badly");
+    }
+
     private static Stream<Arguments> createEquipmentEventTestData() {
         return Stream.of(
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithARRIVECUIMPNEventAct())), getEquipmentEventTestData(GTIN, CLOC)),
@@ -57,6 +71,19 @@ public class EquipmentEventMapperTest {
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithON_RAIL_EXPNEventAct())), getEquipmentEventTestData(GTOT, INTE)),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventAct())), getEquipmentEventTestData(GTOT, DEPO)),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithLOAD_NEventAct())), getEquipmentEventTestData(LOAD, POTE))
+        );
+    }
+
+    private static Stream<Arguments> createEquipmentEventBadTestData() {
+        return Stream.of(
+                //test invalid event
+                Arguments.arguments("Could not map Equipment Event Type of NA_Event_Act", getPubSetTypeWithDemoEventAct()),
+                //test shipment event
+                Arguments.arguments("Could not map Equipment Event Type of Shipment_Cancelled", getPubSetTypeWithShipment_CancelledEventAct()),
+                //test with payload having no transport plan
+                Arguments.arguments("Could not map Equipment Event Type of Shipment_ETD", getPubSetTypeWithoutTransportPlan()),
+                //test  payload having no vessel data
+                Arguments.arguments("Could not map Equipment Event Type of Shipment_ETD", getPubSetTypeWithoutVesselData())
         );
     }
 
