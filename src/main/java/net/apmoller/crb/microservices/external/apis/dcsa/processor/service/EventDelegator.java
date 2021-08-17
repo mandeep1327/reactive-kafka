@@ -1,10 +1,14 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.service;
 
+import MSK.com.external.dcsa.DcsaTrackTraceEvent;
 import com.maersk.jaxb.pojo.GEMSPubType;
 import com.maersk.jaxb.pojo.PubSetType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.ShipmentEventMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.TransportEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.mapping.MappingException;
@@ -19,9 +23,9 @@ import java.util.function.Supplier;
 public class EventDelegator {
 
     private final EventMapper eventMapper;
-    private final ShipmentEventDelegator shipmentEventDelegator;
-    private final EquipmentEventDelegator equipmentEventDelegator;
-    private final TransportEventDelegator transportEventDelegator;
+    private final ShipmentEventMapper shipmentEventMapper;
+    private final EquipmentEventMapper equipmentEventMapper;
+    private final TransportEventMapper transportEventMapper;
     private static final String PUBSET_IS_EMPTY = "The Pubset element is empty";
 
     private Event getBaseEventFromGemSEvent(GEMSPubType gemsBaseStructure) {
@@ -47,14 +51,21 @@ public class EventDelegator {
     public void checkCorrectEvent(GEMSPubType gemsBaseStructure) {
         var pubSetType = getPubSetType(gemsBaseStructure).orElseThrow(getExceptionSupplier(PUBSET_IS_EMPTY));
         var baseEvent = getBaseEventFromGemSEvent(gemsBaseStructure);
-        switch (baseEvent.getEventType()){
+        var dcsaTrackAndTraceToBeStored = new DcsaTrackTraceEvent();
+        switch (baseEvent.getEventType()) {
             case SHIPMENT:
-                shipmentEventDelegator.createAndPushShipmentEvent(baseEvent, pubSetType);
+                dcsaTrackAndTraceToBeStored.setShipmentEvent(shipmentEventMapper.fromPubSetTypeToShipmentEvent(pubSetType, baseEvent));
+                break;
             case TRANSPORT:
-                transportEventDelegator.createAndPushTransportEvent(baseEvent, pubSetType);
+                dcsaTrackAndTraceToBeStored.setTransportEvent(transportEventMapper.fromPubSetToTransportEvent(pubSetType, baseEvent));
+                break;
             case EQUIPMENT:
-                equipmentEventDelegator.createAndPushEquipmentEvent(baseEvent, pubSetType);
+                dcsaTrackAndTraceToBeStored.setEquipmentEvent(equipmentEventMapper.fromPubSetToEquipmentEvent(pubSetType, baseEvent));
+                break;
+            default:
+                throw new MappingException("Not acceptable event type of type" + dcsaTrackAndTraceToBeStored);
         }
+
     }
 }
 

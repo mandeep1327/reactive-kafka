@@ -1,9 +1,10 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 
+import MSK.com.external.dcsa.RefTypeEnum;
 import com.maersk.jaxb.pojo.PartyType;
 import com.maersk.jaxb.pojo.PubSetType;
 import com.maersk.jaxb.pojo.ShipmentType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.References;
+import MSK.com.external.dcsa.References;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,10 +16,10 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.References.RefTypeEnum.AAO;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.References.RefTypeEnum.FF;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.References.RefTypeEnum.PO;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.References.RefTypeEnum.SI;
+import static MSK.com.external.dcsa.RefTypeEnum.AAO;
+import static MSK.com.external.dcsa.RefTypeEnum.FF;
+import static MSK.com.external.dcsa.RefTypeEnum.PO;
+import static MSK.com.external.dcsa.RefTypeEnum.SI;
 
 @Component
 public final class ReferenceMapper {
@@ -55,9 +56,9 @@ public final class ReferenceMapper {
                 .filter(referenceType -> referenceType.getTyp().toString().equals("41"))
                 .filter(referenceType -> !Objects.isNull(referenceType.getValue()))
                 .findFirst()
-                .map(s -> List.of(References.builder()
-                        .referenceType(PO)
-                        .referenceValue(s.getValue().toString())
+                .map(s -> List.of(References.newBuilder()
+                        .setReferenceType(PO)
+                        .setReferenceValue(s.getValue().toString())
                         .build()))
                 .orElse(null);
     }
@@ -81,7 +82,7 @@ public final class ReferenceMapper {
         return referenceList;
     }
 
-    protected static void buildReferenceList(List<References> referenceList, Stream<String> streamOfCustomerReference, References.RefTypeEnum refTypeEnum) {
+    protected static void buildReferenceList(List<References> referenceList, Stream<String> streamOfCustomerReference, RefTypeEnum refTypeEnum) {
         streamOfCustomerReference.forEach(buildReference(referenceList, refTypeEnum));
     }
 
@@ -93,10 +94,10 @@ public final class ReferenceMapper {
                 .map(CharSequence::toString);
     }
 
-    private static Consumer<String> buildReference(List<References> referenceList, References.RefTypeEnum refTypeEnum) {
-        return customerReference -> referenceList.add(References.builder()
-                .referenceType(refTypeEnum)
-                .referenceValue(customerReference)
+    private static Consumer<String> buildReference(List<References> referenceList, RefTypeEnum refTypeEnum) {
+        return customerReference -> referenceList.add(References.newBuilder()
+                .setReferenceType(refTypeEnum)
+                .setReferenceValue(customerReference)
                 .build()
         );
     }

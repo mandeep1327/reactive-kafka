@@ -1,9 +1,9 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 
+import MSK.com.external.dcsa.Party;
 import com.maersk.jaxb.pojo.PartyType;
 import com.maersk.jaxb.pojo.PubSetType;
 import com.maersk.jaxb.pojo.ShipmentType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -38,11 +38,11 @@ public final class PartyMapper {
         var roleType = getNullSafeStringFromNullableChars(partyType.getRoletyp());
         //TODO: take care of the extra role functions here with counter
         var partyFunctions = getMapOfPartyRoleAndFunctions().get(Integer.valueOf(roleType));
-        return Party.builder()
-                .partyID(getNullSafeStringFromNullableChars(partyType.getCustNo()))
-                .partyName(getNullSafeStringFromNullableChars(partyType.getCustName()))
-                .partyFunctionCode(partyFunctions.getFunctionCode())
-                .partyFunctionName(partyFunctions.getFunctionName())
+        return Party.newBuilder()
+                .setPartyID(getNullSafeStringFromNullableChars(partyType.getCustNo()))
+                .setPartyName(getNullSafeStringFromNullableChars(partyType.getCustName()))
+                .setPartyFunctionCode(partyFunctions.getFunctionCode())
+                .setPartyFunctionName(partyFunctions.getFunctionName())
                 .build();
 
     }

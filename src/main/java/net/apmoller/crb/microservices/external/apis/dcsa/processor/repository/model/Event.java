@@ -1,5 +1,10 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model;
 
+import MSK.com.external.dcsa.CarrierCode;
+import MSK.com.external.dcsa.EventClassifierCode;
+import MSK.com.external.dcsa.EventType;
+import MSK.com.external.dcsa.Party;
+import MSK.com.external.dcsa.References;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,17 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 public class Event {
-    public enum  EventType {
-        EQUIPMENT, SHIPMENT, TRANSPORT
-    }
-
-    public enum  EventClassifierCode {
-        PLN, ACT, EST
-    }
-
-    public enum CarrierCodeEnum {
-        MAEU, SAFM, MCCQ, SEJJ, SEAU
-    }
 
     private String eventID;
     private String bookingReference;
@@ -37,5 +31,5 @@ public class Event {
     private String transportDocumentReference;
     private String sourceSystem;
     private String serviceType;
-    private CarrierCodeEnum carrierCode;
+    private CarrierCode carrierCode;
 }

@@ -1,11 +1,13 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mappers;
 
+import MSK.com.external.dcsa.ShipmentEvent;
+import MSK.com.external.dcsa.ShipmentEventType;
+import MSK.com.external.dcsa.ShipmentInformationType;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maersk.jaxb.pojo.GEMSPubType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.ShipmentEventMapperImpl;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,18 +17,17 @@ import org.springframework.data.mapping.MappingException;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.CONF;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.ISSU;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.PENA;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.RECE;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.REJE;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.SURR;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.ARN;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.BOK;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.SHI;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.SRM;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.TRD;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.VGM;
+import static MSK.com.external.dcsa.ShipmentEventType.CONF;
+import static MSK.com.external.dcsa.ShipmentEventType.ISSU;
+import static MSK.com.external.dcsa.ShipmentEventType.PENA;
+import static MSK.com.external.dcsa.ShipmentEventType.RECE;
+import static MSK.com.external.dcsa.ShipmentEventType.REJE;
+import static MSK.com.external.dcsa.ShipmentEventType.SURR;
+import static MSK.com.external.dcsa.ShipmentInformationType.ARN;
+import static MSK.com.external.dcsa.ShipmentInformationType.BOK;
+import static MSK.com.external.dcsa.ShipmentInformationType.SHI;
+import static MSK.com.external.dcsa.ShipmentInformationType.SRM;
+import static MSK.com.external.dcsa.ShipmentInformationType.TRD;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithARRIVAL_NOTICEEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithArrange_Cargo_Release_ClosedEventAct;
@@ -75,25 +76,25 @@ class ShipmentEventMapperTest {
     }
 
 
-    private static ShipmentEvent getShipmentEventTestData(String documentID, ShipmentEvent.ShipmentEventType shipmentEventType, ShipmentEvent.ShipmentInformationTypeCode informationTypeCode) {
-        return ShipmentEvent.builder()
-                .documentTypeCode(informationTypeCode)
-                .shipmentEventTypeCode(shipmentEventType)
-                .documentID(documentID)
-                .eventID(baseEventData.getEventID())
-                .bookingReference(baseEventData.getBookingReference())
-                .eventDateTime(baseEventData.getEventDateTime())
-                .eventType(baseEventData.getEventType())
-                .eventCreatedDateTime(baseEventData.getEventCreatedDateTime())
-                .eventClassifierCode(baseEventData.getEventClassifierCode())
-                .parties(baseEventData.getParties())
-                .references(baseEventData.getReferences())
-                .equipmentReference(baseEventData.getEquipmentReference())
-                .carrierBookingReference(baseEventData.getCarrierBookingReference())
-                .transportDocumentReference(baseEventData.getTransportDocumentReference())
-                .sourceSystem(baseEventData.getSourceSystem())
-                .serviceType(baseEventData.getServiceType())
-                .carrierCode(baseEventData.getCarrierCode())
+    private static ShipmentEvent getShipmentEventTestData(String documentID, ShipmentEventType shipmentEventType, ShipmentInformationType informationTypeCode) {
+        return ShipmentEvent.newBuilder()
+                .setShipmentInformationType(informationTypeCode)
+             .setShipmentEventType(shipmentEventType)
+                .setDocumentID(documentID)
+                .setEventID(baseEventData.getEventID())
+                .setBookingReference(baseEventData.getBookingReference())
+                .setEventDateTime(baseEventData.getEventDateTime())
+                .setEventType(baseEventData.getEventType())
+                .setEventCreatedDateTime(baseEventData.getEventCreatedDateTime())
+                .setEventClassifierCode(baseEventData.getEventClassifierCode())
+                .setParties(baseEventData.getParties())
+                .setReferences(baseEventData.getReferences())
+                .setEquipmentReference(baseEventData.getEquipmentReference())
+                .setCarrierBookingReference(baseEventData.getCarrierBookingReference())
+                .setTransportDocumentReference(baseEventData.getTransportDocumentReference())
+                .setSourceSystem(baseEventData.getSourceSystem())
+                .setServiceType(baseEventData.getServiceType())
+                .setCarrierCode(baseEventData.getCarrierCode())
                 .build();
     }
 }
