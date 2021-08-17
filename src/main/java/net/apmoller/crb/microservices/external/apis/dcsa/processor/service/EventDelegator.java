@@ -10,11 +10,19 @@ import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstr
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.ShipmentEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.TransportEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mapping.MappingException;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.kafka.sender.KafkaSender;
+import reactor.kafka.sender.SenderRecord;
+import reactor.kafka.sender.SenderResult;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 @Service
@@ -27,6 +35,10 @@ public class EventDelegator {
     private final EquipmentEventMapper equipmentEventMapper;
     private final TransportEventMapper transportEventMapper;
     private static final String PUBSET_IS_EMPTY = "The Pubset element is empty";
+    private final KafkaSender<String, DcsaTrackTraceEvent> kafkaSender;
+
+    @Value("${kafka.publisher.topic}")
+    private String kafkaPublisherTopic;
 
     private Event getBaseEventFromGemSEvent(GEMSPubType gemsBaseStructure) {
         return getPubSetType(gemsBaseStructure)
@@ -48,24 +60,43 @@ public class EventDelegator {
                 .findFirst();
     }
 
-    public void checkCorrectEvent(GEMSPubType gemsBaseStructure) {
+    public Flux<SenderResult<String>> checkCorrectEvent(GEMSPubType gemsBaseStructure) {
         var pubSetType = getPubSetType(gemsBaseStructure).orElseThrow(getExceptionSupplier(PUBSET_IS_EMPTY));
         var baseEvent = getBaseEventFromGemSEvent(gemsBaseStructure);
         var dcsaTrackAndTraceToBeStored = new DcsaTrackTraceEvent();
+        String keyForKafkaPayload;
         switch (baseEvent.getEventType()) {
             case SHIPMENT:
-                dcsaTrackAndTraceToBeStored.setShipmentEvent(shipmentEventMapper.fromPubSetTypeToShipmentEvent(pubSetType, baseEvent));
+                var shipmentEvent = shipmentEventMapper.fromPubSetTypeToShipmentEvent(pubSetType, baseEvent);
+                dcsaTrackAndTraceToBeStored.setShipmentEvent(shipmentEvent);
+                keyForKafkaPayload = getKeyForKafkaPayload(shipmentEvent.getEventID());
                 break;
             case TRANSPORT:
-                dcsaTrackAndTraceToBeStored.setTransportEvent(transportEventMapper.fromPubSetToTransportEvent(pubSetType, baseEvent));
+                var transportEvent = transportEventMapper.fromPubSetToTransportEvent(pubSetType, baseEvent);
+                dcsaTrackAndTraceToBeStored.setTransportEvent(transportEvent);
+                keyForKafkaPayload = getKeyForKafkaPayload(transportEvent.getEventID());
                 break;
             case EQUIPMENT:
-                dcsaTrackAndTraceToBeStored.setEquipmentEvent(equipmentEventMapper.fromPubSetToEquipmentEvent(pubSetType, baseEvent));
+                var equipmentEvent = equipmentEventMapper.fromPubSetToEquipmentEvent(pubSetType, baseEvent);
+                dcsaTrackAndTraceToBeStored.setEquipmentEvent(equipmentEvent);
+                keyForKafkaPayload = getKeyForKafkaPayload(equipmentEvent.getEventID());
                 break;
             default:
                 throw new MappingException("Not acceptable event type of type" + dcsaTrackAndTraceToBeStored);
         }
 
+        return sendMessage(dcsaTrackAndTraceToBeStored, keyForKafkaPayload);
+    }
+
+    private String getKeyForKafkaPayload(CharSequence eventId) {
+        return (String) Optional.ofNullable(eventId).orElse(UUID.randomUUID().toString());
+    }
+
+    private Flux<SenderResult<String>> sendMessage(DcsaTrackTraceEvent dcsaTrackAndTraceToBeStored, String keyForKafkaPayload) {
+        var senderRecord = Mono.just(SenderRecord.create(new ProducerRecord<>(kafkaPublisherTopic, keyForKafkaPayload, dcsaTrackAndTraceToBeStored), keyForKafkaPayload));
+
+        return kafkaSender.send(senderRecord)
+                .doOnError(e -> log.error("This is the error message" +e.getMessage()));
     }
 }
 

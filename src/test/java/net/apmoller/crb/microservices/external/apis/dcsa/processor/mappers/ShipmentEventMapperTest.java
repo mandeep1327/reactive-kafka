@@ -79,7 +79,7 @@ class ShipmentEventMapperTest {
     private static ShipmentEvent getShipmentEventTestData(String documentID, ShipmentEventType shipmentEventType, ShipmentInformationType informationTypeCode) {
         return ShipmentEvent.newBuilder()
                 .setShipmentInformationType(informationTypeCode)
-             .setShipmentEventType(shipmentEventType)
+                .setShipmentEventType(shipmentEventType)
                 .setDocumentID(documentID)
                 .setEventID(baseEventData.getEventID())
                 .setBookingReference(baseEventData.getBookingReference())
