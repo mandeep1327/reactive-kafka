@@ -6,7 +6,7 @@ import MSK.com.external.dcsa.ShipmentInformationType;
 import com.maersk.jaxb.pojo.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility;
 import org.jetbrains.annotations.NotNull;
 import org.mapstruct.Mapper;

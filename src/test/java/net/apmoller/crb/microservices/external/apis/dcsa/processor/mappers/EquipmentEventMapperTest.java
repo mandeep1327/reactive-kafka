@@ -8,7 +8,7 @@ import MSK.com.external.dcsa.FacilityType;
 import MSK.com.external.dcsa.TransportCall;
 import com.maersk.jaxb.pojo.GEMSPubType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapperImpl;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

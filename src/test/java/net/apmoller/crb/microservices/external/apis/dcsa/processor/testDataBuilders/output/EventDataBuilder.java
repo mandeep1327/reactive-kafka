@@ -7,7 +7,7 @@ import MSK.com.external.dcsa.PartyFuncName;
 import MSK.com.external.dcsa.PartyFunctionCode;
 import MSK.com.external.dcsa.RefTypeEnum;
 import MSK.com.external.dcsa.References;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 
 import java.util.List;
 

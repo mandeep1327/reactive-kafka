@@ -1,4 +1,4 @@
-package net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model;
+package net.apmoller.crb.microservices.external.apis.dcsa.processor.dto;
 
 import MSK.com.external.dcsa.CarrierCode;
 import MSK.com.external.dcsa.EventClassifierCode;

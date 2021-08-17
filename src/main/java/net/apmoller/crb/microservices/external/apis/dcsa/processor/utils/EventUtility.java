@@ -10,7 +10,7 @@ import com.maersk.jaxb.pojo.MoveType;
 import com.maersk.jaxb.pojo.PubSetType;
 import com.maersk.jaxb.pojo.ShipmentType;
 import com.maersk.jaxb.pojo.TPDocType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.dto.PartyFunctionDTO;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.PartyFunctionDTO;
 import org.springframework.data.mapping.MappingException;
 
 import java.util.List;
