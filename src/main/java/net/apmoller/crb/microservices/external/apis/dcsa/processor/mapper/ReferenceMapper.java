@@ -39,7 +39,7 @@ public final class ReferenceMapper {
 
         var specificReferenceType  = getReferenceFromShipmentOfRefType41(pubSetType);
 
-        if (chosenParties.size() > 1) {
+        if (chosenParties.size() > 0) {
             return fetchReferencesFromChosenParties(chosenParties.get(0));
         } else {
             return specificReferenceType;

@@ -41,7 +41,7 @@ public final class ShipmentTestDataBuilder {
     }
 
     public static List<PartyType> getPartyList3() {
-        return List.of(getParty3(), getParty1());
+        return List.of(getParty3(), getParty4());
     }
 
     public static List<PartyType> getPartyList4() {

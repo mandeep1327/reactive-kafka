@@ -173,29 +173,4 @@ public final class TransportCallMapper {
         return null;
     }
 
-
-    protected static String getCarrierCode(PubSetType pubSetType, EquipmentType firstEquipment){
-        return Optional.ofNullable(firstEquipment)
-                .map(EquipmentType::getMove)
-                .map(MoveType::getActLoc)
-                .map(CharSequence::toString)
-                .orElse(getCarrierCodeFromShipment(pubSetType));
-    }
-
-    protected static String getCarrierCodeFromShipment(PubSetType pubSetType) {
-        return Optional.ofNullable(pubSetType.getShipment())
-                .map(ShipmentType::getOperator)
-                .map(CharSequence::toString)
-                .orElse(getCarrierCodeFromTpDoc(pubSetType));
-    }
-
-    protected static String getCarrierCodeFromTpDoc(PubSetType pubSetType) {
-        return Optional.ofNullable(pubSetType.getTpdoc())
-                .filter(tpDocTypes -> !tpDocTypes.isEmpty())
-                .map(tpDocTypes -> tpDocTypes.get(0))
-                .map(TPDocType::getOperator)
-                .map(CharSequence::toString)
-                .orElseThrow(() -> new MappingException("Carrier code can not be mapped"));
-    }
-
 }

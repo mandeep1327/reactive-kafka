@@ -67,7 +67,7 @@ public final class EventDataBuilder {
     }
 
     private static List<Party> getParties3() {
-        return List.of(getParty3(), getParty1());
+        return List.of(getParty3(), getParty4());
     }
 
     private static Party getParty4() {
