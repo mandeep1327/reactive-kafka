@@ -1,0 +1,759 @@
+{
+  "type": "record",
+  "namespace": "MSK.com.external.dcsa",
+  "name": "DcsaTrackTraceEvent",
+  "fields": [
+    {
+      "name": "shipmentEvent",
+      "type": [
+        "null",
+        {
+          "type": "record",
+          "namespace": "MSK.com.external.dcsa",
+          "name": "ShipmentEvent",
+          "fields": [
+            {
+              "name": "eventID",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "bookingReference",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "eventDateTime",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "type": {
+                "type": "enum",
+                "name": "EventType",
+                "symbols": [
+                  "EQUIPMENT",
+                  "SHIPMENT",
+                  "TRANSPORT"
+                ]
+              },
+              "name": "eventType"
+            },
+            {
+              "type": ["null", "string"],
+              "name": "eventCreatedDateTime",
+              "default": null
+            },
+            {
+              "name": "eventClassifierCode",
+              "type": {
+                "type": "enum",
+                "name": "EventClassifierCode",
+                "symbols": [
+                  "PLN",
+                  "ACT",
+                  "EST"
+                ]
+              }
+            },
+            {
+              "name": "parties",
+              "type": ["null", {
+                "type": "array",
+                "items": {
+                  "fields": [
+                    {
+                      "type": ["null", "string"],
+                      "name": "partyID",
+                      "default": null
+                    },
+                    {
+                      "type": ["null", "string"],
+                      "name": "partyName",
+                      "default": null
+                    },
+                    {
+                      "type": ["null", {
+                        "type": "enum",
+                        "name": "PartyFunctionCode",
+                        "symbols": [
+                          "OS",
+                          "CN",
+                          "N1",
+                          "N2",
+                          "NI",
+                          "COW",
+                          "COX",
+                          "DDR",
+                          "DDS"
+                        ]
+                      }],
+                      "name": "partyFunctionCode",
+                      "default": null
+                    },
+                    {
+                      "type": ["null", {
+                        "name": "PartyFuncName",
+                        "type": "enum",
+                        "symbols": [
+                          "BOOKED_BY",
+                          "CONTRACT",
+                          "SHIPPER",
+                          "CONSIGNEE",
+                          "FNP",
+                          "ANP",
+                          "AO",
+                          "OCB",
+                          "ICB",
+                          "CCIA",
+                          "IP",
+                          "OF",
+                          "IF",
+                          "TDR",
+                          "CCOA",
+                          "CP",
+                          "PO",
+                          "ODO",
+                          "IDO",
+                          "RTP",
+                          "LH",
+                          "DMIP",
+                          "DTIP",
+                          "SUPP",
+                          "HS",
+                          "HC",
+                          "SWSH",
+                          "SWCO"
+                        ]
+                      }],
+                      "name": "partyFunctionName",
+                      "default": null
+                    }
+                  ],
+                  "type": "record",
+                  "name": "Party"
+                }
+              }],
+              "default": null
+            },
+            {
+              "name": "references",
+              "type": ["null", {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "References",
+                  "fields": [
+                    {
+                      "name": "referenceValue",
+                      "type": ["null" ,"string"],
+                      "default": null
+                    },
+                    {
+                      "name": "referenceType",
+                      "type": ["null", {
+                        "type": "enum",
+                        "name": "RefTypeEnum",
+                        "symbols": [
+                          "FF",
+                          "SI",
+                          "PO",
+                          "AAO",
+                          "CR"
+                        ]
+                      }],
+                      "default": null
+                    }
+                  ]
+                }
+              }],
+              "default": null
+            },
+            {
+              "type": ["null" ,"string"],
+              "name": "equipmentReference",
+              "default": null
+            },
+            {
+              "type": ["null" ,"string"],
+              "name": "carrierBookingReference",
+              "default": null
+            },
+            {
+              "name": "transportDocumentReference",
+              "type": ["null" ,"string"],
+              "default": null
+            },
+            {
+              "name": "sourceSystem",
+              "type": ["null" ,"string"],
+              "default": null
+            },
+            {
+              "name": "serviceType",
+              "type": ["null" ,"string"],
+              "default": null
+            },
+            {
+              "name": "carrierCode",
+              "type": ["null", {
+                "type": "enum",
+                "name": "CarrierCode",
+                "symbols": [
+                  "MAEU",
+                  "SAFM",
+                  "MCCQ",
+                  "SEJJ",
+                  "SEAU"
+                ]
+              }],
+              "default": null
+            },
+            {
+              "name": "documentID",
+              "type": ["null" ,"string"],
+              "default": null
+            },
+            {
+              "name": "reason",
+              "type": ["null" ,"string"],
+              "default": null
+            },
+            {
+              "name": "shipmentInformationType",
+              "type": ["null", {
+                "type": "enum",
+                "name": "ShipmentInformationType",
+                "symbols": [
+                  "BOK",
+                  "SHI",
+                  "VGM",
+                  "SRM",
+                  "TRD",
+                  "ARN"
+                ]
+              }],
+              "default": null
+            },
+            {
+              "name": "shipmentEventType",
+              "type": {
+                "type": "enum",
+                "name": "ShipmentEventType",
+                "symbols": [
+                  "RECE",
+                  "DRFT",
+                  "PENA",
+                  "PENU",
+                  "REJE",
+                  "APPR",
+                  "ISSU",
+                  "SURR",
+                  "SUBM",
+                  "VOID",
+                  "CONF"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "equipmentEvent",
+      "type": [
+        "null",
+        {
+          "type": "record",
+          "namespace": "MSK.com.external.dcsa",
+          "name": "EquipmentEvent",
+          "fields": [
+            {
+              "name": "eventID",
+              "type": ["null" ,"string"],
+              "default": null
+            },
+            {
+              "name": "bookingReference",
+              "type": ["null" ,"string"],
+              "default": null
+            },
+            {
+              "name": "eventDateTime",
+              "type": ["null" ,"string"],
+              "default": null
+            },
+            {
+              "type": "EventType",
+              "name": "eventType"
+            },
+            {
+              "type": ["null" ,"string"],
+              "name": "eventCreatedDateTime",
+              "default": null
+            },
+            {
+              "name": "eventClassifierCode",
+              "type": "EventClassifierCode"
+            },
+            {
+              "name": "parties",
+              "type": ["null", {
+                "type": "array",
+                "items": "Party"
+              }],
+              "default": null
+            },
+            {
+              "name": "references",
+              "type": ["null", {
+                "type": "array",
+                "items": "References"
+              }],
+              "default": null
+            },
+            {
+              "type": ["null", "string"],
+              "name": "equipmentReference",
+              "default": null
+            },
+            {
+              "type": ["null", "string"],
+              "name": "carrierBookingReference",
+              "default": null
+            },
+            {
+              "name": "transportDocumentReference",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "sourceSystem",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "serviceType",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "carrierCode",
+              "type": ["null", "CarrierCode"],
+              "default": null
+            },
+            {
+              "name": "equipmentEventType",
+              "type": ["null", {
+                "type": "enum",
+                "name": "EquipmentEventType",
+                "symbols": [
+                  "LOAD",
+                  "DISC",
+                  "GTIN",
+                  "GTOT",
+                  "STUF",
+                  "STRP"
+                ]
+              }],
+              "default": null
+            },
+            {
+              "name": "emptyIndicatorCode",
+              "type": ["null", {
+                "type": "enum",
+                "name": "EmptyIndicatorCode",
+                "symbols": [
+                  "EMPTY",
+                  "LADEN"
+                ]
+              }],
+              "default": null
+            },
+            {
+              "name": "documentReferences",
+              "type": ["null", {
+                "type": "array",
+                "items": {
+                  "name": "DocumentReference",
+                  "type": "record",
+                  "fields": [
+                    {
+                      "name": "key",
+                      "type": ["null", {
+                        "type": "enum",
+                        "name": "Key",
+                        "symbols": [
+                          "BKG",
+                          "TRD"
+                        ]
+                      }],
+                      "default": null
+                    },
+                    {
+                      "name": "value",
+                      "type": ["null", "string"]
+                    }
+                  ]
+                }
+              }],
+              "default": null
+            },
+            {
+              "name": "isoEquipmentCode",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "seals",
+              "type": ["null", {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "Seals",
+                  "fields": [
+                    {
+                      "name": "sealNumber",
+                      "type": ["null", "string"],
+                      "default": null
+                    },
+                    {
+                      "name": "sealSource",
+                      "type": ["null", {
+                        "type": "enum",
+                        "name": "SealSource",
+                        "symbols": [
+                          "CAR",
+                          "SHI",
+                          "PHI",
+                          "VET",
+                          "CUS"
+                        ]
+                      }],
+                      "default": null
+                    }
+                  ]
+                }
+              }],
+              "default": null
+            },
+            {
+              "name": "transportCall",
+              "type": {
+                "type": "record",
+                "name": "TransportCall",
+                "fields": [
+                  {
+                    "name": "carrierServiceCode",
+                    "type": ["null", "string"],
+                    "default": null
+                  },
+                  {
+                    "name": "carrierVoyageNumber",
+                    "type": ["null", "string"],
+                    "default": null
+                  },
+                  {
+                    "name": "facilityType",
+                    "type": ["null", {
+                      "type": "enum",
+                      "name": "FacilityType",
+                      "symbols": [
+                        "BOCR",
+                        "CLOC",
+                        "COFS",
+                        "COYA",
+                        "OFFD",
+                        "DEPO",
+                        "INTE",
+                        "POTE",
+                        "PBPL",
+                        "BRTH"
+                      ]
+                    }],
+                    "default": null
+                  },
+                  {
+                    "name": "otherFacility",
+                    "type": ["null", "string"],
+                    "default": null
+                  },
+                  {
+                    "name": "modeOfTransport",
+                    "type": {
+                      "type": "enum",
+                      "name": "TransPortMode",
+                      "symbols": [
+                        "VESSEL",
+                        "RAIL",
+                        "TRUCK",
+                        "BARGE"
+                      ]
+                    }
+                  },
+                  {
+                    "name": "carrierCode",
+                    "type": ["null", "string"],
+                    "default": null
+                  },
+                  {
+                    "name": "transportCallSequenceNo",
+                    "type": ["null", "int"],
+                    "default": null
+                  },
+                  {
+                    "name": "unLocationCode",
+                    "type": ["null", "string"],
+                    "default": null
+                  },
+                  {
+                    "name": "location",
+                    "type": ["null", {
+                      "type": "record",
+                      "name": "Location",
+                      "fields": [
+                        {
+                          "type": ["null", "string"],
+                          "name": "locationName",
+                          "default": null
+                        },
+                        {
+                          "name": "latitude",
+                          "type": ["null", "string"],
+                          "default": null
+                        },
+                        {
+                          "name": "longitude",
+                          "type": ["null", "string"],
+                          "default": null
+                        },
+                        {
+                          "name": "unLocationCode",
+                          "type": ["null", "string"],
+                          "default": null
+                        },
+                        {
+                          "name": "address",
+                          "type": ["null", {
+                            "type": "record",
+                            "name": "Address",
+                            "fields": [
+                              {
+                                "name": "addressName",
+                                "type": ["null", "string"],
+                                "default": null
+                              },
+                              {
+                                "name": "streetName",
+                                "type": ["null", "string"],
+                                "default": null
+                              },
+                              {
+                                "name": "streetNumber",
+                                "type": ["null", "string"],
+                                "default": null
+                              },
+                              {
+                                "name": "floor",
+                                "type": ["null", "string"],
+                                "default": null
+                              },
+                              {
+                                "name": "postCode",
+                                "type": ["null", "string"],
+                                "default": null
+                              },
+                              {
+                                "name": "cityName",
+                                "type": ["null", "string"],
+                                "default": null
+                              },
+                              {
+                                "name": "stateRegion",
+                                "type": ["null", "string"],
+                                "default": null
+                              },
+                              {
+                                "name": "country",
+                                "type": ["null", "string"],
+                                "default": null
+                              }
+                            ]
+                          }],
+                          "default": null
+                        }
+                      ]
+                    }],
+                    "default": null
+                  },
+                  {
+                    "name": "vessel",
+                    "type": ["null", {
+                      "type": "record",
+                      "name": "Vessel",
+                      "fields": [
+                        {
+                          "name": "vesselIMONumber",
+                          "type": ["null", "int"],
+                          "default": null
+                        },
+                        {
+                          "name": "vesselName",
+                          "type": ["null", "string"],
+                          "default": null
+                        },
+                        {
+                          "name": "vesselFlag",
+                          "type": ["null", "string"],
+                          "default": null
+                        },
+                        {
+                          "name": "vesselCallSignNumber",
+                          "type": ["null", "string"],
+                          "default": null
+                        },
+                        {
+                          "name": "vesselOperatorCarrierId",
+                          "type": ["null", "string"],
+                          "default": null
+                        }
+                      ]
+                    }],
+                    "default": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "transportEvent",
+      "type": [
+        "null",
+        {
+          "type": "record",
+          "namespace": "MSK.com.external.dcsa",
+          "name": "TransportEvent",
+          "fields": [
+            {
+              "name": "eventID",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "bookingReference",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "eventDateTime",
+              "type": "string"
+            },
+            {
+              "type": "EventType",
+              "name": "eventType"
+            },
+            {
+              "type": ["null", "string"],
+              "name": "eventCreatedDateTime",
+              "default": null
+            },
+            {
+              "name": "eventClassifierCode",
+              "type": "EventClassifierCode"
+            },
+            {
+              "name": "parties",
+              "type": ["null", {
+                "type": "array",
+                "items": "Party"
+              }],
+              "default": null
+            },
+            {
+              "name": "references",
+              "type": ["null", {
+                "type": "array",
+                "items": "References"
+              }],
+              "default": null
+            },
+            {
+              "type": ["null", "string"],
+              "name": "equipmentReference",
+              "default": null
+            },
+            {
+              "type": ["null", "string"],
+              "name": "carrierBookingReference",
+              "default": null
+            },
+            {
+              "name": "transportDocumentReference",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "sourceSystem",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "serviceType",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "carrierCode",
+              "type": ["null", "CarrierCode"],
+              "default": null
+            },
+            {
+              "name": "transportEventType",
+              "type": ["null", {
+                "type": "enum",
+                "name": "TransportEventType",
+                "symbols": [
+                  "ARRI",
+                  "DEPA",
+                  "OMIT"
+                ]
+              }],
+              "default": null
+            },
+            {
+              "name": "delayReasonCode",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "changeRemark",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
+              "name": "documentReferences",
+              "type": ["null", {
+                "type": "array",
+                "items": "DocumentReference"
+              }],
+              "default": null
+            },
+            {
+              "name": "transportCall",
+              "type": "TransportCall"
+            },
+            {
+              "name": "vesselCode",
+              "type": ["null", "string"],
+              "default": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

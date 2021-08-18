@@ -1,12 +1,15 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mappers;
 
+import MSK.com.external.dcsa.DocumentReference;
+import MSK.com.external.dcsa.FacilityType;
+import MSK.com.external.dcsa.TransPortMode;
+import MSK.com.external.dcsa.TransportCall;
+import MSK.com.external.dcsa.TransportEvent;
+import MSK.com.external.dcsa.TransportEventType;
 import com.maersk.jaxb.pojo.GEMSPubType;
 import com.maersk.jaxb.pojo.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.TransportEventMapperImpl;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.DocumentReference;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportEvent;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -15,16 +18,16 @@ import org.springframework.data.mapping.MappingException;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.DocumentReference.Key.BKG;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.DocumentReference.Key.TRD;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.INTE;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.POTE;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.TransPortMode.BARGE;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.TransPortMode.RAIL;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.TransPortMode.TRUCK;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.TransPortMode.VESSEL;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportEvent.TransportEventType.ARRI;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportEvent.TransportEventType.DEPA;
+import static MSK.com.external.dcsa.FacilityType.INTE;
+import static MSK.com.external.dcsa.FacilityType.POTE;
+import static MSK.com.external.dcsa.Key.BKG;
+import static MSK.com.external.dcsa.Key.TRD;
+import static MSK.com.external.dcsa.TransPortMode.BARGE;
+import static MSK.com.external.dcsa.TransPortMode.RAIL;
+import static MSK.com.external.dcsa.TransPortMode.TRUCK;
+import static MSK.com.external.dcsa.TransPortMode.VESSEL;
+import static MSK.com.external.dcsa.TransportEventType.ARRI;
+import static MSK.com.external.dcsa.TransportEventType.DEPA;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithCONTAINER_ARRIVALEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithCONTAINER_DEPARTUREEventAct;
@@ -56,14 +59,14 @@ class TransportEventMapperTest {
     @MethodSource("createTransportEventTestData")
     void testTransportEventDataForLegitScenarios(GEMSPubType gemsData, Event baseEvent, TransportEvent expectedTransportEvent) {
         var pubSetData = gemsData.getPubSet().get(0);
-        var actualTransportEvent = transportEventMapper.fromSomethingToTransportEvent(pubSetData, baseEvent);
+        var actualTransportEvent = transportEventMapper.fromPubSetToTransportEvent(pubSetData, baseEvent);
         assertEquals(expectedTransportEvent, actualTransportEvent, "Transport Event does not match");
     }
 
     @ParameterizedTest
     @MethodSource("createTransportEventBadTestData")
     void testTransportEventDataForBadData(String expectedExceptionMessage, PubSetType pubSetData) {
-        var exception = assertThrows(MappingException.class, () -> transportEventMapper.fromSomethingToTransportEvent(pubSetData, baseEventData));
+        var exception = assertThrows(MappingException.class, () -> transportEventMapper.fromPubSetToTransportEvent(pubSetData, baseEventData));
         assertEquals(expectedExceptionMessage, exception.getMessage(), "Exception thrown badly");
 
     }
@@ -107,49 +110,53 @@ class TransportEventMapperTest {
     }
 
     private static DocumentReference getDocRefTrd() {
-        return DocumentReference.builder()
-                .key(TRD)
-                .value("293156737")
-                .build();
+        var docRef = new DocumentReference();
+        docRef.setKey(TRD);
+        docRef.setValue("293156737");
+        return docRef;
     }
 
     private static DocumentReference getDocRefBkg() {
-        return DocumentReference.builder()
-                .key(BKG)
-                .value("209989099")
-                .build();
+        var docRef = new DocumentReference();
+        docRef.setKey(BKG);
+        docRef.setValue("209989099");
+        return docRef;
     }
 
-    private static TransportCall getTransportCall(TransportCall.FacilityTypeCode facilityCode, TransportCall.TransPortMode transPortMode) {
-        return TransportCall.builder()
-                .facilityTypeCode(facilityCode)
-                .carrierServiceCode("LineCode")
-                .carrierVoyageNumber("MUMMRSK")
-                .otherFacility("Copenhagen")
-                .modeOfTransport(transPortMode)
-                .build();
+    private static TransportCall getTransportCall(FacilityType facilityCode, TransPortMode transPortMode) {
+        var transportCall = new TransportCall();
+
+        transportCall.setFacilityType(facilityCode);
+        transportCall.setCarrierServiceCode("LineCode");
+        transportCall.setCarrierVoyageNumber("MUMMRSK");
+        transportCall.setOtherFacility("Copenhagen");
+        transportCall.setModeOfTransport(transPortMode);
+
+        return transportCall;
     }
 
 
-    private static TransportEvent getTransportEventTestData(TransportEvent.TransportEventType transportEventType, TransportCall transportCall, List<DocumentReference> documentReferences) {
-        return TransportEvent.builder()
-                .transportEventType(transportEventType)
-                .transportCall(transportCall)
-                .documentReferences(documentReferences)
-                .eventID(baseEventData.getEventID())
-                .bookingReference(baseEventData.getBookingReference())
-                .eventDateTime(baseEventData.getEventDateTime())
-                .eventType(baseEventData.getEventType())
-                .eventCreatedDateTime(baseEventData.getEventCreatedDateTime())
-                .eventClassifierCode(baseEventData.getEventClassifierCode())
-                .parties(baseEventData.getParties())
-                .references(baseEventData.getReferences())
-                .equipmentReference(baseEventData.getEquipmentReference())
-                .carrierBookingReference(baseEventData.getCarrierBookingReference())
-                .transportDocumentReference(baseEventData.getTransportDocumentReference())
-                .sourceSystem(baseEventData.getSourceSystem())
-                .serviceType(baseEventData.getServiceType())
-                .carrierCode(baseEventData.getCarrierCode())
-                .build();
+    private static TransportEvent getTransportEventTestData(TransportEventType transportEventType, TransportCall transportCall, List<DocumentReference> documentReferences) {
+
+        var transportEvent = new TransportEvent();
+        transportEvent.setTransportEventType(transportEventType);
+        transportEvent.setTransportCall(transportCall);
+        transportEvent.setDocumentReferences(documentReferences);
+        transportEvent.setEventID(baseEventData.getEventID());
+        transportEvent.setBookingReference(baseEventData.getBookingReference());
+        transportEvent.setEventDateTime(baseEventData.getEventDateTime());
+        transportEvent.setEventType(baseEventData.getEventType());
+        transportEvent.setEventCreatedDateTime(baseEventData.getEventCreatedDateTime());
+        transportEvent.setEventClassifierCode(baseEventData.getEventClassifierCode());
+        transportEvent.setParties(baseEventData.getParties());
+        transportEvent.setReferences(baseEventData.getReferences());
+        transportEvent.setEquipmentReference(baseEventData.getEquipmentReference());
+        transportEvent.setCarrierBookingReference(baseEventData.getCarrierBookingReference());
+        transportEvent.setTransportDocumentReference(baseEventData.getTransportDocumentReference());
+        transportEvent.setSourceSystem(baseEventData.getSourceSystem());
+        transportEvent.setServiceType(baseEventData.getServiceType());
+        transportEvent.setCarrierCode(baseEventData.getCarrierCode());
+        return transportEvent;
+
     }
 }

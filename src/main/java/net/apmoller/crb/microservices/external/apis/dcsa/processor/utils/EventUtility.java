@@ -1,16 +1,16 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.utils;
 
 
+import MSK.com.external.dcsa.CarrierCode;
+import MSK.com.external.dcsa.EquipmentEventType;
+import MSK.com.external.dcsa.TransportEventType;
 import com.maersk.jaxb.pojo.EquipmentType;
 import com.maersk.jaxb.pojo.EventType;
 import com.maersk.jaxb.pojo.MoveType;
 import com.maersk.jaxb.pojo.PubSetType;
 import com.maersk.jaxb.pojo.ShipmentType;
 import com.maersk.jaxb.pojo.TPDocType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportEvent;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.dto.PartyFunctionDTO;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.PartyFunctionDTO;
 import org.springframework.data.mapping.MappingException;
 
 import java.util.List;
@@ -18,55 +18,56 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import static MSK.com.external.dcsa.CarrierCode.MAEU;
+import static MSK.com.external.dcsa.CarrierCode.MCCQ;
+import static MSK.com.external.dcsa.CarrierCode.SAFM;
+import static MSK.com.external.dcsa.CarrierCode.SEAU;
+import static MSK.com.external.dcsa.CarrierCode.SEJJ;
+import static MSK.com.external.dcsa.EquipmentEventType.DISC;
+import static MSK.com.external.dcsa.EquipmentEventType.GTIN;
+import static MSK.com.external.dcsa.EquipmentEventType.GTOT;
+import static MSK.com.external.dcsa.EquipmentEventType.LOAD;
+import static MSK.com.external.dcsa.EquipmentEventType.STRP;
+import static MSK.com.external.dcsa.EquipmentEventType.STUF;
+import static MSK.com.external.dcsa.PartyFuncName.ANP;
+import static MSK.com.external.dcsa.PartyFuncName.AO;
+import static MSK.com.external.dcsa.PartyFuncName.BOOKED_BY;
+import static MSK.com.external.dcsa.PartyFuncName.CCIA;
+import static MSK.com.external.dcsa.PartyFuncName.CCOA;
+import static MSK.com.external.dcsa.PartyFuncName.CONSIGNEE;
+import static MSK.com.external.dcsa.PartyFuncName.CONTRACT;
+import static MSK.com.external.dcsa.PartyFuncName.CP;
+import static MSK.com.external.dcsa.PartyFuncName.DMIP;
+import static MSK.com.external.dcsa.PartyFuncName.DTIP;
+import static MSK.com.external.dcsa.PartyFuncName.FNP;
+import static MSK.com.external.dcsa.PartyFuncName.HC;
+import static MSK.com.external.dcsa.PartyFuncName.HS;
+import static MSK.com.external.dcsa.PartyFuncName.ICB;
+import static MSK.com.external.dcsa.PartyFuncName.IDO;
+import static MSK.com.external.dcsa.PartyFuncName.IF;
+import static MSK.com.external.dcsa.PartyFuncName.IP;
+import static MSK.com.external.dcsa.PartyFuncName.LH;
+import static MSK.com.external.dcsa.PartyFuncName.OCB;
+import static MSK.com.external.dcsa.PartyFuncName.ODO;
+import static MSK.com.external.dcsa.PartyFuncName.OF;
+import static MSK.com.external.dcsa.PartyFuncName.PO;
+import static MSK.com.external.dcsa.PartyFuncName.RTP;
+import static MSK.com.external.dcsa.PartyFuncName.SHIPPER;
+import static MSK.com.external.dcsa.PartyFuncName.SUPP;
+import static MSK.com.external.dcsa.PartyFuncName.SWCO;
+import static MSK.com.external.dcsa.PartyFuncName.SWSH;
+import static MSK.com.external.dcsa.PartyFuncName.TDR;
+import static MSK.com.external.dcsa.PartyFunctionCode.CN;
+import static MSK.com.external.dcsa.PartyFunctionCode.COW;
+import static MSK.com.external.dcsa.PartyFunctionCode.DDR;
+import static MSK.com.external.dcsa.PartyFunctionCode.DDS;
+import static MSK.com.external.dcsa.PartyFunctionCode.N1;
+import static MSK.com.external.dcsa.PartyFunctionCode.N2;
+import static MSK.com.external.dcsa.PartyFunctionCode.OS;
+import static MSK.com.external.dcsa.TransportEventType.ARRI;
+import static MSK.com.external.dcsa.TransportEventType.DEPA;
 import static java.util.Map.entry;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.DISC;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.GTIN;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.GTOT;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.LOAD;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.STRP;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.STUF;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event.CarrierCodeEnum.MAEU;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event.CarrierCodeEnum.MCCQ;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event.CarrierCodeEnum.SAFM;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event.CarrierCodeEnum.SEAU;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event.CarrierCodeEnum.SEJJ;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncCode.CN;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncCode.COW;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncCode.DDR;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncCode.DDS;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncCode.N1;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncCode.N2;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncCode.OS;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.ANP;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.AO;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.BOOKED_BY;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.CCIA;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.CCOA;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.CONSIGNEE;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.CONTRACT;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.CP;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.DMIP;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.DTIP;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.FNP;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.HC;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.HS;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.ICB;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.IDO;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.IF;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.IP;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.LH;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.OCB;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.ODO;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.OF;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.PO;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.RTP;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.SHIPPER;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.SUPP;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.SWCO;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.SWSH;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Party.PartyFuncName.TDR;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportEvent.TransportEventType.ARRI;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportEvent.TransportEventType.DEPA;
+
 
 public final class EventUtility {
 
@@ -145,7 +146,7 @@ public final class EventUtility {
             "CONTAINER DEPARTURE"
     );
 
-    public static TransportEvent.TransportEventType getArrivalOrDepartureEventType(String eventAct) {
+    public static TransportEventType getArrivalOrDepartureEventType(String eventAct) {
 
         if (eventAct.isBlank()) {
             throw new MappingException("Null Event Act");
@@ -168,7 +169,7 @@ public final class EventUtility {
     }
 
 
-    public static TransportEvent.TransportEventType getTPEventTypeFromPubSetType(PubSetType pubSetType) {
+    public static TransportEventType getTPEventTypeFromPubSetType(PubSetType pubSetType) {
         var eventAct = Optional.ofNullable(pubSetType.getEvent())
                 .map(EventType::getEventAct)
                 .map(CharSequence::toString)
@@ -176,7 +177,7 @@ public final class EventUtility {
         return getArrivalOrDepartureEventType(eventAct);
     }
 
-    public static EquipmentEvent.EquipmentEventType getEquipmentEventType(String eventAct) {
+    public static EquipmentEventType getEquipmentEventType(String eventAct) {
         if (Objects.isNull(eventAct)) {
             throw new MappingException("Null Event Act");
         }
@@ -275,7 +276,7 @@ public final class EventUtility {
                 .orElse(null);
     }
 
-    public static Event.CarrierCodeEnum fromPubSetTypeToCarrierCode(PubSetType pubSetType) {
+    public static CarrierCode fromPubSetTypeToCarrierCode(PubSetType pubSetType) {
 
         switch (getCarrierCodes(pubSetType)) {
             case "MSK":

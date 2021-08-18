@@ -1,13 +1,16 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mappers;
 
+import MSK.com.external.dcsa.DocumentReference;
+import MSK.com.external.dcsa.EmptyIndicatorCode;
+import MSK.com.external.dcsa.EquipmentEvent;
+import MSK.com.external.dcsa.EquipmentEventType;
+import MSK.com.external.dcsa.FacilityType;
+import MSK.com.external.dcsa.TransportCall;
 import com.maersk.jaxb.pojo.GEMSPubType;
 import com.maersk.jaxb.pojo.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapperImpl;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.DocumentReference;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -17,15 +20,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.DocumentReference.Key.BKG;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.DocumentReference.Key.TRD;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.GTIN;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.GTOT;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.EquipmentEvent.EquipmentEventType.LOAD;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.CLOC;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.DEPO;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.INTE;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.POTE;
+import static MSK.com.external.dcsa.EquipmentEventType.GTIN;
+import static MSK.com.external.dcsa.EquipmentEventType.GTOT;
+import static MSK.com.external.dcsa.EquipmentEventType.LOAD;
+import static MSK.com.external.dcsa.FacilityType.CLOC;
+import static MSK.com.external.dcsa.FacilityType.DEPO;
+import static MSK.com.external.dcsa.FacilityType.INTE;
+import static MSK.com.external.dcsa.FacilityType.POTE;
+import static MSK.com.external.dcsa.Key.BKG;
+import static MSK.com.external.dcsa.Key.TRD;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithARRIVECUIMPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDEPARTCUEXPNEventAct;
@@ -42,17 +45,17 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDa
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class EquipmentEventMapperTest {
+class EquipmentEventMapperTest {
 
     private final static Event baseEventData = getEventForEquipmentEventType();
     private EquipmentEventMapperImpl equipmentEventMapper = new EquipmentEventMapperImpl();
 
     @ParameterizedTest
     @MethodSource("createEquipmentEventTestData")
-    public void testEquipmentDataForLegitScenarios(GEMSPubType gemsData, Event expectedShipmentEvent) {
+    void testEquipmentDataForLegitScenarios(GEMSPubType gemsData, EquipmentEvent expectedEquipmentEvent) {
         var pubSetData = gemsData.getPubSet().get(0);
         var actualEquipmentEvent = equipmentEventMapper.fromPubSetToEquipmentEvent(pubSetData, baseEventData);
-        assertEquals(expectedShipmentEvent, actualEquipmentEvent, "Equipment Event does not match");
+        assertEquals(expectedEquipmentEvent, actualEquipmentEvent, "Equipment Event does not match");
     }
 
     @ParameterizedTest
@@ -87,36 +90,41 @@ public class EquipmentEventMapperTest {
         );
     }
 
-    private static TransportCall getTransportCall(TransportCall.FacilityTypeCode facilityCode) {
-        return TransportCall.builder()
-                .facilityTypeCode(facilityCode)
-                .carrierServiceCode("LineCode")
-                .otherFacility("Copenhagen")
-                .build();
+    private static TransportCall getTransportCall(FacilityType facilityCode) {
+
+        var transportCall = new TransportCall();
+        transportCall.setFacilityType(facilityCode);
+        transportCall.setCarrierServiceCode("LineCode");
+        transportCall.setOtherFacility("Copenhagen");
+
+        return transportCall;
     }
 
-    private static EquipmentEvent getEquipmentEventTestData(EquipmentEvent.EquipmentEventType eventType, TransportCall.FacilityTypeCode facilityTypeCode) {
-        return EquipmentEvent.builder()
-                .equipmentEventType(eventType)
-                .emptyIndicatorCode(EquipmentEvent.EmptyIndicatorCode.LADEN)
-                .documentReferences(getDocumentRef())
-                .seals(new ArrayList<>())
-                .eventID(baseEventData.getEventID())
-                .transportCall(getTransportCall(facilityTypeCode))
-                .bookingReference(baseEventData.getBookingReference())
-                .eventDateTime(baseEventData.getEventDateTime())
-                .eventType(baseEventData.getEventType())
-                .eventCreatedDateTime(baseEventData.getEventCreatedDateTime())
-                .eventClassifierCode(baseEventData.getEventClassifierCode())
-                .parties(baseEventData.getParties())
-                .references(baseEventData.getReferences())
-                .equipmentReference(baseEventData.getEquipmentReference())
-                .carrierBookingReference(baseEventData.getCarrierBookingReference())
-                .transportDocumentReference(baseEventData.getTransportDocumentReference())
-                .sourceSystem(baseEventData.getSourceSystem())
-                .serviceType(baseEventData.getServiceType())
-                .carrierCode(baseEventData.getCarrierCode())
-                .build();
+
+
+    private static EquipmentEvent getEquipmentEventTestData (EquipmentEventType eventType, FacilityType facilityTypeCode) {
+         var equipmentEvent = new EquipmentEvent();
+         equipmentEvent.setEquipmentEventType(eventType);
+         equipmentEvent.setEmptyIndicatorCode(EmptyIndicatorCode.LADEN);
+         equipmentEvent.setDocumentReferences(getDocumentRef());
+         equipmentEvent.setSeals(new ArrayList<>());
+         equipmentEvent.setEventID(baseEventData.getEventID());
+         equipmentEvent.setTransportCall(getTransportCall(facilityTypeCode));
+         equipmentEvent.setBookingReference(baseEventData.getBookingReference());
+         equipmentEvent.setEventDateTime(baseEventData.getEventDateTime());
+         equipmentEvent.setEventType(baseEventData.getEventType());
+         equipmentEvent.setEventCreatedDateTime(baseEventData.getEventCreatedDateTime());
+         equipmentEvent.setEventClassifierCode(baseEventData.getEventClassifierCode());
+         equipmentEvent.setParties(baseEventData.getParties());
+         equipmentEvent.setReferences(baseEventData.getReferences());
+         equipmentEvent.setEquipmentReference(baseEventData.getEquipmentReference());
+         equipmentEvent.setCarrierBookingReference(baseEventData.getCarrierBookingReference());
+         equipmentEvent.setTransportDocumentReference(baseEventData.getTransportDocumentReference());
+         equipmentEvent.setSourceSystem(baseEventData.getSourceSystem());
+         equipmentEvent.setServiceType(baseEventData.getServiceType());
+         equipmentEvent.setCarrierCode(baseEventData.getCarrierCode());
+
+        return equipmentEvent;
     }
 
     private static List<DocumentReference> getDocumentRef() {
@@ -124,16 +132,16 @@ public class EquipmentEventMapperTest {
     }
 
     private static DocumentReference getDocRefTrd() {
-        return DocumentReference.builder()
-                .key(TRD)
-                .value("293156737")
-                .build();
+        var docRef = new DocumentReference();
+        docRef.setKey(TRD);
+        docRef.setValue("293156737");
+        return docRef;
     }
 
     private static DocumentReference getDocRefBkg() {
-        return DocumentReference.builder()
-                .key(BKG)
-                .value("209989099")
-                .build();
+        var docRef = new DocumentReference();
+        docRef.setKey(BKG);
+        docRef.setValue("209989099");
+        return docRef;
     }
 }

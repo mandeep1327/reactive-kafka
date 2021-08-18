@@ -1,15 +1,14 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 
+import MSK.com.external.dcsa.FacilityType;
+import MSK.com.external.dcsa.TransPortMode;
+import MSK.com.external.dcsa.TransportCall;
 import com.maersk.jaxb.pojo.EndLocType;
 import com.maersk.jaxb.pojo.EquipmentType;
 import com.maersk.jaxb.pojo.EventType;
-import com.maersk.jaxb.pojo.MoveType;
 import com.maersk.jaxb.pojo.PubSetType;
-import com.maersk.jaxb.pojo.ShipmentType;
 import com.maersk.jaxb.pojo.StartLocType;
-import com.maersk.jaxb.pojo.TPDocType;
 import com.maersk.jaxb.pojo.TransportPlanType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall;
 import org.springframework.data.mapping.MappingException;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +19,10 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.CLOC;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.DEPO;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.INTE;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.TransportCall.FacilityTypeCode.POTE;
+import static MSK.com.external.dcsa.FacilityType.CLOC;
+import static MSK.com.external.dcsa.FacilityType.DEPO;
+import static MSK.com.external.dcsa.FacilityType.INTE;
+import static MSK.com.external.dcsa.FacilityType.POTE;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDepartureEventType;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstEquipmentElement;
 
@@ -36,11 +35,15 @@ public final class TransportCallMapper {
         var event = pubSetType.getEvent();
         var eventAct = event.getEventAct().toString();
         var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
-        return TransportCall.builder()
-                .facilityTypeCode(getFacilityCodeType(eventAct))
-                .carrierServiceCode(getCarrierServiceCode(equipmentFirstElement))
-                .otherFacility(getLocation(equipmentFirstElement))
-                .build();
+        return getTransportCall(eventAct, equipmentFirstElement);
+    }
+
+    private static TransportCall getTransportCall(String eventAct, EquipmentType equipmentFirstElement) {
+        var transportCall = new TransportCall();
+        transportCall.setFacilityType(getFacilityCodeType(eventAct));
+        transportCall.setCarrierServiceCode(getCarrierServiceCode(equipmentFirstElement));
+        transportCall.setOtherFacility(getLocation(equipmentFirstElement));
+        return transportCall;
     }
 
     public static TransportCall fromPubsetToTransportCall(PubSetType pubSetType) {
@@ -49,13 +52,19 @@ public final class TransportCallMapper {
         var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
         var transportPlan = Optional.ofNullable(getProperLocationFromTransportPlan(transportPlanTypeList, pubSetType.getEvent()))
                 .map(e -> e.get(getActLocation(equipmentFirstElement))).orElse(null);
-        return TransportCall.builder()
-                .facilityTypeCode(base.getFacilityTypeCode())
-                .carrierServiceCode(base.getCarrierServiceCode())
-                .carrierVoyageNumber(getVoyageNumberFromTransportPlan(transportPlan))
-                .modeOfTransport(getModeOfTransport(transportPlan))
-                .otherFacility(base.getOtherFacility())
-                .build();
+        return getFatterTransportCall(base, transportPlan);
+    }
+
+    private static TransportCall getFatterTransportCall(TransportCall base, TransportPlanType transportPlan) {
+
+        var transportCall = new TransportCall();
+
+        transportCall.setFacilityType(base.getFacilityType());
+        transportCall.setCarrierServiceCode(base.getCarrierServiceCode());
+        transportCall.setCarrierVoyageNumber(getVoyageNumberFromTransportPlan(transportPlan));
+        transportCall.setModeOfTransport(getModeOfTransport(transportPlan));
+        transportCall.setOtherFacility(base.getOtherFacility());
+        return transportCall;
     }
 
     protected static String getVoyageNumberFromTransportPlan(TransportPlanType transportPlanMap) {
@@ -73,7 +82,7 @@ public final class TransportCallMapper {
     }
 
 
-    protected static TransportCall.TransPortMode getModeOfTransport(TransportPlanType transportPlanType) {
+    protected static TransPortMode getModeOfTransport(TransportPlanType transportPlanType) {
         var transportModeCode = Optional.ofNullable(transportPlanType)
                 .map(TransportPlanType::getTransMode)
                 .map(CharSequence::toString)
@@ -81,25 +90,25 @@ public final class TransportCallMapper {
         switch (transportModeCode.toUpperCase()) {
             case "BAR":
             case "BCO":
-                return TransportCall.TransPortMode.BARGE;
+                return TransPortMode.BARGE;
             case "MVS":
             case "FEO":
             case "FEF":
             case "VSL":
             case "VSF":
             case "VSM":
-                return TransportCall.TransPortMode.VESSEL;
+                return TransPortMode.VESSEL;
             case "TRK":
-                return TransportCall.TransPortMode.TRUCK;
+                return TransPortMode.TRUCK;
             case "RR":
             case "RCO":
-                return TransportCall.TransPortMode.RAIL;
+                return TransPortMode.RAIL;
             default:
                 throw new MappingException("Could not map TransportMode Code ".concat(transportModeCode));
         }
     }
 
-    protected static TransportCall.FacilityTypeCode getFacilityCodeType(String eventAct) {
+    protected static FacilityType getFacilityCodeType(String eventAct) {
         switch (eventAct) {
             case "ARRIVECUIMPN":
             case "DEPARTCUEXPN":

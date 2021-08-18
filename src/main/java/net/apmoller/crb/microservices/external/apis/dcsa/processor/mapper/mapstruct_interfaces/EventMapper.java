@@ -1,10 +1,12 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces;
 
+import MSK.com.external.dcsa.EventClassifierCode;
+import MSK.com.external.dcsa.EventType;
 import com.maersk.jaxb.pojo.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ServiceTypeMapper;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -34,17 +36,15 @@ public interface EventMapper {
     @Mapping(expression = "java(EventUtility.fromPubSetTypeToEquipmentReference(details))", target = "equipmentReference")
     @Mapping(expression = "java(EventUtility.fromPubSetTypeToCarrierCode(details))", target = "carrierCode")
     @Mapping(expression = "java(ServiceTypeMapper.getServiceTypeFromPubSetType(details))", target = "serviceType")
-
-
     Event fromPubSetTypeToEvent(PubSetType details);
 
-    default Event.EventType getDCSAEventType(String act) {
+    default EventType getDCSAEventType(String act) {
         if (SHIPMENT_EVENTS.contains(act)) {
-            return Event.EventType.SHIPMENT;
+            return EventType.SHIPMENT;
         } else if (TRANSPORT_EVENTS.contains(act)) {
-            return Event.EventType.TRANSPORT;
+            return EventType.TRANSPORT;
         } else if (EQUIPMENT_EVENTS.contains(act)) {
-            return Event.EventType.EQUIPMENT;
+            return EventType.EQUIPMENT;
         }
         throw new MappingException("Could not map eventType");
     }
@@ -68,11 +68,11 @@ public interface EventMapper {
     }
 
 
-    default Event.EventClassifierCode getEventClassifierCode(String act) {
+    default EventClassifierCode getEventClassifierCode(String act) {
         if(EST_EVENTS.contains(act)) {
-            return Event.EventClassifierCode.EST;
+            return EventClassifierCode.EST;
         } else if (ACT_EVENTS.contains(act)) {
-            return Event.EventClassifierCode.ACT;
+            return EventClassifierCode.ACT;
         }
         throw new MappingException("Could not map EventClassifierCode");
     }

@@ -1,35 +1,36 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces;
 
+import MSK.com.external.dcsa.ShipmentEvent;
+import MSK.com.external.dcsa.ShipmentEventType;
+import MSK.com.external.dcsa.ShipmentInformationType;
 import com.maersk.jaxb.pojo.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.Event;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility;
 import org.jetbrains.annotations.NotNull;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.data.mapping.MappingException;
 
+import static MSK.com.external.dcsa.ShipmentEventType.CONF;
+import static MSK.com.external.dcsa.ShipmentEventType.DRFT;
+import static MSK.com.external.dcsa.ShipmentEventType.ISSU;
+import static MSK.com.external.dcsa.ShipmentEventType.PENA;
+import static MSK.com.external.dcsa.ShipmentEventType.RECE;
+import static MSK.com.external.dcsa.ShipmentEventType.REJE;
+import static MSK.com.external.dcsa.ShipmentEventType.SURR;
+import static MSK.com.external.dcsa.ShipmentInformationType.ARN;
+import static MSK.com.external.dcsa.ShipmentInformationType.BOK;
+import static MSK.com.external.dcsa.ShipmentInformationType.SHI;
+import static MSK.com.external.dcsa.ShipmentInformationType.SRM;
+import static MSK.com.external.dcsa.ShipmentInformationType.TRD;
 import static java.util.Objects.isNull;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.CONF;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.DRFT;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.ISSU;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.PENA;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.RECE;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.REJE;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentEventType.SURR;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.ARN;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.BOK;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.SHI;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.SRM;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.TRD;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.repository.model.ShipmentEvent.ShipmentInformationTypeCode.VGM;
 
 @Mapper(componentModel = "spring", imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class})
 public interface ShipmentEventMapper {
-    @Mapping(expression = "java(getShipmentEventType(pubSetType.getEvent().getEventAct().toString()))", target = "shipmentEventTypeCode")
-    @Mapping(expression = "java(getShipmentInformationTypeCode(pubSetType.getEvent().getEventAct().toString()))", target = "documentTypeCode")
+    @Mapping(expression = "java(getShipmentEventType(pubSetType.getEvent().getEventAct().toString()))", target = "shipmentEventType")
+    @Mapping(expression = "java(getShipmentInformationTypeCode(pubSetType.getEvent().getEventAct().toString()))", target = "shipmentInformationType")
     @Mapping(expression = "java(getDocumentId(pubSetType))", target = "documentID")
     @Mapping(source = "baseData.eventID", target = "eventID")
     @Mapping(source = "baseData.bookingReference", target = "bookingReference")
@@ -81,7 +82,7 @@ public interface ShipmentEventMapper {
         throw new MappingException("Booking Number is not available for Document ID");
     }
 
-    default ShipmentEvent.ShipmentEventType getShipmentEventType(String eventAct) {
+    default ShipmentEventType getShipmentEventType(String eventAct) {
 
         switch (eventAct) {
             case "Arrange_Cargo_Release_Closed":
@@ -105,7 +106,7 @@ public interface ShipmentEventMapper {
         }
     }
 
-    default ShipmentEvent.ShipmentInformationTypeCode getShipmentInformationTypeCode(String eventAct) {
+    default ShipmentInformationType getShipmentInformationTypeCode(String eventAct) {
 
         switch (eventAct) {
             case "Arrange_Cargo_Release_Closed":

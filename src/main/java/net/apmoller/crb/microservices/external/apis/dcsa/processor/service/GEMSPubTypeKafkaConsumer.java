@@ -33,34 +33,34 @@ public class GEMSPubTypeKafkaConsumer {
     public Disposable startKafkaConsumer() {
         return kafkaReceiver
                 .receive()
-                .doOnNext(record -> log.info("Received event: key {}, value {}", record.key(), record.value()))
+                .doOnNext(gemsRecord -> log.info("Received event: key {}, value {}", gemsRecord.key(), gemsRecord.value()))
                 .doOnError(error -> log.error("Error receiving shipment record", error))
                 .flatMap(this::handleSubscriptionResponseEvent)
-                .doOnNext(record -> record.receiverOffset().acknowledge())
+                .doOnNext(gemsRecord -> gemsRecord.receiverOffset().acknowledge())
                 .subscribe();
     }
 
-    private Mono<ReceiverRecord<String, GEMSPubType>> handleSubscriptionResponseEvent(ReceiverRecord<String, GEMSPubType> record) {
+    private Mono<ReceiverRecord<String, GEMSPubType>> handleSubscriptionResponseEvent(ReceiverRecord<String, GEMSPubType> gemsRecord) {
         try {
-            return Mono.just(record)
+            return Mono.just(gemsRecord)
                     .filter(this::filterDeserializationError)
                     .map(ConsumerRecord::value)
                     .flatMap(this::handleSubscriptionResponse)
-                    .doOnError(ex -> log.warn("Error processing event {}", record.key(), ex))
+                    .doOnError(ex -> log.warn("Error processing event {}", gemsRecord.key(), ex))
                     .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(5)))
-                    .doOnError(ex -> log.error("Error processing event after all retries {}", record.key(), ex))
+                    .doOnError(ex -> log.error("Error processing event after all retries {}", gemsRecord.key(), ex))
                     .onErrorResume(ex -> Mono.empty())
                     .doOnNext(event -> log.info("Successfully processed event"))
-                    .then(Mono.just(record));
+                    .then(Mono.just(gemsRecord));
         } catch (Exception ex) {
-            log.error("Error processing event {}", record.key(), ex);
-            return Mono.just(record);
+            log.error("Error processing event {}", gemsRecord.key(), ex);
+            return Mono.just(gemsRecord);
         }
     }
 
-    private boolean filterDeserializationError(ReceiverRecord<String, GEMSPubType> record) {
+    private boolean filterDeserializationError(ReceiverRecord<String, GEMSPubType> gemsRecord) {
         byte[] keyDeserializationException =
-                Optional.ofNullable(record.headers().lastHeader(ErrorHandlingDeserializer.KEY_DESERIALIZER_EXCEPTION_HEADER))
+                Optional.ofNullable(gemsRecord.headers().lastHeader(ErrorHandlingDeserializer.KEY_DESERIALIZER_EXCEPTION_HEADER))
                         .map(Header::value)
                         .orElse(null);
         if (keyDeserializationException != null) {
@@ -68,7 +68,7 @@ public class GEMSPubTypeKafkaConsumer {
             return false;
         }
         byte[] valueDeserializationException = Optional
-                .ofNullable(record.headers().lastHeader(ErrorHandlingDeserializer.VALUE_DESERIALIZER_EXCEPTION_HEADER))
+                .ofNullable(gemsRecord.headers().lastHeader(ErrorHandlingDeserializer.VALUE_DESERIALIZER_EXCEPTION_HEADER))
                 .map(Header::value)
                 .orElse(null);
         if (valueDeserializationException != null) {
@@ -80,12 +80,16 @@ public class GEMSPubTypeKafkaConsumer {
 
     private Exception deserializeExceptionObject(byte[] exception) {
         try (var bais = new ByteArrayInputStream(exception)) {
-            try (var ois = new ObjectInputStream(bais)) {
-                return (Exception) ois.readObject();
-            } catch (ClassNotFoundException ex) {
-                return null;
-            }
+            return getException(bais);
         } catch (IOException ex) {
+            return null;
+        }
+    }
+
+    private Exception getException(ByteArrayInputStream bais) throws IOException {
+        try (var ois = new ObjectInputStream(bais)) {
+            return (Exception) ois.readObject();
+        } catch (ClassNotFoundException ex) {
             return null;
         }
     }
@@ -93,7 +97,8 @@ public class GEMSPubTypeKafkaConsumer {
     private Mono<Void> handleSubscriptionResponse(GEMSPubType gemsPubType) {
         log.info("GEMS Event received:::: {}", gemsPubType);
         return Mono.just(gemsPubType)
-                .doOnNext(eventDelegator::checkCorrectEvent)
+                .map(gemsPubType1 -> eventDelegator.checkCorrectEvent(gemsPubType))
+                .doOnError(exception -> log.error(exception.getMessage()))
                 .then();
     }
 
