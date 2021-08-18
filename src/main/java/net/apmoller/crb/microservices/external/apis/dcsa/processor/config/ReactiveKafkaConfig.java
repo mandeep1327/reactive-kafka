@@ -75,7 +75,6 @@ public class ReactiveKafkaConfig {
     @Value("${kafka.consumer.max-fetch-size-bytes}")
     private Integer maxRequestSizeBytes;
 
-
     @Value("${kafka.schemaRegistry.url}")
     private String schemaRegistryUrl;
     @Value("${kafka.schemaRegistry.username}")
@@ -93,10 +92,10 @@ public class ReactiveKafkaConfig {
                                                                       String username, String password, String topicName) {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
+        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
         properties.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class);
-        properties.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, KafkaAvroDeserializer.class);
+        properties.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, ErrorHandlingDeserializer.class);
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, consumerOffsetAutoReset);
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         properties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, consumerMaxPollRecords);
@@ -146,8 +145,6 @@ public class ReactiveKafkaConfig {
             properties.put("sasl.jaas.config", saslJassConfig);
         }
     }
-
-
 
 }
 

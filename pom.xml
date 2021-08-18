@@ -9,8 +9,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>net.apmoller.crb.microservices</groupId>
-    <artifactId>external-dcsa-event-processor</artifactId>
-    <version>0.0.13-SNAPSHOT</version>
+    <artifactId>external-dcsa-events-processor</artifactId>
+    <version>0.0.16-SNAPSHOT</version>
     <description>Processor for GEMS events for the external track and trace service</description>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -34,14 +34,6 @@
         <connection>scm:git:https://github.com/Maersk-Global/external-dcsa-events-processor.git</connection>
         <tag>HEAD</tag>
     </scm>
-    <distributionManagement>
-        <repository>
-            <id>java.artifacts</id>
-            <url>
-                https://transport-logistics.pkgs.visualstudio.com/ef8fb13d-7d81-4ce8-bdd2-0f4d8c45e810/_packaging/java.artifacts/maven/v1
-            </url>
-        </repository>
-    </distributionManagement>
     <repositories>
         <repository>
             <id>java.artifacts</id>
@@ -180,7 +172,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator</artifactId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
