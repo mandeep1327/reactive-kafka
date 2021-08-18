@@ -1,7 +1,7 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders;
 
-import com.maersk.jaxb.pojo.EquipmentType;
-import com.maersk.jaxb.pojo.MoveType;
+import MSK.com.gems.EquipmentType;
+import MSK.com.gems.MoveType;
 
 import java.util.List;
 

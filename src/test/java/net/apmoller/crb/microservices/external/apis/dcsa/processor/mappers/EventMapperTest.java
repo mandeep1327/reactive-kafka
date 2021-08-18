@@ -1,6 +1,6 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mappers;
 
-import com.maersk.jaxb.pojo.PubSetType;
+import MSK.com.gems.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapperImpl;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import org.junit.jupiter.params.ParameterizedTest;

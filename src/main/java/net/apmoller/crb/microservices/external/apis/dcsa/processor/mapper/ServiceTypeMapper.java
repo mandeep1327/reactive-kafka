@@ -1,7 +1,7 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 
-import com.maersk.jaxb.pojo.PubSetType;
-import com.maersk.jaxb.pojo.ShipmentType;
+import MSK.com.gems.PubSetType;
+import MSK.com.gems.ShipmentType;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

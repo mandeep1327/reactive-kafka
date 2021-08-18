@@ -4,12 +4,12 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.utils;
 import MSK.com.external.dcsa.CarrierCode;
 import MSK.com.external.dcsa.EquipmentEventType;
 import MSK.com.external.dcsa.TransportEventType;
-import com.maersk.jaxb.pojo.EquipmentType;
-import com.maersk.jaxb.pojo.EventType;
-import com.maersk.jaxb.pojo.MoveType;
-import com.maersk.jaxb.pojo.PubSetType;
-import com.maersk.jaxb.pojo.ShipmentType;
-import com.maersk.jaxb.pojo.TPDocType;
+import MSK.com.gems.EquipmentType;
+import MSK.com.gems.EventType;
+import MSK.com.gems.MoveType;
+import MSK.com.gems.PubSetType;
+import MSK.com.gems.ShipmentType;
+import MSK.com.gems.TPDocType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.PartyFunctionDTO;
 import org.springframework.data.mapping.MappingException;
 

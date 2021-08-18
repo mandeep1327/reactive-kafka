@@ -2,7 +2,7 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapst
 
 import MSK.com.external.dcsa.EventClassifierCode;
 import MSK.com.external.dcsa.EventType;
-import com.maersk.jaxb.pojo.PubSetType;
+import MSK.com.gems.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ServiceTypeMapper;

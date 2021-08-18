@@ -2,7 +2,7 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.config;
 
 
 import MSK.com.external.dcsa.DcsaTrackTraceEvent;
-import com.maersk.jaxb.pojo.GEMSPubType;
+import MSK.com.gems.GEMSPubType;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;

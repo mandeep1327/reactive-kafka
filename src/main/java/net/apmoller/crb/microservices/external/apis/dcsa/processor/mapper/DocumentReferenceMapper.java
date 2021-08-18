@@ -2,7 +2,7 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 
 import MSK.com.external.dcsa.DocumentReference;
 import MSK.com.external.dcsa.Key;
-import com.maersk.jaxb.pojo.PubSetType;
+import MSK.com.gems.PubSetType;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

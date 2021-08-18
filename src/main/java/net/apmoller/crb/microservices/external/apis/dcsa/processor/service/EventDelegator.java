@@ -1,8 +1,8 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.service;
 
 import MSK.com.external.dcsa.DcsaTrackTraceEvent;
-import com.maersk.jaxb.pojo.GEMSPubType;
-import com.maersk.jaxb.pojo.PubSetType;
+import MSK.com.gems.GEMSPubType;
+import MSK.com.gems.PubSetType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapper;

@@ -6,8 +6,8 @@ import MSK.com.external.dcsa.EquipmentEvent;
 import MSK.com.external.dcsa.EquipmentEventType;
 import MSK.com.external.dcsa.FacilityType;
 import MSK.com.external.dcsa.TransportCall;
-import com.maersk.jaxb.pojo.GEMSPubType;
-import com.maersk.jaxb.pojo.PubSetType;
+import MSK.com.gems.GEMSPubType;
+import MSK.com.gems.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapperImpl;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 

@@ -3,12 +3,12 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 import MSK.com.external.dcsa.FacilityType;
 import MSK.com.external.dcsa.TransPortMode;
 import MSK.com.external.dcsa.TransportCall;
-import com.maersk.jaxb.pojo.EndLocType;
-import com.maersk.jaxb.pojo.EquipmentType;
-import com.maersk.jaxb.pojo.EventType;
-import com.maersk.jaxb.pojo.PubSetType;
-import com.maersk.jaxb.pojo.StartLocType;
-import com.maersk.jaxb.pojo.TransportPlanType;
+import MSK.com.gems.EndLocType;
+import MSK.com.gems.EquipmentType;
+import MSK.com.gems.EventType;
+import MSK.com.gems.PubSetType;
+import MSK.com.gems.StartLocType;
+import MSK.com.gems.TransportPlanType;
 import org.springframework.data.mapping.MappingException;
 import org.springframework.stereotype.Component;
 

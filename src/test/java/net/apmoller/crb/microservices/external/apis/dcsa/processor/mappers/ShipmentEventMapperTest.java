@@ -3,7 +3,7 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.mappers;
 import MSK.com.external.dcsa.ShipmentEvent;
 import MSK.com.external.dcsa.ShipmentEventType;
 import MSK.com.external.dcsa.ShipmentInformationType;
-import com.maersk.jaxb.pojo.GEMSPubType;
+import MSK.com.gems.GEMSPubType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.ShipmentEventMapperImpl;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import org.junit.jupiter.api.Test;
@@ -74,24 +74,24 @@ class ShipmentEventMapperTest {
 
 
     private static ShipmentEvent getShipmentEventTestData(String documentID, ShipmentEventType shipmentEventType, ShipmentInformationType informationTypeCode) {
-        return ShipmentEvent.newBuilder()
-                .setShipmentInformationType(informationTypeCode)
-                .setShipmentEventType(shipmentEventType)
-                .setDocumentID(documentID)
-                .setEventID(baseEventData.getEventID())
-                .setBookingReference(baseEventData.getBookingReference())
-                .setEventDateTime(baseEventData.getEventDateTime())
-                .setEventType(baseEventData.getEventType())
-                .setEventCreatedDateTime(baseEventData.getEventCreatedDateTime())
-                .setEventClassifierCode(baseEventData.getEventClassifierCode())
-                .setParties(baseEventData.getParties())
-                .setReferences(baseEventData.getReferences())
-                .setEquipmentReference(baseEventData.getEquipmentReference())
-                .setCarrierBookingReference(baseEventData.getCarrierBookingReference())
-                .setTransportDocumentReference(baseEventData.getTransportDocumentReference())
-                .setSourceSystem(baseEventData.getSourceSystem())
-                .setServiceType(baseEventData.getServiceType())
-                .setCarrierCode(baseEventData.getCarrierCode())
-                .build();
+        var shipmentEvent = new ShipmentEvent();
+        shipmentEvent.setShipmentInformationType(informationTypeCode);
+        shipmentEvent.setShipmentEventType(shipmentEventType);
+        shipmentEvent.setDocumentID(documentID);
+        shipmentEvent.setEventID(baseEventData.getEventID());
+        shipmentEvent.setBookingReference(baseEventData.getBookingReference());
+        shipmentEvent.setEventDateTime(baseEventData.getEventDateTime());
+        shipmentEvent.setEventType(baseEventData.getEventType());
+        shipmentEvent.setEventCreatedDateTime(baseEventData.getEventCreatedDateTime());
+        shipmentEvent.setEventClassifierCode(baseEventData.getEventClassifierCode());
+        shipmentEvent.setParties(baseEventData.getParties());
+        shipmentEvent.setReferences(baseEventData.getReferences());
+        shipmentEvent.setEquipmentReference(baseEventData.getEquipmentReference());
+        shipmentEvent.setCarrierBookingReference(baseEventData.getCarrierBookingReference());
+        shipmentEvent.setTransportDocumentReference(baseEventData.getTransportDocumentReference());
+        shipmentEvent.setSourceSystem(baseEventData.getSourceSystem());
+        shipmentEvent.setServiceType(baseEventData.getServiceType());
+        shipmentEvent.setCarrierCode(baseEventData.getCarrierCode());
+        return shipmentEvent;
     }
 }

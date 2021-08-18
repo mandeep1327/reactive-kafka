@@ -1,6 +1,6 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders;
 
-import com.maersk.jaxb.pojo.TPDocType;
+import MSK.com.gems.TPDocType;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders;
 
-import com.maersk.jaxb.pojo.PartyType;
-import com.maersk.jaxb.pojo.ReferenceType;
-import com.maersk.jaxb.pojo.ShipmentType;
+import MSK.com.gems.PartyType;
+import MSK.com.gems.ReferenceType;
+import MSK.com.gems.ShipmentType;
 
 import java.util.List;
 
@@ -11,26 +11,15 @@ public final class ShipmentTestDataBuilder {
     private ShipmentTestDataBuilder(){}
 
     public static ShipmentType getShipmentValue(List<PartyType> party) {
-        return ShipmentType.newBuilder()
-                .setParty(party)
-                .setBookNo("209989099")
-                .setRcvSvc("CY")
-                .setDelSvc("CY")
-                .setBreakBulk(null)
-                .setCargoes(null)
-                .setCargoTypes(null)
-                .setEquipmentAssignments(null)
-                .setHaulageArrangements(null)
-                .setHistoryOfReasonsForTransportPlan(null)
-                .setMilTStamp(null)
-                .setOperationalRouteRef(null)
-                .setOperator(null)
-                .setPcfn(null)
-                .setPublishSpotROTPNotification(null)
-                .setReference(getReferenceType41())
-                .setTpchangeReason(null)
-                .setTpinfo(null)
-                .build();
+        var shipmentType = new ShipmentType();
+
+        shipmentType.setParty(party);
+        shipmentType.setBookNo("209989099");
+        shipmentType.setRcvSvc("CY");
+        shipmentType.setDelSvc("CY");
+        shipmentType.setReference(getReferenceType41());
+
+        return shipmentType;
     }
 
     public static List<PartyType> getPartyList() {

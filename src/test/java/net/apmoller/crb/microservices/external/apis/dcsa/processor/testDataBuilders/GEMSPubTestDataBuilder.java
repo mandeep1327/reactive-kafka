@@ -1,13 +1,13 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders;
 
-import com.maersk.jaxb.pojo.EndLocType;
-import com.maersk.jaxb.pojo.EventType;
-import com.maersk.jaxb.pojo.GEMSPubType;
-import com.maersk.jaxb.pojo.GTTSVesselType;
-import com.maersk.jaxb.pojo.PartyType;
-import com.maersk.jaxb.pojo.PubSetType;
-import com.maersk.jaxb.pojo.StartLocType;
-import com.maersk.jaxb.pojo.TransportPlanType;
+import MSK.com.gems.EndLocType;
+import MSK.com.gems.EventType;
+import MSK.com.gems.GEMSPubType;
+import MSK.com.gems.GTTSVesselType;
+import MSK.com.gems.PartyType;
+import MSK.com.gems.PubSetType;
+import MSK.com.gems.StartLocType;
+import MSK.com.gems.TransportPlanType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -287,7 +287,7 @@ public final class GEMSPubTestDataBuilder {
         eventType.setEventAct(eventAct);
         eventType.setGemstsutc("2021-09-23 23:45");
         eventType.setSrcSys("GCSS");
-        eventType.setSrcSysTimeStamp("2021-09-23 23:45");
+        eventType.setSrcSysTimestamp("2021-09-23 23:45");
         eventType.setRkemmove("DISCHARG   N");
         return eventType;
 
