@@ -7,11 +7,13 @@ public class DcsaStepDefinition extends CucumberSpringConfiguration {
 
     @BeforeAll
     public static void setup() throws Exception {
-        KafkaTestContainer.setupKafkaContainer();
+        System.out.println("GOT");
     }
 
     @Given("set a message on kafka")
     public void send() throws Exception {
-       /// KafkaTestContainer.sendToProducer("Test", "test");
+        KafkaTestContainer.setupKafkaContainer();
+
+        /// KafkaTestContainer.sendToProducer("Test", "test");
     }
 }
