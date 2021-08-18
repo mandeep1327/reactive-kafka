@@ -74,9 +74,6 @@ class EventMapperTest {
 
     private static Stream<Arguments> testDataForEquipmentEventActs() {
         return Stream.of(
-                //TODO: get rid of these two types of Event Act
-                /*Arguments.arguments(getPubSetTypeWithARRIVECUIMPNEventAct(), getEventForEquipmentEventType()),
-                Arguments.arguments(getPubSetTypeWithDEPARTCUEXPNEventAct(), getEventForEquipmentEventType()),*/
                 Arguments.arguments(getPubSetTypeWithDISCHARG_NEventAct(), getEventForEquipmentEventType()),
                 Arguments.arguments(getPubSetTypeWithGATE_IN_EXPNEventAct(), getEventForEquipmentEventType()),
                 Arguments.arguments(getPubSetTypeWithGATE_OUTEXPYEventAct(), getEventForEquipmentEventType()),
@@ -99,7 +96,6 @@ class EventMapperTest {
 
     private static Stream<Arguments> testEventDataForTransportEventActs() {
         return Stream.of(
-                //TODO: get rid of these two types of Event Act
                 Arguments.arguments(getPubSetTypeWithCONTAINER_ARRIVALEventAct(), getEventForTransportEventType()),
                 Arguments.arguments(getPubSetTypeWithCONTAINER_DEPARTUREEventAct(), getEventForTransportEventType()),
                 Arguments.arguments(getPubSetTypeWithRAIL_ARRIVAL_AT_DESTINATIONEventAct(), getEventForTransportEventType()),

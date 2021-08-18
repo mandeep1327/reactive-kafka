@@ -8,9 +8,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import static MSK.com.external.dcsa.PartyFuncName.ANP;
+import static MSK.com.external.dcsa.PartyFunctionCode.N2;
+import static MSK.com.external.dcsa.PartyFunctionCode.NI;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getMapOfPartyRoleAndFunctions;
 
 @Component
@@ -26,17 +30,28 @@ public final class PartyMapper {
 
         parties.ifPresent(s -> IntStream.range(0, s.size())
                 .forEach(counter ->
-                        partiesList.add(counter, getPartiesFromEvent(s.get(counter), counter)))
+                        partiesList.add(counter, getPartiesFromEvent(s.get(counter))))
         );
+
+        /*special case for NI*/
+        var counter = 0;
+        for (Party party : partiesList) {
+            if (Objects.nonNull(party.getPartyFunctionCode()) && party.getPartyFunctionCode().equals(N2)) {
+                counter++;
+            }
+            if (counter > 1) {
+                party.setPartyFunctionCode(NI);
+                party.setPartyFunctionName(ANP);
+            }
+        }
 
         return partiesList;
 
     }
 
-    protected static Party getPartiesFromEvent(PartyType partyType, Integer counter ) {
+    protected static Party getPartiesFromEvent(PartyType partyType ) {
 
         var roleType = getNullSafeStringFromNullableChars(partyType.getRoletyp());
-        //TODO: take care of the extra role functions here with counter
         var partyFunctions = getMapOfPartyRoleAndFunctions().get(Integer.valueOf(roleType));
         return Party.newBuilder()
                 .setPartyID(getNullSafeStringFromNullableChars(partyType.getCustNo()))

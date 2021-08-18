@@ -45,7 +45,6 @@ import static MSK.com.external.dcsa.PartyFuncName.HS;
 import static MSK.com.external.dcsa.PartyFuncName.ICB;
 import static MSK.com.external.dcsa.PartyFuncName.IDO;
 import static MSK.com.external.dcsa.PartyFuncName.IF;
-import static MSK.com.external.dcsa.PartyFuncName.IP;
 import static MSK.com.external.dcsa.PartyFuncName.LH;
 import static MSK.com.external.dcsa.PartyFuncName.OCB;
 import static MSK.com.external.dcsa.PartyFuncName.ODO;
@@ -58,7 +57,6 @@ import static MSK.com.external.dcsa.PartyFuncName.SWCO;
 import static MSK.com.external.dcsa.PartyFuncName.SWSH;
 import static MSK.com.external.dcsa.PartyFuncName.TDR;
 import static MSK.com.external.dcsa.PartyFunctionCode.CN;
-import static MSK.com.external.dcsa.PartyFunctionCode.COW;
 import static MSK.com.external.dcsa.PartyFunctionCode.DDR;
 import static MSK.com.external.dcsa.PartyFunctionCode.DDS;
 import static MSK.com.external.dcsa.PartyFunctionCode.N1;
@@ -219,14 +217,11 @@ public final class EventUtility {
                 entry(3, PartyFunctionDTO.builder().functionName(SHIPPER).functionCode(OS).build()),
                 entry(4, PartyFunctionDTO.builder().functionName(CONSIGNEE).functionCode(CN).build()),
                 entry(5, PartyFunctionDTO.builder().functionName(FNP).functionCode(N1).build()),
-                //TODO: special case is there with 6
                 entry(6, PartyFunctionDTO.builder().functionName(ANP).functionCode(N2).build()),
                 entry(7, PartyFunctionDTO.builder().functionName(AO).build()),
                 entry(11, PartyFunctionDTO.builder().functionName(OCB).build()),
                 entry(12, PartyFunctionDTO.builder().functionName(ICB).build()),
                 entry(13, PartyFunctionDTO.builder().functionName(CCIA).build()),
-                //TODO: special entry for 14
-                entry(14, PartyFunctionDTO.builder().functionName(IP).functionCode(COW).build()),
                 entry(15, PartyFunctionDTO.builder().functionName(OF).functionCode(DDR).build()),
                 entry(16, PartyFunctionDTO.builder().functionName(IF).functionCode(DDS).build()),
                 entry(22, PartyFunctionDTO.builder().functionName(TDR).build()),

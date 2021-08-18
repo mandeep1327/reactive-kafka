@@ -227,13 +227,6 @@ public final class GEMSPubTestDataBuilder {
         return getPubSet(getEventTypeData("STUFFINGEXPN"));
     }
 
-
-/*    public static PubSetType getPubSetTypeWithARRIVECUIMPNEventAct(){
-        return getPubSet(getEventTypeData("ARRIVECUIMPN"));
-    }
-    public static PubSetType getPubSetTypeWithDEPARTCUEXPNEventAct(){
-        return getPubSet(getEventTypeData("DEPARTCUEXPN"));
-    }*/
     public static PubSetType getPubSetTypeWithCONTAINER_ARRIVALEventAct(){
         return getPubSetWithTransportPlan(getEventTypeData("CONTAINER ARRIVAL"), getPartyList2());
     }
