@@ -31,8 +31,12 @@ public final class EventDataBuilder {
     public static Event getEventForTransportEventType() {
         return getEventWithEventTypeAct(EventType.TRANSPORT, "2021-21-21 13:29", getParties2(), getReferences2());
     }
+
     public static Event getEventForTransportEventTypeWithESTEventAct() {
         return getEventWithEventTypeEst( "2021-21-21 13:29", getParties3(), getReferences3());
+    }
+    public static Event getEventForTransportEventTypeWithESTEventAct2() {
+        return getEventWithEventTypeEst("2021-21-21 13:29", getParties4(), getReferences4());
     }
 
     private static Event getEventWithEventTypeAct(EventType eventType, String eventDateTime, List<Party> parties, List<References> references) {
@@ -76,6 +80,10 @@ public final class EventDataBuilder {
         return List.of(getParty3(), getParty4());
     }
 
+    private static List<Party> getParties4() {
+        return List.of(getParty4(), getParty1());
+    }
+
     private static Party getParty4() {
         return Party.newBuilder()
                 .setPartyFunctionName(PartyFuncName.BOOKED_BY)
@@ -114,15 +122,19 @@ public final class EventDataBuilder {
     }
 
     private static List<References> getReferences() {
-        return List.of(getRef1());
+        return List.of(getRef41A(), getRef41B(), getRef1(), getRef2());
     }
 
     private static List<References> getReferences2() {
-        return List.of(getRef2());
+        return List.of(getRef41A(), getRef41B(), getRef2(), getRef3A(), getRef3B(), getRef3C());
     }
 
     private static List<References> getReferences3() {
-        return List.of(getRef3());
+        return List.of(getRef41A(), getRef41B(), getRef3A(), getRef3B(), getRef3C());
+    }
+
+    private static List<References> getReferences4() {
+        return List.of(getRef41A(), getRef41B(), getRef1());
     }
 
     private static References getRef1() {
@@ -139,10 +151,38 @@ public final class EventDataBuilder {
                 .build();
     }
 
-    private static References getRef3() {
+    private static References getRef3A() {
         return References.newBuilder()
                 .setReferenceType(RefTypeEnum.FF)
                 .setReferenceValue("4351297464471500")
+                .build();
+    }
+
+    private static References getRef3B() {
+        return References.newBuilder()
+                .setReferenceType(RefTypeEnum.FF)
+                .setReferenceValue("4351297464471501")
+                .build();
+    }
+
+    private static References getRef3C() {
+        return References.newBuilder()
+                .setReferenceType(RefTypeEnum.FF)
+                .setReferenceValue("4351297464471502")
+                .build();
+    }
+
+    private static References getRef41A() {
+        return References.newBuilder()
+                .setReferenceType(RefTypeEnum.PO)
+                .setReferenceValue("4351297464431500")
+                .build();
+    }
+
+    private static References getRef41B() {
+        return References.newBuilder()
+                .setReferenceType(RefTypeEnum.PO)
+                .setReferenceValue("4351297464431501")
                 .build();
     }
 }

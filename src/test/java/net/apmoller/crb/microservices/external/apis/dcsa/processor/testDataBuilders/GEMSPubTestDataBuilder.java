@@ -16,6 +16,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDa
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getPartyList;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getPartyList2;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getPartyList3;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getPartyList4;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getShipmentValue;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.TPDocTypeTestDataBuilder.getTPDocList;
 
@@ -250,7 +251,7 @@ public final class GEMSPubTestDataBuilder {
         return getPubSetWithTransportPlan(getEventTypeData("Shipment_ETA"), getPartyList3());
     }
     public static PubSetType getPubSetTypeWithShipment_ETDEventAct(){
-        return getPubSetForDepartureWithTransportPlan(getEventTypeData("Shipment_ETD"), getPartyList3());
+        return getPubSetForDepartureWithTransportPlan(getEventTypeData("Shipment_ETD"), getPartyList4());
     }
     public static PubSetType getPubSetTypeWithShipment_ETDEventActAndBARTransportMode(){
         return getPubSetForDepartureWithTransportPlanAndBARTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());

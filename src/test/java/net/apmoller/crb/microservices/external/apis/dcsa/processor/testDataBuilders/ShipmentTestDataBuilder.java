@@ -1,6 +1,7 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders;
 
 import com.maersk.jaxb.pojo.PartyType;
+import com.maersk.jaxb.pojo.ReferenceType;
 import com.maersk.jaxb.pojo.ShipmentType;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public final class ShipmentTestDataBuilder {
                 .setOperator(null)
                 .setPcfn(null)
                 .setPublishSpotROTPNotification(null)
-                .setReference(null)
+                .setReference(getReferenceType41())
                 .setTpchangeReason(null)
                 .setTpinfo(null)
                 .build();
@@ -87,7 +88,7 @@ public final class ShipmentTestDataBuilder {
 
     private static PartyType getParty3() {
         return PartyType.newBuilder()
-                .setCustRefNo(List.of("4351297464471500"))
+                .setCustRefNo(List.of("4351297464471500", "4351297464471501", "4351297464471502"))
                 .setCustNo("80092546")
                 .setRoletyp("15")
                 .setCustName("PARTY NAME 3")
@@ -119,5 +120,18 @@ public final class ShipmentTestDataBuilder {
                 .setDodaac(null)
                 .setState(null)
                 .build();
+    }
+
+    private static List<ReferenceType> getReferenceType41() {
+        return List.of(ReferenceType.newBuilder()
+                .setTyp("41")
+                .setName("TEST")
+                .setValue("4351297464431500")
+                .build(),
+                ReferenceType.newBuilder()
+                .setTyp("41")
+                .setName("TEST")
+                .setValue("4351297464431501")
+                .build());
     }
 }

@@ -38,13 +38,13 @@ public final class ReferenceMapper {
                         || partyType.getRoletyp().toString().equals("4")))
                 .collect(Collectors.toUnmodifiableList());
 
-        var specificReferenceType  = getReferenceFromShipmentOfRefType41(pubSetType);
+        var references  = new ArrayList<>(getReferenceFromShipmentOfRefType41(pubSetType));
 
         if (!chosenParties.isEmpty()) {
-            return fetchReferencesFromChosenParties(chosenParties.get(0));
-        } else {
-            return specificReferenceType;
+            addReferencesParties(references, chosenParties);
+
         }
+        return references;
     }
 
     protected static List<References> getReferenceFromShipmentOfRefType41(PubSetType pubSetType) {
@@ -55,16 +55,21 @@ public final class ReferenceMapper {
                 .stream()
                 .filter(referenceType -> referenceType.getTyp().toString().equals("41"))
                 .filter(referenceType -> !Objects.isNull(referenceType.getValue()))
-                .findFirst()
-                .map(s -> List.of(References.newBuilder()
+                .map(s -> References.newBuilder()
                         .setReferenceType(PO)
                         .setReferenceValue(s.getValue().toString())
-                        .build()))
-                .orElse(null);
+                        .build()
+                        )
+                .collect(Collectors.toList());
     }
 
-    protected static List<References> fetchReferencesFromChosenParties (PartyType party) {
-        List<References> referenceList = new ArrayList<>();
+    protected static void addReferencesParties (List<References> referenceList, List<PartyType> parties) {
+        for (PartyType party : parties) {
+            addReferencesForChosenParties(referenceList, party);
+        }
+    }
+
+    protected static void addReferencesForChosenParties (List<References> referenceList, PartyType party) {
         var streamOfCustomerReference = getStreamOfCustomerReference(party);
         switch (party.getRoletyp().toString()){
             case "15":
@@ -77,9 +82,8 @@ public final class ReferenceMapper {
                 buildReferenceList(referenceList, streamOfCustomerReference, AAO);
                 break;
             default:
-                return Collections.emptyList();
+                break;
         }
-        return referenceList;
     }
 
     protected static void buildReferenceList(List<References> referenceList, Stream<String> streamOfCustomerReference, RefTypeEnum refTypeEnum) {

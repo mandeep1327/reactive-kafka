@@ -36,6 +36,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDa
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForShipmentEventType;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForTransportEventType;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForTransportEventTypeWithESTEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForTransportEventTypeWithESTEventAct2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -104,7 +105,7 @@ class EventMapperTest {
                 Arguments.arguments(getPubSetTypeWithRAIL_ARRIVAL_AT_DESTINATIONEventAct(), getEventForTransportEventType()),
                 Arguments.arguments(getPubSetTypeWithRAIL_DEPARTUREEventAct(), getEventForTransportEventType()),
                 Arguments.arguments(getPubSetTypeWithShipment_ETAEventAct(), getEventForTransportEventTypeWithESTEventAct()),
-                Arguments.arguments(getPubSetTypeWithShipment_ETDEventAct(), getEventForTransportEventTypeWithESTEventAct())
+                Arguments.arguments(getPubSetTypeWithShipment_ETDEventAct(), getEventForTransportEventTypeWithESTEventAct2())
         );
     }
 
