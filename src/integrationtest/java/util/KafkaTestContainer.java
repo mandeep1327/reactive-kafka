@@ -7,7 +7,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
@@ -32,74 +31,64 @@ public class KafkaTestContainer {
     private static KafkaConsumer<String, String> consumer;
     private static ConsumerRecords<String, String> records;
     public static EnvironmentReader environmentReader;
+    private static KafkaContainer kafka;
     public static void setupKafkaContainer() throws Exception {
         Network network = Network.newNetwork();
 
-        EnvironmentReader environmentReader = new EnvironmentReader();
+        environmentReader = new EnvironmentReader();
 
-        KafkaContainer kafka = new KafkaContainer(KAFKA_IMAGE)
+         kafka = new KafkaContainer(KAFKA_IMAGE)
                 .withNetwork(network)
         .withEnv("KAFKA_CLIENT_PORT", environmentReader.getKafkaPort())
         .withEnv("KAFKA_ADVERTISED_LISTENERS",environmentReader.getKafkaPort());
 
         kafka.start();
 
-        setupKafkaProducer(kafka);
-        setupKafkaConsumer(kafka);
-        setupConfig(kafka.getBootstrapServers(), 1, 1);
-        producer.send(new ProducerRecord<>(environmentReader.getKafkaConsumerTopic(), "resr", "rsr"));
-        System.out.println("WAITING");
+        setupKafkaProducer();
 
-        Thread.sleep(5000);
-        List<ConsumerRecord<String, String>> changeEvents =
-                drain(consumer, 2);
-
-        System.out.println("EVENTS " + changeEvents.get(0));
     }
 
-    public static void setupKafkaProducer(KafkaContainer kafka){
+    public static void setupKafkaProducer(){
         producer = new KafkaProducer<>(
                 ImmutableMap.of(
-                        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
-                        ProducerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString()
-                ),
+                        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "http://localhost:9092",
+                        ProducerConfig.CLIENT_ID_CONFIG,"external-dcsa-events-processor"),
                 new StringSerializer(),
                 new StringSerializer()
         );
     }
 
-    public static void setupKafkaConsumer(KafkaContainer kafka){
+    public static void setupKafkaConsumer(){
         consumer = new KafkaConsumer<>(
                 ImmutableMap.of(
                         ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
-                        ConsumerConfig.GROUP_ID_CONFIG, environmentReader.getKafkaConsumerGroup()),
+                        ConsumerConfig.GROUP_ID_CONFIG, "1"),
                 new StringDeserializer(),
                 new StringDeserializer()
         );
     }
 
-    protected static void setupConfig(String bootstrapServers, int partitions, int rf) throws Exception {
+    protected static void setupConfig(int partitions, int rf) throws Exception {
         try (
                 AdminClient adminClient = AdminClient.create(ImmutableMap.of(
-                        AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers
+                        AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers()
                 ));
         ) {
 
             Collection<NewTopic> topics = singletonList(new NewTopic(environmentReader.getKafkaConsumerTopic(), partitions, (short) rf));
             adminClient.createTopics(topics).all().get(30, TimeUnit.SECONDS);
 
-            consumer.subscribe(singletonList(environmentReader.getKafkaConsumerTopic()));
+            consumer.subscribe(singletonList(environmentReader.getKafkaPublisherTopic()));
 
         }
     }
 
-    protected static void sendToProducer(String key, String value) throws Exception {
-        producer.send(new ProducerRecord<>(environmentReader.getKafkaConsumerTopic(), key, value));
+    protected static void sendToProducer(String content) throws Exception {
+        producer.send(new ProducerRecord<>(environmentReader.getKafkaConsumerTopic(), content));
         }
 
 
-    private static List<ConsumerRecord<String, String>> drain(
-            KafkaConsumer<String, String> consumer,
+    protected static List<ConsumerRecord<String, String>> drain(
             int expectedRecordCount) {
 
         List<ConsumerRecord<String, String>> allRecords = new ArrayList<>();

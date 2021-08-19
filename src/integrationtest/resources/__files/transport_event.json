@@ -1,0 +1,80 @@
+{
+  "eventID": "2537152461542365",
+  "bookingReference": "209989099",
+  "eventDateTime": "2021-21-21 13:29",
+  "eventType": "TRANSPORT",
+  "eventCreatedDateTime": "2021-09-23 23:45",
+  "eventClassifierCode": "ACT",
+  "parties": [
+    {
+      "partyID": "241342126",
+      "partyName": "PARTY NAME 2",
+      "partyFunctionCode": "CN",
+      "partyFunctionName": "Consignee"
+    },
+    {
+      "partyID": "80092546",
+      "partyName": "PARTY NAME 3",
+      "partyFunctionCode": "DDR",
+      "partyFunctionName": "Outward Forwarder"
+    }
+  ],
+  "references": [
+    {
+      "referenceValue": "4351297464431500",
+      "referenceType": "PO"
+    },
+    {
+      "referenceValue": "4351297464431501",
+      "referenceType": "PO"
+    },
+    {
+      "referenceValue": "4351297464491500",
+      "referenceType": "AAO"
+    },
+    {
+      "referenceValue": "4351297464471500",
+      "referenceType": "FF"
+    },
+    {
+      "referenceValue": "4351297464471501",
+      "referenceType": "FF"
+    },
+    {
+      "referenceValue": "4351297464471502",
+      "referenceType": "FF"
+    }
+  ],
+  "equipmentReference": "TCNU6816701",
+  "carrierBookingReference": "209989099",
+  "transportDocumentReference": "293156737",
+  "sourceSystem": "GCSS",
+  "serviceType": "CY/CY",
+  "carrierCode": "MAEU",
+  "transportEventType": "ARRI",
+  "delayReasonCode": null,
+  "changeRemark": null,
+  "documentReferences": [
+    {
+      "key": "BKG",
+      "value": "203634611"
+    },
+    {
+      "key": "TRD",
+      "value": "203634611"
+    }
+  ],
+  "transportCall": {
+    "carrierServiceCode": null,
+    "carrierVoyageNumber": null,
+    "facilityType": "POTE",
+    "otherFacility": null,
+    "modeOfTransport": null,
+    "carrierCode": null,
+    "transportCallSequenceNo": null,
+    "unLocationCode": null,
+    "location": null,
+    "vessel": null
+  },
+  "vesselCode": null
+}
