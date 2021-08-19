@@ -6,10 +6,12 @@ import MSK.com.external.dcsa.TransportCall;
 import MSK.com.gems.EndLocType;
 import MSK.com.gems.EquipmentType;
 import MSK.com.gems.EventType;
+import MSK.com.gems.MoveType;
 import MSK.com.gems.PubSetType;
 import MSK.com.gems.StartLocType;
 import MSK.com.gems.TransportPlanType;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mapping.MappingException;
 
 import java.util.List;
@@ -27,6 +29,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstEquipmentElement;
 
 @UtilityClass
+@Slf4j
 public final class TransportCallMapper {
 
     public static TransportCall fromPubsetToTransportCallBase(PubSetType pubSetType) {
@@ -69,14 +72,15 @@ public final class TransportCallMapper {
         return Optional.ofNullable(transportPlanMap)
                 .map(TransportPlanType::getVesselCde)
                 .map(CharSequence::toString)
-                .orElseThrow(() -> new MappingException("Could not find the vessel code"));
+                .orElse(null);
 
     }
 
     protected static String getLocation(EquipmentType equipmentTypeElement){
-        return Optional.ofNullable(equipmentTypeElement.getMove().getActLoc())
+        return Optional.ofNullable(equipmentTypeElement.getMove())
+                .map(MoveType::getActLoc)
                 .map(CharSequence::toString)
-                .orElseThrow(() -> new MappingException("Could not find the RKST code for the location"));
+                .orElse(null);
     }
 
 
@@ -102,7 +106,9 @@ public final class TransportCallMapper {
             case "RCO":
                 return TransPortMode.RAIL;
             default:
-                throw new MappingException("Could not map TransportMode Code ".concat(transportModeCode));
+                //TODO: Waiting for Terry
+                /*throw new MappingException("Could not map TransportMode Code ".concat(transportModeCode));*/
+                return null;
         }
     }
 
@@ -137,7 +143,8 @@ public final class TransportCallMapper {
                 !Objects.isNull(equipment.getMove().getLineCde())) {
             return equipment.getMove().getLineCde().toString();
         }
-        throw new MappingException("Could not Map the carrier service code");
+        log.error("Could not Map the carrier service code");
+        return null;
     }
 
     protected static String getActLocation(EquipmentType firstEquipmentType) {

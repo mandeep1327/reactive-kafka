@@ -2,6 +2,7 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapst
 
 import MSK.com.external.dcsa.EventClassifierCode;
 import MSK.com.external.dcsa.EventType;
+import MSK.com.gems.GTTSVesselType;
 import MSK.com.gems.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
@@ -12,6 +13,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.data.mapping.MappingException;
 
+import java.util.Optional;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.ACT_EVENTS;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.EQUIPMENT_EVENTS;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.EST_EVENTS;
@@ -55,9 +57,9 @@ public interface EventMapper {
         if (SHIPMENT_EVENTS.contains(eventAct.toString())) {
             return pubSetType.getEvent().getGemstsutc().toString();
         } else if (TRANSPORT_EVENTS.contains(eventAct.toString())) {
-            var date = pubSetType.getGttsvessel().getGttsdte().toString();
-            var time = pubSetType.getGttsvessel().getGttstim().toString();
-            return date.concat(time);
+            var date = (String) Optional.ofNullable(pubSetType.getGttsvessel()).map(GTTSVesselType::getGttsdte).orElse("");
+            var time = (String) Optional.ofNullable(pubSetType.getGttsvessel()).map(GTTSVesselType::getGttstim).orElse("");
+            return date.concat(time).isBlank() ? pubSetType.getEvent().getGemstsutc().toString() : date.concat(time);
         } else if (EQUIPMENT_EVENTS.contains(eventAct.toString())) {
             final var equipmentType = pubSetType.getEquipment().get(0);
             var date = equipmentType.getMove().getActDte().toString();

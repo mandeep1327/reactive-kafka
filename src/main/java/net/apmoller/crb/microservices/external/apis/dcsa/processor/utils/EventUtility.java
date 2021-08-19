@@ -180,7 +180,7 @@ public final class EventUtility {
                 .map(PubSetType::getEquipment)
                 .filter(equipmentTypes -> !equipmentTypes.isEmpty())
                 .map(equipmentList -> equipmentList.get(0))
-                .orElseThrow(() -> new MappingException("Equipment element is missing"));
+                .orElse(new EquipmentType());
     }
 
     public static Map<Integer, PartyFunctionDTO> getMapOfPartyRoleAndFunctions (){
