@@ -4,51 +4,36 @@ import MSK.com.external.dcsa.Party;
 import MSK.com.gems.PartyType;
 import MSK.com.gems.PubSetType;
 import MSK.com.gems.ShipmentType;
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.IntStream;
+import java.util.stream.Collectors;
 
 import static MSK.com.external.dcsa.PartyFunctionCode.N2;
 import static MSK.com.external.dcsa.PartyFunctionCode.NI;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getMapOfPartyRoleAndFunctions;
 
-@Component
+@UtilityClass
 public final class PartyMapper {
 
-    protected PartyMapper(){}
-
     public static List<Party> getPartiesFromPubSetType(PubSetType pubSetType) {
-        var parties = Optional.ofNullable(pubSetType.getShipment())
-                .map(ShipmentType::getParty);
+        var partiesList = Optional.ofNullable(pubSetType.getShipment())
+                .map(ShipmentType::getParty)
+                .map(s -> s.stream().map(PartyMapper::getPartiesFromEvent)
+                .collect(Collectors.toList())).orElse(List.of());
 
-        List<Party> partiesList = new ArrayList<>();
-
-        parties.ifPresent(s -> IntStream.range(0, s.size())
-                .forEach(counter ->
-                        partiesList.add(counter, getPartiesFromEvent(s.get(counter))))
-        );
-
-        /*special case for NI*/
-        var counter = 0;
-        for (Party party : partiesList) {
-            if (Objects.nonNull(party.getPartyFunctionCode()) && party.getPartyFunctionCode().equals(N2)) {
-                counter++;
-            }
-            if (counter > 1) {
-                party.setPartyFunctionCode(NI);
-                party.setPartyFunctionName("Additional Notify Party");
-            }
-        }
+        partiesList.stream()
+                .filter(party -> N2.equals(party.getPartyFunctionCode()))
+                .skip(1)
+                .forEach(PartyMapper::setAsAdditionalNotifyParty);
 
         return partiesList;
-
     }
 
-    protected static Party getPartiesFromEvent(PartyType partyType ) {
+
+    private static Party getPartiesFromEvent(PartyType partyType) {
 
         var roleType = getNullSafeStringFromNullableChars(partyType.getRoletyp());
         var partyFunctions = getMapOfPartyRoleAndFunctions().get(Integer.valueOf(roleType));
@@ -61,8 +46,13 @@ public final class PartyMapper {
 
     }
 
-    protected static String getNullSafeStringFromNullableChars(CharSequence chars) {
+    private static String getNullSafeStringFromNullableChars(CharSequence chars) {
         return Optional.ofNullable(chars).map(CharSequence::toString).orElse(null);
+    }
+
+    private static void setAsAdditionalNotifyParty(Party party) {
+        party.setPartyFunctionCode(NI);
+        party.setPartyFunctionName("Additional Notify Party");
     }
 
 }

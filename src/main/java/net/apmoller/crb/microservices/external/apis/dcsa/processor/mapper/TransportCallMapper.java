@@ -9,8 +9,8 @@ import MSK.com.gems.EventType;
 import MSK.com.gems.PubSetType;
 import MSK.com.gems.StartLocType;
 import MSK.com.gems.TransportPlanType;
+import lombok.experimental.UtilityClass;
 import org.springframework.data.mapping.MappingException;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -26,10 +26,8 @@ import static MSK.com.external.dcsa.FacilityType.POTE;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDepartureEventType;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstEquipmentElement;
 
-@Component
+@UtilityClass
 public final class TransportCallMapper {
-
-    protected TransportCallMapper() {}
 
     public static TransportCall fromPubsetToTransportCallBase(PubSetType pubSetType) {
         var event = pubSetType.getEvent();

@@ -3,7 +3,7 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 import MSK.com.external.dcsa.DocumentReference;
 import MSK.com.external.dcsa.Key;
 import MSK.com.gems.PubSetType;
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,10 +13,8 @@ import java.util.stream.Stream;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getBolNumber;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getBookingNumber;
 
-@Component
+@UtilityClass
 public final class DocumentReferenceMapper {
-
-    protected DocumentReferenceMapper(){}
 
     public static List<DocumentReference> fromPubsetTypeToDocumentReferences(PubSetType pubSetType) {
 

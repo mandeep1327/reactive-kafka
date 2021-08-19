@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 import static MSK.com.external.dcsa.EmptyIndicatorCode.EMPTY;
@@ -60,13 +61,7 @@ public interface EquipmentEventMapper {
     }
 
     default TransportCall fromPubSetTypeToTransportCall(PubSetType pubSetType) {
-        var transportCall = fromPubsetToTransportCallBase(pubSetType);
-        var outPut = new TransportCall();
-
-        outPut.setCarrierServiceCode(transportCall.getCarrierServiceCode());
-        outPut.setFacilityType(transportCall.getFacilityType());
-        outPut.setOtherFacility(transportCall.getOtherFacility());
-        return outPut;
+        return fromPubsetToTransportCallBase(pubSetType);
     }
 
     default String fromPubSetTypeToIsoEquipmentCode(PubSetType pubSetType) {
@@ -76,20 +71,15 @@ public interface EquipmentEventMapper {
     }
 
     default List<Seals> fromPubSetTypeToSeals(PubSetType pubSetType) {
-        var sealList = Optional.ofNullable(getFirstEquipmentElement(pubSetType).getMove())
+        return Optional.ofNullable(getFirstEquipmentElement(pubSetType).getMove())
                 .map(MoveType::getSeal)
                 .filter(sealTypes -> !sealTypes.isEmpty())
-                .orElse(Collections.emptyList());
-
-        List<Seals> seals = new ArrayList<>();
-
-        sealList.forEach(sealType ->
-                seals.add(Seals.newBuilder()
+                .orElse(Collections.emptyList())
+                .stream().map(sealType -> Seals.newBuilder()
                         .setSealNumber(sealType.getValue().toString())
                         .setSealSource(getSealSource(sealType.getTyp().toString()))
-                        .build()));
-
-        return seals;
+                        .build())
+                .collect(Collectors.toList());
     }
 
     private SealSource getSealSource(String sealType) {

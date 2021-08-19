@@ -5,7 +5,7 @@ import MSK.com.gems.PartyType;
 import MSK.com.gems.PubSetType;
 import MSK.com.gems.ShipmentType;
 import MSK.com.external.dcsa.References;
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,10 +21,8 @@ import static MSK.com.external.dcsa.RefTypeEnum.FF;
 import static MSK.com.external.dcsa.RefTypeEnum.PO;
 import static MSK.com.external.dcsa.RefTypeEnum.SI;
 
-@Component
+@UtilityClass
 public final class ReferenceMapper {
-
-    protected ReferenceMapper(){}
 
     public static List<References> getReferencesFromPubSetType(PubSetType pubSetType) {
         var chosenParties= Optional.ofNullable(pubSetType.getShipment())
@@ -41,8 +39,7 @@ public final class ReferenceMapper {
         var references  = new ArrayList<>(getReferenceFromShipmentOfRefType41(pubSetType));
 
         if (!chosenParties.isEmpty()) {
-            addReferencesParties(references, chosenParties);
-
+            chosenParties.forEach(partyType -> addReferencesForChosenParties(references, partyType));
         }
         return references;
     }
@@ -58,15 +55,8 @@ public final class ReferenceMapper {
                 .map(s -> References.newBuilder()
                         .setReferenceType(PO)
                         .setReferenceValue(s.getValue().toString())
-                        .build()
-                        )
+                        .build())
                 .collect(Collectors.toList());
-    }
-
-    protected static void addReferencesParties (List<References> referenceList, List<PartyType> parties) {
-        for (PartyType party : parties) {
-            addReferencesForChosenParties(referenceList, party);
-        }
     }
 
     protected static void addReferencesForChosenParties (List<References> referenceList, PartyType party) {

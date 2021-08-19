@@ -2,14 +2,12 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 
 import MSK.com.gems.PubSetType;
 import MSK.com.gems.ShipmentType;
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 
 import java.util.Optional;
 
-@Component
+@UtilityClass
 public final class ServiceTypeMapper {
-
-    protected ServiceTypeMapper(){}
 
     public static String getServiceTypeFromPubSetType(PubSetType pubSetType) {
 
@@ -18,10 +16,9 @@ public final class ServiceTypeMapper {
                 .map(CharSequence::toString)
                 .filter(s -> !s.isEmpty())
                 .map(fp -> fp.concat("/")
-                        .concat(
-                                Optional.ofNullable(pubSetType.getShipment())
-                                        .map(ShipmentType::getDelSvc)
-                                        .map(CharSequence::toString).orElse("")
+                        .concat(Optional.ofNullable(pubSetType.getShipment())
+                                .map(ShipmentType::getDelSvc)
+                                .map(CharSequence::toString).orElse("")
                         ))
                 .orElse(null);
     }

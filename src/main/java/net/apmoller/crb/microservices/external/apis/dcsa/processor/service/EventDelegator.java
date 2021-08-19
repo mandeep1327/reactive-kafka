@@ -89,11 +89,14 @@ public class EventDelegator {
     }
 
     private String getKeyForKafkaPayload(CharSequence eventId) {
-        return (String) Optional.ofNullable(eventId).orElse(UUID.randomUUID().toString());
+        return Optional.ofNullable(eventId)
+                .map(CharSequence::toString)
+                .orElse(UUID.randomUUID().toString());
     }
 
     private Flux<SenderResult<String>> sendMessage(DcsaTrackTraceEvent dcsaTrackAndTraceToBeStored, String keyForKafkaPayload) {
-        var senderRecord = Mono.just(SenderRecord.create(new ProducerRecord<>(kafkaPublisherTopic, keyForKafkaPayload, dcsaTrackAndTraceToBeStored), keyForKafkaPayload));
+        var senderRecord = Mono.just(SenderRecord.create(
+                new ProducerRecord<>(kafkaPublisherTopic, keyForKafkaPayload, dcsaTrackAndTraceToBeStored), keyForKafkaPayload));
 
         return kafkaSender.send(senderRecord)
                 .doOnError(e -> log.error("This is the error message" +e.getMessage()));
