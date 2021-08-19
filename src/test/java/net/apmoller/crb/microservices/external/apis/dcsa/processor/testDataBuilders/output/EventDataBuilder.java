@@ -3,7 +3,6 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuil
 import MSK.com.external.dcsa.EventClassifierCode;
 import MSK.com.external.dcsa.EventType;
 import MSK.com.external.dcsa.Party;
-import MSK.com.external.dcsa.PartyFuncName;
 import MSK.com.external.dcsa.PartyFunctionCode;
 import MSK.com.external.dcsa.RefTypeEnum;
 import MSK.com.external.dcsa.References;
@@ -86,7 +85,7 @@ public final class EventDataBuilder {
 
     private static Party getParty4() {
         return Party.newBuilder()
-                .setPartyFunctionName(PartyFuncName.BOOKED_BY)
+                .setPartyFunctionName("Booked By")
                 .setPartyID("26047945")
                 .setPartyName("PARTY NAME 4")
                 .setPartyFunctionCode(null)
@@ -95,7 +94,7 @@ public final class EventDataBuilder {
 
     private static Party getParty3() {
         return Party.newBuilder()
-                .setPartyFunctionName(PartyFuncName.OF)
+                .setPartyFunctionName("Outward Forwarder")
                 .setPartyID("80092546")
                 .setPartyName("PARTY NAME 3")
                 .setPartyFunctionCode(PartyFunctionCode.DDR)
@@ -104,7 +103,7 @@ public final class EventDataBuilder {
 
     private static Party getParty2() {
         return Party.newBuilder()
-                .setPartyFunctionName(PartyFuncName.CONSIGNEE)
+                .setPartyFunctionName("Consignee")
                 .setPartyID("241342126")
                 .setPartyName("PARTY NAME 2")
                 .setPartyFunctionCode(PartyFunctionCode.CN)
@@ -113,7 +112,7 @@ public final class EventDataBuilder {
 
     private static Party getParty1() {
         return Party.newBuilder()
-                .setPartyFunctionName(PartyFuncName.SHIPPER)
+                .setPartyFunctionName("Shipper")
                 .setPartyID("406019090921")
                 .setPartyName("PARTY NAME 1")
                 .setPartyFunctionCode(PartyFunctionCode.OS)

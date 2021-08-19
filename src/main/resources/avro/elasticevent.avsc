@@ -92,40 +92,7 @@
                       "default": null
                     },
                     {
-                      "type": ["null", {
-                        "name": "PartyFuncName",
-                        "type": "enum",
-                        "symbols": [
-                          "BOOKED_BY",
-                          "CONTRACT",
-                          "SHIPPER",
-                          "CONSIGNEE",
-                          "FNP",
-                          "ANP",
-                          "AO",
-                          "OCB",
-                          "ICB",
-                          "CCIA",
-                          "IP",
-                          "OF",
-                          "IF",
-                          "TDR",
-                          "CCOA",
-                          "CP",
-                          "PO",
-                          "ODO",
-                          "IDO",
-                          "RTP",
-                          "LH",
-                          "DMIP",
-                          "DTIP",
-                          "SUPP",
-                          "HS",
-                          "HC",
-                          "SWSH",
-                          "SWCO"
-                        ]
-                      }],
+                      "type": ["null", "string"],
                       "name": "partyFunctionName",
                       "default": null
                     }

@@ -12,7 +12,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import static MSK.com.external.dcsa.PartyFuncName.ANP;
 import static MSK.com.external.dcsa.PartyFunctionCode.N2;
 import static MSK.com.external.dcsa.PartyFunctionCode.NI;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getMapOfPartyRoleAndFunctions;
@@ -41,7 +40,7 @@ public final class PartyMapper {
             }
             if (counter > 1) {
                 party.setPartyFunctionCode(NI);
-                party.setPartyFunctionName(ANP);
+                party.setPartyFunctionName("Additional Notify Party");
             }
         }
 

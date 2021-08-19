@@ -29,33 +29,6 @@ import static MSK.com.external.dcsa.EquipmentEventType.GTOT;
 import static MSK.com.external.dcsa.EquipmentEventType.LOAD;
 import static MSK.com.external.dcsa.EquipmentEventType.STRP;
 import static MSK.com.external.dcsa.EquipmentEventType.STUF;
-import static MSK.com.external.dcsa.PartyFuncName.ANP;
-import static MSK.com.external.dcsa.PartyFuncName.AO;
-import static MSK.com.external.dcsa.PartyFuncName.BOOKED_BY;
-import static MSK.com.external.dcsa.PartyFuncName.CCIA;
-import static MSK.com.external.dcsa.PartyFuncName.CCOA;
-import static MSK.com.external.dcsa.PartyFuncName.CONSIGNEE;
-import static MSK.com.external.dcsa.PartyFuncName.CONTRACT;
-import static MSK.com.external.dcsa.PartyFuncName.CP;
-import static MSK.com.external.dcsa.PartyFuncName.DMIP;
-import static MSK.com.external.dcsa.PartyFuncName.DTIP;
-import static MSK.com.external.dcsa.PartyFuncName.FNP;
-import static MSK.com.external.dcsa.PartyFuncName.HC;
-import static MSK.com.external.dcsa.PartyFuncName.HS;
-import static MSK.com.external.dcsa.PartyFuncName.ICB;
-import static MSK.com.external.dcsa.PartyFuncName.IDO;
-import static MSK.com.external.dcsa.PartyFuncName.IF;
-import static MSK.com.external.dcsa.PartyFuncName.LH;
-import static MSK.com.external.dcsa.PartyFuncName.OCB;
-import static MSK.com.external.dcsa.PartyFuncName.ODO;
-import static MSK.com.external.dcsa.PartyFuncName.OF;
-import static MSK.com.external.dcsa.PartyFuncName.PO;
-import static MSK.com.external.dcsa.PartyFuncName.RTP;
-import static MSK.com.external.dcsa.PartyFuncName.SHIPPER;
-import static MSK.com.external.dcsa.PartyFuncName.SUPP;
-import static MSK.com.external.dcsa.PartyFuncName.SWCO;
-import static MSK.com.external.dcsa.PartyFuncName.SWSH;
-import static MSK.com.external.dcsa.PartyFuncName.TDR;
 import static MSK.com.external.dcsa.PartyFunctionCode.CN;
 import static MSK.com.external.dcsa.PartyFunctionCode.DDR;
 import static MSK.com.external.dcsa.PartyFunctionCode.DDS;
@@ -212,33 +185,33 @@ public final class EventUtility {
 
     public static Map<Integer, PartyFunctionDTO> getMapOfPartyRoleAndFunctions (){
         return Map.ofEntries(
-                entry(1, PartyFunctionDTO.builder().functionName(BOOKED_BY).build()),
-                entry(2, PartyFunctionDTO.builder().functionName(CONTRACT).build()),
-                entry(3, PartyFunctionDTO.builder().functionName(SHIPPER).functionCode(OS).build()),
-                entry(4, PartyFunctionDTO.builder().functionName(CONSIGNEE).functionCode(CN).build()),
-                entry(5, PartyFunctionDTO.builder().functionName(FNP).functionCode(N1).build()),
-                entry(6, PartyFunctionDTO.builder().functionName(ANP).functionCode(N2).build()),
-                entry(7, PartyFunctionDTO.builder().functionName(AO).build()),
-                entry(11, PartyFunctionDTO.builder().functionName(OCB).build()),
-                entry(12, PartyFunctionDTO.builder().functionName(ICB).build()),
-                entry(13, PartyFunctionDTO.builder().functionName(CCIA).build()),
-                entry(15, PartyFunctionDTO.builder().functionName(OF).functionCode(DDR).build()),
-                entry(16, PartyFunctionDTO.builder().functionName(IF).functionCode(DDS).build()),
-                entry(22, PartyFunctionDTO.builder().functionName(TDR).build()),
-                entry(25, PartyFunctionDTO.builder().functionName(CCOA).build()),
-                entry(26, PartyFunctionDTO.builder().functionName(CP).build()),
-                entry(27, PartyFunctionDTO.builder().functionName(PO).build()),
-                entry(28, PartyFunctionDTO.builder().functionName(ODO).build()),
-                entry(29, PartyFunctionDTO.builder().functionName(IDO).build()),
-                entry(31, PartyFunctionDTO.builder().functionName(RTP).build()),
-                entry(32, PartyFunctionDTO.builder().functionName(LH).build()),
-                entry(33, PartyFunctionDTO.builder().functionName(DMIP).build()),
-                entry(34, PartyFunctionDTO.builder().functionName(DTIP).build()),
-                entry(35, PartyFunctionDTO.builder().functionName(SUPP).build()),
-                entry(36, PartyFunctionDTO.builder().functionName(HS).build()),
-                entry(37, PartyFunctionDTO.builder().functionName(HC).build()),
-                entry(38, PartyFunctionDTO.builder().functionName(SWSH).build()),
-                entry(39, PartyFunctionDTO.builder().functionName(SWCO).build())
+                entry(1, PartyFunctionDTO.builder().functionName("Booked By").build()),
+                entry(2, PartyFunctionDTO.builder().functionName("Contractual Customer").build()),
+                entry(3, PartyFunctionDTO.builder().functionName("Shipper").functionCode(OS).build()),
+                entry(4, PartyFunctionDTO.builder().functionName("Consignee").functionCode(CN).build()),
+                entry(5, PartyFunctionDTO.builder().functionName("First Notify Party").functionCode(N1).build()),
+                entry(6, PartyFunctionDTO.builder().functionName("Additional Notify Party").functionCode(N2).build()),
+                entry(7, PartyFunctionDTO.builder().functionName("Allocation Owner").build()),
+                entry(11, PartyFunctionDTO.builder().functionName("Outward Customs Broker").build()),
+                entry(12, PartyFunctionDTO.builder().functionName("Inward Customs Broker").build()),
+                entry(13, PartyFunctionDTO.builder().functionName("Contractual Carrier''s Inward Agent").build()),
+                entry(15, PartyFunctionDTO.builder().functionName("Outward Forwarder").functionCode(DDR).build()),
+                entry(16, PartyFunctionDTO.builder().functionName("Inward Forwarder").functionCode(DDS).build()),
+                entry(22, PartyFunctionDTO.builder().functionName("Transport Document Receiver").build()),
+                entry(25, PartyFunctionDTO.builder().functionName("Contractual Carrier''s Outward Agent").build()),
+                entry(26, PartyFunctionDTO.builder().functionName("Credit Party").build()),
+                entry(27, PartyFunctionDTO.builder().functionName("Product Owner").build()),
+                entry(28, PartyFunctionDTO.builder().functionName("Outward Document Owner").build()),
+                entry(29, PartyFunctionDTO.builder().functionName("Inward Document Owner").build()),
+                entry(31, PartyFunctionDTO.builder().functionName("Release to Party").build()),
+                entry(32, PartyFunctionDTO.builder().functionName("Lawful (B/L) Holder").build()),
+                entry(33, PartyFunctionDTO.builder().functionName("Demurrage Invoice Party").build()),
+                entry(34, PartyFunctionDTO.builder().functionName("Detention Invoice Party").build()),
+                entry(35, PartyFunctionDTO.builder().functionName("Supplier").build()),
+                entry(36, PartyFunctionDTO.builder().functionName("House Shipper").build()),
+                entry(37, PartyFunctionDTO.builder().functionName("House Consignee").build()),
+                entry(38, PartyFunctionDTO.builder().functionName("Switched Shipper").build()),
+                entry(39, PartyFunctionDTO.builder().functionName("Switched Consignee").build())
         );
     }
 
