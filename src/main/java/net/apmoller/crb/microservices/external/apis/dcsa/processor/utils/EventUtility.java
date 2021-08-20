@@ -39,6 +39,7 @@ import static MSK.com.external.dcsa.PartyFunctionCode.OS;
 import static MSK.com.external.dcsa.TransportEventType.ARRI;
 import static MSK.com.external.dcsa.TransportEventType.DEPA;
 import static java.util.Map.entry;
+import static java.util.Objects.isNull;
 
 @UtilityClass
 public final class EventUtility {
@@ -112,7 +113,7 @@ public final class EventUtility {
 
     public static TransportEventType getArrivalOrDepartureEventType(String eventAct) {
 
-        if (eventAct.isBlank()) {
+        if (isNull(eventAct)) {
             throw new MappingException("Null Event Act");
         }
 
@@ -142,7 +143,7 @@ public final class EventUtility {
     }
 
     public static EquipmentEventType getEquipmentEventType(String eventAct) {
-        if (Objects.isNull(eventAct)) {
+        if (isNull(eventAct)) {
             throw new MappingException("Null Event Act");
         }
 

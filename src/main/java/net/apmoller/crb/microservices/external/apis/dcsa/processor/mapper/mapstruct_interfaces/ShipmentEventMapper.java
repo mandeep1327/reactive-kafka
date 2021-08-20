@@ -68,7 +68,9 @@ public interface ShipmentEventMapper {
 
     @NotNull
     private String getDocumentIdForOthers(PubSetType pubSetType) {
-        if (!isNull(pubSetType.getTpdoc()) && !isNull(pubSetType.getTpdoc().get(0).getBolNo())) {
+        if (!isNull(pubSetType.getTpdoc()) &&
+                !pubSetType.getTpdoc().isEmpty() &&
+                !isNull(pubSetType.getTpdoc().get(0).getBolNo())) {
             return pubSetType.getTpdoc().get(0).getBolNo().toString();
         }
         throw new MappingException("Booking Number is not available for Document ID");
