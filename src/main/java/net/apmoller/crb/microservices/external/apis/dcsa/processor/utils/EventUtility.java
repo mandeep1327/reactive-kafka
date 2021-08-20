@@ -10,6 +10,7 @@ import MSK.com.gems.MoveType;
 import MSK.com.gems.PubSetType;
 import MSK.com.gems.ShipmentType;
 import MSK.com.gems.TPDocType;
+import lombok.experimental.UtilityClass;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.PartyFunctionDTO;
 import org.springframework.data.mapping.MappingException;
 
@@ -39,16 +40,8 @@ import static MSK.com.external.dcsa.TransportEventType.ARRI;
 import static MSK.com.external.dcsa.TransportEventType.DEPA;
 import static java.util.Map.entry;
 
-
+@UtilityClass
 public final class EventUtility {
-
-    public static final String TRANSPORT_EVENT = "TRANSPORT";
-    public static final String EQUIPMENT_EVENT = "EQUIPMENT";
-    public static final String SHIPMENT_EVENT = "SHIPMENT";
-
-
-    private EventUtility() {
-    }
 
     public static final List<String> SHIPMENT_EVENTS = List.of(
             "Confirm_Shipment_Closed",

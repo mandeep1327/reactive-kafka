@@ -65,7 +65,7 @@ public final class TransportCallMapper {
         return transportCall;
     }
 
-    protected static String getVoyageNumberFromTransportPlan(TransportPlanType transportPlanMap) {
+    private static String getVoyageNumberFromTransportPlan(TransportPlanType transportPlanMap) {
         return Optional.ofNullable(transportPlanMap)
                 .map(TransportPlanType::getVesselCde)
                 .map(CharSequence::toString)
@@ -73,14 +73,14 @@ public final class TransportCallMapper {
 
     }
 
-    protected static String getLocation(EquipmentType equipmentTypeElement){
+    private static String getLocation(EquipmentType equipmentTypeElement){
         return Optional.ofNullable(equipmentTypeElement.getMove().getActLoc())
                 .map(CharSequence::toString)
                 .orElseThrow(() -> new MappingException("Could not find the RKST code for the location"));
     }
 
 
-    protected static TransPortMode getModeOfTransport(TransportPlanType transportPlanType) {
+    private static TransPortMode getModeOfTransport(TransportPlanType transportPlanType) {
         var transportModeCode = Optional.ofNullable(transportPlanType)
                 .map(TransportPlanType::getTransMode)
                 .map(CharSequence::toString)
@@ -106,7 +106,7 @@ public final class TransportCallMapper {
         }
     }
 
-    protected static FacilityType getFacilityCodeType(String eventAct) {
+    private static FacilityType getFacilityCodeType(String eventAct) {
         switch (eventAct) {
             case "ARRIVECUIMPN":
             case "DEPARTCUEXPN":
@@ -132,7 +132,7 @@ public final class TransportCallMapper {
         }
     }
 
-    protected static String getCarrierServiceCode(EquipmentType equipment) {
+    private static String getCarrierServiceCode(EquipmentType equipment) {
         if (!Objects.isNull(equipment.getMove()) &&
                 !Objects.isNull(equipment.getMove().getLineCde())) {
             return equipment.getMove().getLineCde().toString();
@@ -140,7 +140,7 @@ public final class TransportCallMapper {
         throw new MappingException("Could not Map the carrier service code");
     }
 
-    protected static String getActLocation(EquipmentType firstEquipmentType) {
+    private static String getActLocation(EquipmentType firstEquipmentType) {
         if (!Objects.isNull(firstEquipmentType.getMove()) &&
                 !Objects.isNull(firstEquipmentType.getMove().getActLoc())) {
                 return firstEquipmentType.getMove().getActLoc().toString();
@@ -148,7 +148,7 @@ public final class TransportCallMapper {
         return null;
     }
 
-    protected static Map<String, TransportPlanType> getProperLocationFromTransportPlan(List<TransportPlanType> transportPlan, EventType eventType) {
+    private static Map<String, TransportPlanType> getProperLocationFromTransportPlan(List<TransportPlanType> transportPlan, EventType eventType) {
         var typeOfTransport = getArrivalOrDepartureEventType(eventType.getEventAct().toString());
         var transportPlans = Optional.ofNullable(transportPlan)
                 .filter(transportPlanTypes -> !transportPlanTypes.isEmpty())
@@ -166,16 +166,16 @@ public final class TransportCallMapper {
         }
     }
 
-    protected static String getEndLocation (EndLocType endLocType){
+    private static String getEndLocation (EndLocType endLocType){
         if (!Objects.isNull(endLocType)){
-            return endLocType.getValue().toString();
+            return String.valueOf(endLocType.getValue());
         }
         return null;
     }
 
-    protected static String getStartLocation (StartLocType startLocType){
+    private static String getStartLocation (StartLocType startLocType){
         if (!Objects.isNull(startLocType)){
-            return startLocType.getValue().toString();
+            return String.valueOf(startLocType.getValue());
         }
         return null;
     }

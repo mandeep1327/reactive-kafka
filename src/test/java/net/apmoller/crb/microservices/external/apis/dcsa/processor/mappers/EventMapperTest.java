@@ -104,7 +104,4 @@ class EventMapperTest {
                 Arguments.arguments(getPubSetTypeWithShipment_ETDEventAct(), getEventForTransportEventTypeWithESTEventAct2())
         );
     }
-
-
-
 }

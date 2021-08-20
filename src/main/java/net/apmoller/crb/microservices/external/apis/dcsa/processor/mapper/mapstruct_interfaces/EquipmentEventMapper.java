@@ -76,8 +76,8 @@ public interface EquipmentEventMapper {
                 .filter(sealTypes -> !sealTypes.isEmpty())
                 .orElse(Collections.emptyList())
                 .stream().map(sealType -> Seals.newBuilder()
-                        .setSealNumber(sealType.getValue().toString())
-                        .setSealSource(getSealSource(sealType.getTyp().toString()))
+                        .setSealNumber(String.valueOf(sealType.getValue()))
+                        .setSealSource(getSealSource(String.valueOf(sealType.getTyp())))
                         .build())
                 .collect(Collectors.toList());
     }
