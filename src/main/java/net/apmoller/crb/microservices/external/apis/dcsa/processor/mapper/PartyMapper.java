@@ -42,7 +42,6 @@ public final class PartyMapper {
                 .setPartyFunctionCode(partyFunctions.getFunctionCode())
                 .setPartyFunctionName(partyFunctions.getFunctionName())
                 .build();
-
     }
 
     private static void setAsAdditionalNotifyParty(Party party) {

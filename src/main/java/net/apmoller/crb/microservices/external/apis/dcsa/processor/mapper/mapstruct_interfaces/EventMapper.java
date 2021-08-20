@@ -23,9 +23,9 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 public interface EventMapper {
 
     @Mapping(target = "eventID", source = "event.eventId")
-    @Mapping(target = "bookingReference", expression = "java(details.getShipment().getBookNo())")
+    @Mapping(target = "bookingReference", source = "shipment.bookNo")
     @Mapping(target = "eventDateTime", expression = "java(getDCSAEventDateTime(details))")
-    @Mapping(target = "eventCreatedDateTime", expression = "java(details.getEvent().getGemstsutc())")
+    @Mapping(target = "eventCreatedDateTime", source = "event.gemstsutc")
     @Mapping(target = "eventType", expression = "java(getDCSAEventType(details.getEvent().getEventAct()))")
     @Mapping(target = "eventClassifierCode", expression = "java(getEventClassifierCode(details.getEvent().getEventAct()))")
     @Mapping(expression = "java(ReferenceMapper.getReferencesFromPubSetType(details))", target = "references")

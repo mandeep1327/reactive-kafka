@@ -16,7 +16,6 @@ import org.springframework.data.mapping.MappingException;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import static MSK.com.external.dcsa.CarrierCode.MAEU;
@@ -44,71 +43,104 @@ import static java.util.Objects.isNull;
 @UtilityClass
 public final class EventUtility {
 
+    public static final String ARRANGE_CARGO_RELEASE_CLOSED = "Arrange_Cargo_Release_Closed";
+    public static final String CONFIRM_SHIPMENT_CLOSED = "Confirm_Shipment_Closed";
+    public static final String SHIPMENT_CANCELLED = "Shipment_Cancelled";
+    public static final String RECEIVE_TRANSPORT_DOCUMENT_INSTRUCTIONS_CLOSED = "Receive_Transport_Document_Instructions_Closed";
+    public static final String EQUIPMENT_VGM_DETAILS_UPDATED = "Equipment_VGM_Details_Updated";
+    public static final String ISSUE_ORIGINAL_TPDOC_CLOSED = "Issue_Original_TPDOC_Closed";
+    public static final String ISSUE_VERIFY_COPY_OF_TPDOC_CLOSED = "Issue_Verify_Copy_of_TPDOC_Closed";
+    public static final String RELEASE = "RELEASE";
+    public static final String ARRANGE_CARGO_RELEASE_OPEN = "Arrange_Cargo_Release_Open";
+    public static final String ARRIVAL_NOTICE = "ARRIVAL_NOTICE";
+    public static final String SHIPMENT_ETA = "Shipment_ETA";
+    public static final String SHIPMENT_ETD = "Shipment_ETD";
+    public static final String RAIL_ARRIVAL_AT_DESTINATION = "RAIL_ARRIVAL_AT_DESTINATION";
+    public static final String RAIL_DEPARTURE = "RAIL_DEPARTURE";
+    public static final String ARRIVECUIMPN = "ARRIVECUIMPN";
+    public static final String GATE_IN_EXPN = "GATE-IN EXPN";
+    public static final String OFF_RAILIMPN = "OFF-RAILIMPN";
+    public static final String DEPARTCUEXPN = "DEPARTCUEXPN";
+    public static final String GATE_OUTEXPY = "GATE-OUTEXPY";
+    public static final String ON_RAIL_EXPN = "ON-RAIL EXPN";
+    public static final String LOAD_N = "LOAD       N";
+    public static final String STUFFINGEXPN = "STUFFINGEXPN";
+    public static final String DISCHARG_N = "DISCHARG   N";
+    public static final String STRIPPIN_Y = "STRIPPIN   Y";
+    public static final String CONTAINER_ARRIVAL = "CONTAINER ARRIVAL";
+    public static final String CONTAINER_DEPARTURE = "CONTAINER DEPARTURE";
+
+
     public static final List<String> SHIPMENT_EVENTS = List.of(
-            "Confirm_Shipment_Closed",
-            "Shipment_Cancelled",
-            "Receive_Transport_Document_Instructions_Closed",
-            "Equipment_VGM_Details_Updated",
-            "Arrange_Cargo_Release_Closed",
-            "Arrange_Cargo_Release_Open",
-            "Issue_Original_TPDOC_Closed",
-            "Issue_Verify_Copy_of_TPDOC_Closed",
-            "ARRIVAL_NOTICE",
-            "RELEASE");
+            CONFIRM_SHIPMENT_CLOSED,
+            SHIPMENT_CANCELLED,
+            RECEIVE_TRANSPORT_DOCUMENT_INSTRUCTIONS_CLOSED,
+            EQUIPMENT_VGM_DETAILS_UPDATED,
+            ARRANGE_CARGO_RELEASE_CLOSED,
+            ARRANGE_CARGO_RELEASE_OPEN,
+            ISSUE_ORIGINAL_TPDOC_CLOSED,
+            ISSUE_VERIFY_COPY_OF_TPDOC_CLOSED,
+            ARRIVAL_NOTICE,
+            RELEASE
+    );
 
     public static final List<String> TRANSPORT_EVENTS = List.of(
-            "CONTAINER ARRIVAL",
-            "CONTAINER DEPARTURE",
-            "RAIL_ARRIVAL_AT_DESTINATION",
-            "RAIL_DEPARTURE",
-            "RAIL_ARRIVAL_AT_DESTINATION",
-            "RAIL_DEPARTURE",
-            "Shipment_ETA",
-            "Shipment_ETD");
+            CONTAINER_ARRIVAL,
+            CONTAINER_DEPARTURE,
+            RAIL_ARRIVAL_AT_DESTINATION,
+            RAIL_DEPARTURE,
+            RAIL_ARRIVAL_AT_DESTINATION,
+            RAIL_DEPARTURE,
+            SHIPMENT_ETA,
+            SHIPMENT_ETD
+    );
+
 
     public static final List<String> EQUIPMENT_EVENTS = List.of(
-            "ARRIVECUIMPN",
-            "DEPARTCUEXPN",
-            "DISCHARG   N",
-            "GATE-IN EXPN",
-            "GATE-OUTEXPY",
-            "LOAD       N",
-            "OFF-RAILIMPN",
-            "ON-RAIL EXPN",
-            "STRIPPIN   Y",
-            "STUFFINGEXPN");
+            ARRIVECUIMPN,
+            DEPARTCUEXPN,
+            DISCHARG_N,
+            GATE_IN_EXPN,
+            GATE_OUTEXPY,
+            LOAD_N,
+            OFF_RAILIMPN,
+            ON_RAIL_EXPN,
+            STRIPPIN_Y,
+            STUFFINGEXPN
+    );
 
     public static final List<String> EST_EVENTS = List.of(
-            "Shipment_ETA",
-            "Shipment_ETD");
+            SHIPMENT_ETA,
+            SHIPMENT_ETD
+    );
 
     public static final List<String> ACT_EVENTS = List.of(
-            "RAIL_ARRIVAL_AT_DESTINATION",
-            "ARRIVECUIMPN",
-            "DEPARTCUEXPN",
-            "RAIL_DEPARTURE",
-            "Arrange_Cargo_Release_Closed",
-            "Confirm_Shipment_Closed",
-            "Shipment_Cancelled",
-            "Receive_Transport_Document_Instructions_Closed",
-            "Equipment_VGM_Details_Updated",
-            "Issue_Original_TPDOC_Closed",
-            "Issue_Verify_Copy_of_TPDOC_Closed",
-            "RELEASE",
-            "Arrange_Cargo_Release_Open",
-            "ARRIVAL_NOTICE",
-            "DISCHARG   N",
-            "GATE-OUTEXPY",
-            "LOAD       N",
-            "GATE-IN EXPN",
-            "OFF-RAILIMPN",
-            "ON-RAIL EXPN",
-            "ARRIVECUIMPN",
-            "DEPARTCUEXPN",
-            "STUFFINGEXPN",
-            "STRIPPIN   Y",
-            "CONTAINER ARRIVAL",
-            "CONTAINER DEPARTURE"
+            RAIL_ARRIVAL_AT_DESTINATION,
+            ARRIVECUIMPN,
+            DEPARTCUEXPN,
+            RAIL_DEPARTURE,
+            ARRANGE_CARGO_RELEASE_CLOSED,
+            CONFIRM_SHIPMENT_CLOSED,
+            SHIPMENT_CANCELLED,
+            RECEIVE_TRANSPORT_DOCUMENT_INSTRUCTIONS_CLOSED,
+            EQUIPMENT_VGM_DETAILS_UPDATED,
+            ISSUE_ORIGINAL_TPDOC_CLOSED,
+            ISSUE_VERIFY_COPY_OF_TPDOC_CLOSED,
+            RELEASE,
+            ARRANGE_CARGO_RELEASE_OPEN,
+            ARRIVAL_NOTICE,
+            DISCHARG_N,
+            GATE_OUTEXPY,
+            LOAD_N,
+            GATE_IN_EXPN,
+            OFF_RAILIMPN,
+            ON_RAIL_EXPN,
+            ARRIVECUIMPN,
+            DEPARTCUEXPN,
+            STUFFINGEXPN,
+            STRIPPIN_Y,
+            CONTAINER_ARRIVAL,
+            CONTAINER_DEPARTURE
     );
 
     public static TransportEventType getArrivalOrDepartureEventType(String eventAct) {
@@ -118,15 +150,15 @@ public final class EventUtility {
         }
 
         switch (eventAct) {
-            case "ARRIVECUIMPN":
-            case "CONTAINER ARRIVAL":
-            case "RAIL_ARRIVAL_AT_DESTINATION":
-            case "Shipment_ETA":
+            case ARRIVECUIMPN:
+            case CONTAINER_ARRIVAL:
+            case RAIL_ARRIVAL_AT_DESTINATION:
+            case SHIPMENT_ETA:
                 return ARRI;
-            case "CONTAINER DEPARTURE":
-            case "DEPARTCUEXPN":
-            case "RAIL_DEPARTURE":
-            case "Shipment_ETD":
+            case CONTAINER_DEPARTURE:
+            case DEPARTCUEXPN:
+            case RAIL_DEPARTURE:
+            case SHIPMENT_ETD:
                 return DEPA;
             default:
                 throw new MappingException("Could not map Transport Event Type of ".concat(eventAct));
@@ -147,21 +179,21 @@ public final class EventUtility {
         }
 
         switch (eventAct) {
-            case "ARRIVECUIMPN":
-            case "GATE-IN EXPN":
-            case "OFF-RAILIMPN":
+            case ARRIVECUIMPN:
+            case GATE_IN_EXPN:
+            case OFF_RAILIMPN:
                 return GTIN;
-            case "DISCHARG   N":
+            case DISCHARG_N:
                 return DISC;
-            case "DEPARTCUEXPN":
-            case "GATE-OUTEXPY":
-            case "ON-RAIL EXPN":
+            case DEPARTCUEXPN:
+            case GATE_OUTEXPY:
+            case ON_RAIL_EXPN:
                 return GTOT;
-            case "LOAD       N":
+            case LOAD_N:
                 return LOAD;
-            case "STRIPPIN   Y":
+            case STRIPPIN_Y:
                 return STRP;
-            case "STUFFINGEXPN":
+            case STUFFINGEXPN:
                 return STUF;
             default:
                 throw new MappingException("Could not map Equipment Event Type of ".concat(eventAct));
