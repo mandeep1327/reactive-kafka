@@ -13,12 +13,11 @@ public final class ServiceTypeMapper {
 
         return Optional.ofNullable(pubSetType.getShipment())
                 .map(ShipmentType::getRcvSvc)
-                .map(CharSequence::toString)
                 .filter(s -> !s.isEmpty())
                 .map(fp -> fp.concat("/")
                         .concat(Optional.ofNullable(pubSetType.getShipment())
                                 .map(ShipmentType::getDelSvc)
-                                .map(CharSequence::toString).orElse("")
+                                .orElse("")
                         ))
                 .orElse(null);
     }

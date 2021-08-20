@@ -23,11 +23,11 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 public interface EventMapper {
 
     @Mapping(target = "eventID", source = "event.eventId")
-    @Mapping(target = "bookingReference", expression = "java(details.getShipment().getBookNo().toString())")
+    @Mapping(target = "bookingReference", expression = "java(details.getShipment().getBookNo())")
     @Mapping(target = "eventDateTime", expression = "java(getDCSAEventDateTime(details))")
-    @Mapping(target = "eventCreatedDateTime", expression = "java(details.getEvent().getGemstsutc().toString())")
-    @Mapping(target = "eventType", expression = "java(getDCSAEventType(details.getEvent().getEventAct().toString()))")
-    @Mapping(target = "eventClassifierCode", expression = "java(getEventClassifierCode(details.getEvent().getEventAct().toString()))")
+    @Mapping(target = "eventCreatedDateTime", expression = "java(details.getEvent().getGemstsutc())")
+    @Mapping(target = "eventType", expression = "java(getDCSAEventType(details.getEvent().getEventAct()))")
+    @Mapping(target = "eventClassifierCode", expression = "java(getEventClassifierCode(details.getEvent().getEventAct()))")
     @Mapping(expression = "java(ReferenceMapper.getReferencesFromPubSetType(details))", target = "references")
     @Mapping(expression = "java(PartyMapper.getPartiesFromPubSetType(details))", target = "parties")
     @Mapping(expression = "java(EventUtility.getSourceSystemFromPubsetType(details))", target = "sourceSystem")
@@ -51,17 +51,17 @@ public interface EventMapper {
 
     default String getDCSAEventDateTime(PubSetType pubSetType) {
         //This is something we need to format the timestamp
-        CharSequence eventAct = pubSetType.getEvent().getEventAct();
-        if (SHIPMENT_EVENTS.contains(String.valueOf(eventAct))) {
-            return pubSetType.getEvent().getGemstsutc().toString();
-        } else if (TRANSPORT_EVENTS.contains(String.valueOf(eventAct))) {
-            var date = pubSetType.getGttsvessel().getGttsdte().toString();
-            var time = pubSetType.getGttsvessel().getGttstim().toString();
+        String eventAct = pubSetType.getEvent().getEventAct();
+        if (SHIPMENT_EVENTS.contains((eventAct))) {
+            return pubSetType.getEvent().getGemstsutc();
+        } else if (TRANSPORT_EVENTS.contains((eventAct))) {
+            var date = pubSetType.getGttsvessel().getGttsdte();
+            var time = pubSetType.getGttsvessel().getGttstim();
             return date.concat(time);
-        } else if (EQUIPMENT_EVENTS.contains(eventAct.toString())) {
+        } else if (EQUIPMENT_EVENTS.contains(eventAct)) {
             final var equipmentType = pubSetType.getEquipment().get(0);
-            var date = equipmentType.getMove().getActDte().toString();
-            var time = equipmentType.getMove().getActTim().toString();
+            var date = equipmentType.getMove().getActDte();
+            var time = equipmentType.getMove().getActTim();
             return date.concat(time);
         }
         throw new MappingException("Could not map eventType");

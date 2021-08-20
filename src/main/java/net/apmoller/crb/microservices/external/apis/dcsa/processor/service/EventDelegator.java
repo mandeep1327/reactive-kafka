@@ -88,9 +88,8 @@ public class EventDelegator {
         return sendMessage(dcsaTrackAndTraceToBeStored, keyForKafkaPayload);
     }
 
-    private String getKeyForKafkaPayload(CharSequence eventId) {
+    private String getKeyForKafkaPayload(String eventId) {
         return Optional.ofNullable(eventId)
-                .map(CharSequence::toString)
                 .orElse(UUID.randomUUID().toString());
     }
 

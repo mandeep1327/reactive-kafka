@@ -31,9 +31,9 @@ public final class ReferenceMapper {
                 .orElse(Collections.emptyList())
                 .stream()
                 .filter(partyType ->
-                        "15".equals(String.valueOf(partyType.getRoletyp())) ||
-                        "3".equals(String.valueOf(partyType.getRoletyp())) ||
-                        "4".equals(String.valueOf(partyType.getRoletyp())))
+                        "15".equals((partyType.getRoletyp())) ||
+                        "3".equals((partyType.getRoletyp())) ||
+                        "4".equals((partyType.getRoletyp())))
                 .collect(Collectors.toUnmodifiableList());
 
         var references = new ArrayList<>(getReferenceFromShipmentOfRefType41(pubSetType));
@@ -50,18 +50,18 @@ public final class ReferenceMapper {
                 .filter(referenceTypes -> !referenceTypes.isEmpty())
                 .orElse(Collections.emptyList())
                 .stream()
-                .filter(referenceType -> "41".equals(String.valueOf(referenceType.getTyp())))
+                .filter(referenceType -> "41".equals((referenceType.getTyp())))
                 .filter(referenceType -> !Objects.isNull(referenceType.getValue()))
                 .map(s -> References.newBuilder()
                         .setReferenceType(PO)
-                        .setReferenceValue(s.getValue().toString())
+                        .setReferenceValue(s.getValue())
                         .build())
                 .collect(Collectors.toList());
     }
 
     protected static void addReferencesForChosenParties(List<References> referenceList, PartyType party) {
         var streamOfCustomerReference = getStreamOfCustomerReference(party);
-        switch (party.getRoletyp().toString()) {
+        switch (party.getRoletyp()) {
             case "15":
                 buildReferenceList(referenceList, streamOfCustomerReference, FF);
                 break;
@@ -84,8 +84,7 @@ public final class ReferenceMapper {
         return Optional.ofNullable(party.getCustRefNo())
                 .filter(custRefs -> !custRefs.isEmpty())
                 .orElse(Collections.emptyList())
-                .stream()
-                .map(CharSequence::toString);
+                .stream();
     }
 
     private static Consumer<String> buildReference(List<References> referenceList, RefTypeEnum refTypeEnum) {

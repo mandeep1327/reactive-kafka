@@ -137,7 +137,6 @@ public final class EventUtility {
     public static TransportEventType getTPEventTypeFromPubSetType(PubSetType pubSetType) {
         var eventAct = Optional.ofNullable(pubSetType.getEvent())
                 .map(EventType::getEventAct)
-                .map(CharSequence::toString)
                 .orElse("");
         return getArrivalOrDepartureEventType(eventAct);
     }
@@ -212,14 +211,12 @@ public final class EventUtility {
     public static String getSourceSystemFromPubsetType(PubSetType pubSetType) {
         return Optional.ofNullable(pubSetType.getEvent())
                 .map(EventType::getSrcSys)
-                .map(CharSequence::toString)
                 .orElse(null);
     }
 
     public static String getBookingNumber(PubSetType pubSetType) {
         return Optional.ofNullable(pubSetType.getShipment())
                 .map(ShipmentType::getBookNo)
-                .map(CharSequence::toString)
                 .orElse(null);
     }
 
@@ -228,13 +225,11 @@ public final class EventUtility {
                 .filter(tpDocTypes -> !tpDocTypes.isEmpty())
                 .map(tpDocTypes -> tpDocTypes.get(0))
                 .map(TPDocType::getBolNo)
-                .map(CharSequence::toString)
                 .orElse(null);
     }
 
     public static String fromPubSetTypeToEquipmentReference(PubSetType pubSetType) {
         return Optional.ofNullable(getFirstEquipmentElement(pubSetType).getEqptNo())
-                .map(CharSequence::toString)
                 .orElse(null);
     }
 
@@ -261,7 +256,6 @@ public final class EventUtility {
     protected static String getCarrierCodes(PubSetType pubSetType) {
         return Optional.ofNullable(getFirstEquipmentElement(pubSetType).getMove())
                 .map(MoveType::getOperator)
-                .map(CharSequence::toString)
                 .orElse("")
                 .toUpperCase();
     }

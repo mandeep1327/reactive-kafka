@@ -38,7 +38,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
         imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class, ServiceTypeMapper.class, DocumentReferenceMapper.class})
 public interface EquipmentEventMapper {
 
-    @Mapping(expression = "java(getEquipmentEventTypeFromEventAct(pubSetType.getEvent().getEventAct().toString()))", target = "equipmentEventType")
+    @Mapping(expression = "java(getEquipmentEventTypeFromEventAct(pubSetType.getEvent().getEventAct()))", target = "equipmentEventType")
     @Mapping(expression = "java(fromPubSetTypeToEmptyIndicatorCode(pubSetType))", target = "emptyIndicatorCode")
     @Mapping(expression = "java(DocumentReferenceMapper.fromPubsetTypeToDocumentReferences(pubSetType))", target = "documentReferences")
     @Mapping(expression = "java(fromPubSetTypeToTransportCall(pubSetType))", target = "transportCall")
@@ -54,7 +54,6 @@ public interface EquipmentEventMapper {
     default EmptyIndicatorCode fromPubSetTypeToEmptyIndicatorCode(PubSetType pubSetType) {
         return Optional.ofNullable(getFirstEquipmentElement(pubSetType).getMove())
                 .map(MoveType::getStatEmpty)
-                .map(CharSequence::toString)
                 .filter(stat -> stat.equals("Y"))
                 .map(s -> EMPTY)
                 .orElse(LADEN);
@@ -66,7 +65,6 @@ public interface EquipmentEventMapper {
 
     default String fromPubSetTypeToIsoEquipmentCode(PubSetType pubSetType) {
         return Optional.ofNullable(getFirstEquipmentElement(pubSetType).getIsocode())
-                .map(CharSequence::toString)
                 .orElse(null);
     }
 
@@ -76,8 +74,8 @@ public interface EquipmentEventMapper {
                 .filter(sealTypes -> !sealTypes.isEmpty())
                 .orElse(Collections.emptyList())
                 .stream().map(sealType -> Seals.newBuilder()
-                        .setSealNumber(String.valueOf(sealType.getValue()))
-                        .setSealSource(getSealSource(String.valueOf(sealType.getTyp())))
+                        .setSealNumber((sealType.getValue()))
+                        .setSealSource(getSealSource((sealType.getTyp())))
                         .build())
                 .collect(Collectors.toList());
     }
