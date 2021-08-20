@@ -3,6 +3,7 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapst
 import MSK.com.external.dcsa.EventClassifierCode;
 import MSK.com.external.dcsa.EventType;
 import MSK.com.gems.PubSetType;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ServiceTypeMapper;
@@ -10,7 +11,7 @@ import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.data.mapping.MappingException;
+
 
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.ACT_EVENTS;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.EQUIPMENT_EVENTS;

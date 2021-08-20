@@ -4,6 +4,7 @@ import MSK.com.external.dcsa.ShipmentEvent;
 import MSK.com.external.dcsa.ShipmentEventType;
 import MSK.com.external.dcsa.ShipmentInformationType;
 import MSK.com.gems.PubSetType;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
@@ -11,7 +12,7 @@ import net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUt
 import org.jetbrains.annotations.NotNull;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.data.mapping.MappingException;
+
 
 import static MSK.com.external.dcsa.ShipmentEventType.CONF;
 import static MSK.com.external.dcsa.ShipmentEventType.DRFT;

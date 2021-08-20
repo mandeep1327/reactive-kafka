@@ -8,12 +8,12 @@ import MSK.com.external.dcsa.TransportEvent;
 import MSK.com.external.dcsa.TransportEventType;
 import MSK.com.gems.GEMSPubType;
 import MSK.com.gems.PubSetType;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.TransportEventMapperImpl;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.data.mapping.MappingException;
 
 import java.util.List;
 import java.util.stream.Stream;

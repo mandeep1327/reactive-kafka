@@ -11,8 +11,9 @@ import MSK.com.gems.PubSetType;
 import MSK.com.gems.ShipmentType;
 import MSK.com.gems.TPDocType;
 import lombok.experimental.UtilityClass;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.PartyFunctionDTO;
-import org.springframework.data.mapping.MappingException;
+
 
 import java.util.List;
 import java.util.Map;

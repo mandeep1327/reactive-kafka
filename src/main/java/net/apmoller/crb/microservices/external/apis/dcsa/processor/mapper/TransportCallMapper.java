@@ -10,7 +10,8 @@ import MSK.com.gems.PubSetType;
 import MSK.com.gems.StartLocType;
 import MSK.com.gems.TransportPlanType;
 import lombok.experimental.UtilityClass;
-import org.springframework.data.mapping.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+
 
 import java.util.List;
 import java.util.Map;
