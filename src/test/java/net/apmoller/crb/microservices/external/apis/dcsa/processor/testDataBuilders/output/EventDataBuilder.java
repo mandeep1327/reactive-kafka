@@ -80,15 +80,24 @@ public final class EventDataBuilder {
     }
 
     private static List<Party> getParties4() {
-        return List.of(getParty4(), getParty1());
+        return List.of(getParty4(), getParty5(), getParty1());
     }
 
     private static Party getParty4() {
         return Party.newBuilder()
-                .setPartyFunctionName("Booked By")
+                .setPartyFunctionName("Additional Notify Party")
                 .setPartyID("26047945")
                 .setPartyName("PARTY NAME 4")
-                .setPartyFunctionCode(null)
+                .setPartyFunctionCode(PartyFunctionCode.N2)
+                .build();
+    }
+
+    private static Party getParty5() {
+        return Party.newBuilder()
+                .setPartyFunctionName("Additional Notify Party")
+                .setPartyID("26047946")
+                .setPartyName("PARTY NAME 5")
+                .setPartyFunctionCode(PartyFunctionCode.NI)
                 .build();
     }
 

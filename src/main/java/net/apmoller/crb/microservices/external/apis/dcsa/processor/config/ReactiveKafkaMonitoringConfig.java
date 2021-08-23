@@ -19,7 +19,7 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class ReactiveKafkaMonitoringConfig {
 
-    @Value("${kafka.bootstrap-servers}")
+    @Value("${kafka.receiver.bootstrap-servers}")
     private String bootstrapServers;
 
     @Value("${kafka.login-module:org.apache.kafka.common.security.plain.PlainLoginModule}")

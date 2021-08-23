@@ -4,6 +4,7 @@ import MSK.com.external.dcsa.ShipmentEvent;
 import MSK.com.external.dcsa.ShipmentEventType;
 import MSK.com.external.dcsa.ShipmentInformationType;
 import MSK.com.gems.PubSetType;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
@@ -11,7 +12,7 @@ import net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUt
 import org.jetbrains.annotations.NotNull;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.data.mapping.MappingException;
+
 
 import static MSK.com.external.dcsa.ShipmentEventType.CONF;
 import static MSK.com.external.dcsa.ShipmentEventType.DRFT;
@@ -29,8 +30,8 @@ import static java.util.Objects.isNull;
 
 @Mapper(componentModel = "spring", imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class})
 public interface ShipmentEventMapper {
-    @Mapping(expression = "java(getShipmentEventType(pubSetType.getEvent().getEventAct().toString()))", target = "shipmentEventType")
-    @Mapping(expression = "java(getShipmentInformationTypeCode(pubSetType.getEvent().getEventAct().toString()))", target = "shipmentInformationType")
+    @Mapping(expression = "java(getShipmentEventType(pubSetType.getEvent().getEventAct()))", target = "shipmentEventType")
+    @Mapping(expression = "java(getShipmentInformationTypeCode(pubSetType.getEvent().getEventAct()))", target = "shipmentInformationType")
     @Mapping(expression = "java(getDocumentId(pubSetType))", target = "documentID")
     @Mapping(source = "baseData.eventID", target = "eventID")
     @Mapping(source = "baseData.bookingReference", target = "bookingReference")
@@ -49,7 +50,7 @@ public interface ShipmentEventMapper {
     ShipmentEvent fromPubSetTypeToShipmentEvent(PubSetType pubSetType, Event baseData);
 
     default String getDocumentId(PubSetType pubSetType) {
-        switch (pubSetType.getEvent().getEventAct().toString()) {
+        switch (pubSetType.getEvent().getEventAct()) {
             case "Confirm_Shipment_Closed":
             case "Shipment_Cancelled":
                 return getDocumentIdForBookingEvents(pubSetType);
@@ -68,8 +69,10 @@ public interface ShipmentEventMapper {
 
     @NotNull
     private String getDocumentIdForOthers(PubSetType pubSetType) {
-        if (!isNull(pubSetType.getTpdoc()) && !isNull(pubSetType.getTpdoc().get(0).getBolNo())) {
-            return pubSetType.getTpdoc().get(0).getBolNo().toString();
+        if (!isNull(pubSetType.getTpdoc()) &&
+                !pubSetType.getTpdoc().isEmpty() &&
+                !isNull(pubSetType.getTpdoc().get(0).getBolNo())) {
+            return pubSetType.getTpdoc().get(0).getBolNo();
         }
         throw new MappingException("Booking Number is not available for Document ID");
     }
@@ -77,7 +80,7 @@ public interface ShipmentEventMapper {
     @NotNull
     private String getDocumentIdForBookingEvents(PubSetType pubSetType) {
         if (!isNull(pubSetType.getShipment()) && !isNull(pubSetType.getShipment().getBookNo())) {
-            return pubSetType.getShipment().getBookNo().toString();
+            return pubSetType.getShipment().getBookNo();
         }
         throw new MappingException("Booking Number is not available for Document ID");
     }

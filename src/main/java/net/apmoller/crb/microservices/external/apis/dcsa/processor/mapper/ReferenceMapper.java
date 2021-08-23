@@ -25,18 +25,18 @@ import static MSK.com.external.dcsa.RefTypeEnum.SI;
 public final class ReferenceMapper {
 
     public static List<References> getReferencesFromPubSetType(PubSetType pubSetType) {
-        var chosenParties= Optional.ofNullable(pubSetType.getShipment())
+        var chosenParties = Optional.ofNullable(pubSetType.getShipment())
                 .map(ShipmentType::getParty)
                 .filter(partyTypes -> !partyTypes.isEmpty())
                 .orElse(Collections.emptyList())
                 .stream()
-                .filter(partyType -> partyType.getRoletyp()!=null
-                        && ( partyType.getRoletyp().toString().equals("15")
-                        || partyType.getRoletyp().toString().equals("3")
-                        || partyType.getRoletyp().toString().equals("4")))
+                .filter(partyType ->
+                        "15".equals((partyType.getRoletyp())) ||
+                        "3".equals((partyType.getRoletyp())) ||
+                        "4".equals((partyType.getRoletyp())))
                 .collect(Collectors.toUnmodifiableList());
 
-        var references  = new ArrayList<>(getReferenceFromShipmentOfRefType41(pubSetType));
+        var references = new ArrayList<>(getReferenceFromShipmentOfRefType41(pubSetType));
 
         if (!chosenParties.isEmpty()) {
             chosenParties.forEach(partyType -> addReferencesForChosenParties(references, partyType));
@@ -50,25 +50,25 @@ public final class ReferenceMapper {
                 .filter(referenceTypes -> !referenceTypes.isEmpty())
                 .orElse(Collections.emptyList())
                 .stream()
-                .filter(referenceType -> referenceType.getTyp().toString().equals("41"))
+                .filter(referenceType -> "41".equals((referenceType.getTyp())))
                 .filter(referenceType -> !Objects.isNull(referenceType.getValue()))
                 .map(s -> References.newBuilder()
                         .setReferenceType(PO)
-                        .setReferenceValue(s.getValue().toString())
+                        .setReferenceValue(s.getValue())
                         .build())
                 .collect(Collectors.toList());
     }
 
-    protected static void addReferencesForChosenParties (List<References> referenceList, PartyType party) {
+    protected static void addReferencesForChosenParties(List<References> referenceList, PartyType party) {
         var streamOfCustomerReference = getStreamOfCustomerReference(party);
-        switch (party.getRoletyp().toString()){
+        switch (party.getRoletyp()) {
             case "15":
                 buildReferenceList(referenceList, streamOfCustomerReference, FF);
                 break;
             case "3":
                 buildReferenceList(referenceList, streamOfCustomerReference, SI);
                 break;
-            case "4" :
+            case "4":
                 buildReferenceList(referenceList, streamOfCustomerReference, AAO);
                 break;
             default:
@@ -84,8 +84,7 @@ public final class ReferenceMapper {
         return Optional.ofNullable(party.getCustRefNo())
                 .filter(custRefs -> !custRefs.isEmpty())
                 .orElse(Collections.emptyList())
-                .stream()
-                .map(CharSequence::toString);
+                .stream();
     }
 
     private static Consumer<String> buildReference(List<References> referenceList, RefTypeEnum refTypeEnum) {

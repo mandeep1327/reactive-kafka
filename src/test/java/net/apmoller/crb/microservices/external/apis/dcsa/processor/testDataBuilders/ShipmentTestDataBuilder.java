@@ -35,7 +35,7 @@ public final class ShipmentTestDataBuilder {
     }
 
     public static List<PartyType> getPartyList4() {
-        return List.of(getParty4(), getParty1());
+        return List.of(getParty4(), getParty5(), getParty1());
     }
 
     private static PartyType getParty1() {
@@ -97,7 +97,7 @@ public final class ShipmentTestDataBuilder {
         return PartyType.newBuilder()
                 .setCustRefNo(List.of("4351297464461500"))
                 .setCustNo("26047945")
-                .setRoletyp("1")
+                .setRoletyp("6")
                 .setCustName("PARTY NAME 4")
                 .setAddrLn1("DOREEN AVENUE")
                 .setAddrLn2("SOUTH END")
@@ -108,6 +108,24 @@ public final class ShipmentTestDataBuilder {
                 .setConcernCode(null)
                 .setDodaac(null)
                 .setState(null)
+                .build();
+    }
+
+    private static PartyType getParty5() {
+        return PartyType.newBuilder()
+                .setCustRefNo(List.of("4351297464461501"))
+                .setCustNo("26047946")
+                .setRoletyp("6")
+                .setCustName("PARTY NAME 5")
+                .setAddrLn1("AVENUE OF BROKEN DREAMS")
+                .setAddrLn2("NORTH END")
+                .setCity("ATLANTIC CITY")
+                .setCntry("USA")
+                .setPostCde("2430")
+                .setAddrLn3(null)
+                .setConcernCode(null)
+                .setDodaac(null)
+                .setState("NJ")
                 .build();
     }
 

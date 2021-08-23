@@ -16,17 +16,25 @@ azure:
     uri: ${AZURE_VAULT_ADDRESS}
 
 kafka:
-  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+  receiver:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    schemaRegistry:
+      url: ${KAFKA_SCHEMA_REGISTRY_URL}
+      username: ${kafkaSchemaRegistryUsername}
+      password: ${kafkaSchemaRegistryPassword}
+    producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+      schemaRegistry:
+        url: ${KAFKA_SCHEMA_REGISTRY_URL}
+        username: ${kafkaSchemaRegistryUsername}
+        password: ${kafkaSchemaRegistryPassword}
+
   login-module: org.apache.kafka.common.security.plain.PlainLoginModule
   security-protocol: SASL_SSL
   sasl-mechanism: PLAIN
   client-id: external-dcsa-events-processor
   publisher:
     topic: ${KAFKA_PUBLISHER_TOPIC}
-  schemaRegistry:
-    url: ${KAFKA_SCHEMA_REGISTRY_URL}
-    username: ${kafkaSchemaRegistryUsername}
-    password: ${kafkaSchemaRegistryPassword}
   consumer:
     topic: ${KAFKA_CONSUMER_TOPIC}
     group: ${KAFKA_CONSUMER_GROUP}

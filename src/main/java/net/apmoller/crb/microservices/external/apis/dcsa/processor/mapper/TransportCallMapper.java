@@ -11,8 +11,8 @@ import MSK.com.gems.PubSetType;
 import MSK.com.gems.StartLocType;
 import MSK.com.gems.TransportPlanType;
 import lombok.experimental.UtilityClass;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.mapping.MappingException;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +34,7 @@ public final class TransportCallMapper {
 
     public static TransportCall fromPubsetToTransportCallBase(PubSetType pubSetType) {
         var event = pubSetType.getEvent();
-        var eventAct = event.getEventAct().toString();
+        var eventAct = event.getEventAct();
         var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
         return getTransportCall(eventAct, equipmentFirstElement);
     }
@@ -68,26 +68,22 @@ public final class TransportCallMapper {
         return transportCall;
     }
 
-    protected static String getVoyageNumberFromTransportPlan(TransportPlanType transportPlanMap) {
+    private static String getVoyageNumberFromTransportPlan(TransportPlanType transportPlanMap) {
         return Optional.ofNullable(transportPlanMap)
                 .map(TransportPlanType::getVesselCde)
-                .map(CharSequence::toString)
                 .orElse(null);
 
     }
 
-    protected static String getLocation(EquipmentType equipmentTypeElement){
-        return Optional.ofNullable(equipmentTypeElement.getMove())
-                .map(MoveType::getActLoc)
-                .map(CharSequence::toString)
+    private static String getLocation(EquipmentType equipmentTypeElement){
+        return Optional.ofNullable(equipmentTypeElement.getMove().getActLoc())
                 .orElse(null);
     }
 
 
-    protected static TransPortMode getModeOfTransport(TransportPlanType transportPlanType) {
+    private static TransPortMode getModeOfTransport(TransportPlanType transportPlanType) {
         var transportModeCode = Optional.ofNullable(transportPlanType)
                 .map(TransportPlanType::getTransMode)
-                .map(CharSequence::toString)
                 .orElse("DEFAULT");
         switch (transportModeCode.toUpperCase()) {
             case "BAR":
@@ -106,13 +102,11 @@ public final class TransportCallMapper {
             case "RCO":
                 return TransPortMode.RAIL;
             default:
-                //TODO: Waiting for Terry
-                /*throw new MappingException("Could not map TransportMode Code ".concat(transportModeCode));*/
-                return null;
+                throw new MappingException("Could not map TransportMode Code ".concat(transportModeCode));
         }
     }
 
-    protected static FacilityType getFacilityCodeType(String eventAct) {
+    private static FacilityType getFacilityCodeType(String eventAct) {
         switch (eventAct) {
             case "ARRIVECUIMPN":
             case "DEPARTCUEXPN":
@@ -138,25 +132,25 @@ public final class TransportCallMapper {
         }
     }
 
-    protected static String getCarrierServiceCode(EquipmentType equipment) {
+    private static String getCarrierServiceCode(EquipmentType equipment) {
         if (!Objects.isNull(equipment.getMove()) &&
                 !Objects.isNull(equipment.getMove().getLineCde())) {
-            return equipment.getMove().getLineCde().toString();
+            return equipment.getMove().getLineCde();
         }
         log.error("Could not Map the carrier service code");
         return null;
     }
 
-    protected static String getActLocation(EquipmentType firstEquipmentType) {
+    private static String getActLocation(EquipmentType firstEquipmentType) {
         if (!Objects.isNull(firstEquipmentType.getMove()) &&
                 !Objects.isNull(firstEquipmentType.getMove().getActLoc())) {
-                return firstEquipmentType.getMove().getActLoc().toString();
+                return firstEquipmentType.getMove().getActLoc();
         }
         return null;
     }
 
-    protected static Map<String, TransportPlanType> getProperLocationFromTransportPlan(List<TransportPlanType> transportPlan, EventType eventType) {
-        var typeOfTransport = getArrivalOrDepartureEventType(eventType.getEventAct().toString());
+    private static Map<String, TransportPlanType> getProperLocationFromTransportPlan(List<TransportPlanType> transportPlan, EventType eventType) {
+        var typeOfTransport = getArrivalOrDepartureEventType(eventType.getEventAct());
         var transportPlans = Optional.ofNullable(transportPlan)
                 .filter(transportPlanTypes -> !transportPlanTypes.isEmpty())
                 .orElseThrow(() -> new MappingException("TransportPlan can not be empty for the Transport Event"));
@@ -173,16 +167,16 @@ public final class TransportCallMapper {
         }
     }
 
-    protected static String getEndLocation (EndLocType endLocType){
+    private static String getEndLocation (EndLocType endLocType){
         if (!Objects.isNull(endLocType)){
-            return endLocType.getValue().toString();
+            return (endLocType.getValue());
         }
         return null;
     }
 
-    protected static String getStartLocation (StartLocType startLocType){
+    private static String getStartLocation (StartLocType startLocType){
         if (!Objects.isNull(startLocType)){
-            return startLocType.getValue().toString();
+            return (startLocType.getValue());
         }
         return null;
     }

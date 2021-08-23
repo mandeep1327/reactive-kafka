@@ -7,7 +7,6 @@ import MSK.com.gems.ShipmentType;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,19 +34,14 @@ public final class PartyMapper {
 
     private static Party getPartiesFromEvent(PartyType partyType) {
 
-        var roleType = getNullSafeStringFromNullableChars(partyType.getRoletyp());
+        var roleType = partyType.getRoletyp();
         var partyFunctions = getMapOfPartyRoleAndFunctions().get(Integer.valueOf(roleType));
         return Party.newBuilder()
-                .setPartyID(getNullSafeStringFromNullableChars(partyType.getCustNo()))
-                .setPartyName(getNullSafeStringFromNullableChars(partyType.getCustName()))
+                .setPartyID(partyType.getCustNo())
+                .setPartyName(partyType.getCustName())
                 .setPartyFunctionCode(partyFunctions.getFunctionCode())
                 .setPartyFunctionName(partyFunctions.getFunctionName())
                 .build();
-
-    }
-
-    private static String getNullSafeStringFromNullableChars(CharSequence chars) {
-        return Optional.ofNullable(chars).map(CharSequence::toString).orElse(null);
     }
 
     private static void setAsAdditionalNotifyParty(Party party) {

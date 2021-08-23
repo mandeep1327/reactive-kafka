@@ -82,7 +82,7 @@ public class GEMSPubTypeKafkaConsumer {
         try (var bais = new ByteArrayInputStream(exception)) {
             return getException(bais);
         } catch (IOException ex) {
-            return null;
+            return ex;
         }
     }
 
@@ -90,7 +90,7 @@ public class GEMSPubTypeKafkaConsumer {
         try (var ois = new ObjectInputStream(bais)) {
             return (Exception) ois.readObject();
         } catch (ClassNotFoundException ex) {
-            return null;
+            return ex;
         }
     }
 
