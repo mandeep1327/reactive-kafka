@@ -1,34 +1,37 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces;
 
-import MSK.com.external.dcsa.EventClassifierCode;
-import MSK.com.external.dcsa.EventType;
+import MSK.com.gems.EquipmentType;
+import MSK.com.gems.EventType;
+import MSK.com.gems.GTTSVesselType;
 import MSK.com.gems.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DCSAEventTypeMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.EventClassifierCodeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ServiceTypeMapper;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.Optional;
 
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.ACT_EVENTS;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.EQUIPMENT_EVENTS;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.EST_EVENTS;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_EVENTS;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.TRANSPORT_EVENTS;
 
 @Mapper(componentModel = "spring",
-        imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class, ServiceTypeMapper.class})
+        imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class, ServiceTypeMapper.class},
+        uses = {DCSAEventTypeMapper.class, EventClassifierCodeMapper.class})
 public interface EventMapper {
 
     @Mapping(target = "eventID", source = "event.eventId")
     @Mapping(target = "bookingReference", source = "shipment.bookNo")
     @Mapping(target = "eventDateTime", expression = "java(getDCSAEventDateTime(details))")
     @Mapping(target = "eventCreatedDateTime", source = "event.gemstsutc")
-    @Mapping(target = "eventType", expression = "java(getDCSAEventType(details.getEvent().getEventAct()))")
-    @Mapping(target = "eventClassifierCode", expression = "java(getEventClassifierCode(details.getEvent().getEventAct()))")
+    @Mapping(target = "eventType", source = "details.event.eventAct")
+    @Mapping(target = "eventClassifierCode", source = "details.event.eventAct")
     @Mapping(expression = "java(ReferenceMapper.getReferencesFromPubSetType(details))", target = "references")
     @Mapping(expression = "java(PartyMapper.getPartiesFromPubSetType(details))", target = "parties")
     @Mapping(expression = "java(EventUtility.getSourceSystemFromPubsetType(details))", target = "sourceSystem")
@@ -39,43 +42,35 @@ public interface EventMapper {
     @Mapping(expression = "java(ServiceTypeMapper.getServiceTypeFromPubSetType(details))", target = "serviceType")
     Event fromPubSetTypeToEvent(PubSetType details);
 
-    default EventType getDCSAEventType(String act) {
-        if (SHIPMENT_EVENTS.contains(act)) {
-            return EventType.SHIPMENT;
-        } else if (TRANSPORT_EVENTS.contains(act)) {
-            return EventType.TRANSPORT;
-        } else if (EQUIPMENT_EVENTS.contains(act)) {
-            return EventType.EQUIPMENT;
-        }
-        throw new MappingException("Could not map eventType");
-    }
-
     default String getDCSAEventDateTime(PubSetType pubSetType) {
         //This is something we need to format the timestamp
-        String eventAct = pubSetType.getEvent().getEventAct();
+        String eventAct = Optional.ofNullable(pubSetType)
+                .map(PubSetType::getEvent)
+                .map(EventType::getEventAct)
+                .orElseThrow(MappingException::new);
         if (SHIPMENT_EVENTS.contains((eventAct))) {
             return pubSetType.getEvent().getGemstsutc();
         } else if (TRANSPORT_EVENTS.contains((eventAct))) {
-            var date = pubSetType.getGttsvessel().getGttsdte();
-            var time = pubSetType.getGttsvessel().getGttstim();
+            var date = Optional.ofNullable(pubSetType)
+                    .map(PubSetType::getGttsvessel)
+                    .map(GTTSVesselType::getGttsdte)
+                    .orElseThrow(MappingException::new);
+            var time = Optional.ofNullable(pubSetType)
+                    .map(PubSetType::getGttsvessel)
+                    .map(GTTSVesselType::getGttstim)
+                    .orElseThrow(MappingException::new);
             return date.concat(time);
         } else if (EQUIPMENT_EVENTS.contains(eventAct)) {
-            final var equipmentType = pubSetType.getEquipment().get(0);
-            var date = equipmentType.getMove().getActDte();
-            var time = equipmentType.getMove().getActTim();
+            final var moveType = Optional.ofNullable(pubSetType)
+                    .map(PubSetType::getEquipment)
+                    .filter(list -> !list.isEmpty())
+                    .map(equipmentTypes -> equipmentTypes.get(0))
+                    .map(EquipmentType::getMove)
+                    .orElseThrow(MappingException::new);
+            var date = Optional.ofNullable(moveType.getActDte()).orElseThrow(MappingException::new);
+            var time = Optional.ofNullable(moveType.getActTim()).orElseThrow(MappingException::new);
             return date.concat(time);
         }
         throw new MappingException("Could not map eventType");
     }
-
-
-    default EventClassifierCode getEventClassifierCode(String act) {
-        if(EST_EVENTS.contains(act)) {
-            return EventClassifierCode.EST;
-        } else if (ACT_EVENTS.contains(act)) {
-            return EventClassifierCode.ACT;
-        }
-        throw new MappingException("Could not map EventClassifierCode");
-    }
-
 }

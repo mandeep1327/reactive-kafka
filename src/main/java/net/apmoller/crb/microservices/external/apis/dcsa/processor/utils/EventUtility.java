@@ -174,32 +174,6 @@ public final class EventUtility {
         return getArrivalOrDepartureEventType(eventAct);
     }
 
-    public static EquipmentEventType getEquipmentEventType(String eventAct) {
-        if (isNull(eventAct)) {
-            throw new MappingException("Null Event Act");
-        }
-
-        switch (eventAct) {
-            case ARRIVECUIMPN:
-            case GATE_IN_EXPN:
-            case OFF_RAILIMPN:
-                return GTIN;
-            case DISCHARG_N:
-                return DISC;
-            case DEPARTCUEXPN:
-            case GATE_OUTEXPY:
-            case ON_RAIL_EXPN:
-                return GTOT;
-            case LOAD_N:
-                return LOAD;
-            case STRIPPIN_Y:
-                return STRP;
-            case STUFFINGEXPN:
-                return STUF;
-            default:
-                throw new MappingException("Could not map Equipment Event Type of ".concat(eventAct));
-        }
-    }
 
     public static EquipmentType getFirstEquipmentElement (PubSetType pubSetType){
         return Optional.ofNullable(pubSetType)

@@ -1,11 +1,18 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mappers;
 
 import MSK.com.gems.PubSetType;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DCSAEventTypeMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.EventClassifierCodeMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapperImpl;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.stream.Stream;
 
@@ -39,10 +46,12 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDa
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForTransportEventTypeWithESTEventAct2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {EventMapperImpl.class, EventClassifierCodeMapper.class, DCSAEventTypeMapper.class})
 class EventMapperTest {
 
-    private final EventMapperImpl eventMapper = new EventMapperImpl();
+    @Autowired
+    private EventMapper eventMapper;
 
     @ParameterizedTest
     @MethodSource("testDataForShipmentEventActs")
