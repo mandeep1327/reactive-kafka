@@ -8,8 +8,6 @@ kafkaSchemaRegistryUsername:
 kafkaSchemaRegistryPassword:
 kafkaConsumerUsername:
 kafkaConsumerPassword:
-#KAFKA_BOOTSTRAP_SERVERS: pkc-lq8gm.westeurope.azure.confluent.cloud:9092
-#CONSUMER_TOPIC: MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1
 azure:
   keyvault:
     enabled: ${ENABLE_AZURE_VAULT}

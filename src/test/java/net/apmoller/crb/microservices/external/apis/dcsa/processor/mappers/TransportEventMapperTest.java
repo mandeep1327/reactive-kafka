@@ -82,7 +82,7 @@ class TransportEventMapperTest {
                 //test with payload having no transport plan
                 Arguments.arguments("TransportPlan can not be empty for the Transport Event", getPubSetTypeWithoutTransportPlan()),
                  //test  payload having no vessel data
-                Arguments.arguments("Could not find the vessel code", getPubSetTypeWithoutVesselData())
+                Arguments.arguments("Could not map TransportMode Code DEFAULT", getPubSetTypeWithoutVesselData())
         );
     }
 

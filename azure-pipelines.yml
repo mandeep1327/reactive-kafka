@@ -26,3 +26,4 @@ extends:
     sonarQubeProject: external-dcsa-events-processor
     blackduckScanTags: dcsaevents
     dockerRepository: 'external-dcsa-events-processor'
+    deployable: true

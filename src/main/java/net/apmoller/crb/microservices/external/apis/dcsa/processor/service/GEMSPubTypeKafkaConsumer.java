@@ -97,7 +97,7 @@ public class GEMSPubTypeKafkaConsumer {
     private Mono<Void> handleSubscriptionResponse(GEMSPubType gemsPubType) {
         log.info("GEMS Event received:::: {}", gemsPubType);
         return Mono.just(gemsPubType)
-                .map(gemsPubType1 -> eventDelegator.checkCorrectEvent(gemsPubType))
+                .doOnNext(gemsPubType1 -> eventDelegator.checkCorrectEvent(gemsPubType))
                 .doOnError(exception -> log.error(exception.getMessage()))
                 .then();
     }

@@ -6,21 +6,18 @@ import MSK.com.gems.PubSetType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.ShipmentEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.TransportEventMapper;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderRecord;
-import reactor.kafka.sender.SenderResult;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -61,7 +58,7 @@ public class EventDelegator {
                 .findFirst();
     }
 
-    public Flux<SenderResult<String>> checkCorrectEvent(GEMSPubType gemsBaseStructure) {
+    public void checkCorrectEvent(GEMSPubType gemsBaseStructure) {
         var pubSetType = getPubSetType(gemsBaseStructure).orElseThrow(getExceptionSupplier(PUBSET_IS_EMPTY));
         var baseEvent = getBaseEventFromGemSEvent(gemsBaseStructure);
         var dcsaTrackAndTraceToBeStored = new DcsaTrackTraceEvent();
@@ -86,7 +83,7 @@ public class EventDelegator {
                 throw new MappingException("Not acceptable event type of type" + dcsaTrackAndTraceToBeStored);
         }
 
-        return sendMessage(dcsaTrackAndTraceToBeStored, keyForKafkaPayload);
+        sendMessage(dcsaTrackAndTraceToBeStored, keyForKafkaPayload);
     }
 
     private String getKeyForKafkaPayload(String eventId) {
@@ -94,12 +91,22 @@ public class EventDelegator {
                 .orElse(UUID.randomUUID().toString());
     }
 
-    private Flux<SenderResult<String>> sendMessage(DcsaTrackTraceEvent dcsaTrackAndTraceToBeStored, String keyForKafkaPayload) {
+    private void sendMessage(DcsaTrackTraceEvent dcsaTrackAndTraceToBeStored, String keyForKafkaPayload) {
+        log.info("The payload is this : {}", dcsaTrackAndTraceToBeStored);
+
         var senderRecord = Mono.just(SenderRecord.create(
                 new ProducerRecord<>(kafkaPublisherTopic, keyForKafkaPayload, dcsaTrackAndTraceToBeStored), keyForKafkaPayload));
 
-        return kafkaSender.send(senderRecord)
-                .doOnError(e -> log.error("This is the error message" +e.getMessage()));
+        kafkaSender.send(senderRecord)
+                .doOnError(e -> log.error("This is the error message" + e.getMessage()))
+                .subscribe(r -> {
+                    var metadata = r.recordMetadata();
+                    log.info("Message {} sent successfully, topic-partition={}-{} offset={}\n",
+                            r.correlationMetadata(),
+                            metadata.topic(),
+                            metadata.partition(),
+                            metadata.offset());
+                });
     }
 }
 
