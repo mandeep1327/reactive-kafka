@@ -19,7 +19,7 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class ReactiveKafkaMonitoringConfig {
 
-    @Value("${kafka.receiver.bootstrap-servers}")
+    @Value("${kafka.bootstrap-servers}")
     private String bootstrapServers;
 
     @Value("${kafka.login-module:org.apache.kafka.common.security.plain.PlainLoginModule}")
@@ -60,7 +60,7 @@ public class ReactiveKafkaMonitoringConfig {
         if (nonNull(username) && !username.isBlank()) {
             properties.put("security.protocol", securityProtocol);
             properties.put("sasl.mechanism", saslMechanism);
-            String saslJassConfig = String.format("%s required username=\"%s\" password=\"%s\" ;", loginModule, username, password);
+            var saslJassConfig = String.format("%s required username=\"%s\" password=\"%s\" ;", loginModule, username, password);
             properties.put("sasl.jaas.config", saslJassConfig);
         }
     }

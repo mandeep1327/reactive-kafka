@@ -37,19 +37,19 @@ import static java.util.Objects.nonNull;
 @Slf4j
 public class ReactiveKafkaConfig {
 
-    @Value("${kafka.receiver.bootstrap-servers}")
-    private String receiverBootstrapServers;
+    @Value("${kafka.bootstrap-servers}")
+    private String bootstrapServers;
 
-    @Value("${kafka.receiver.consumer.topic}")
-    private String receiverTopicName;
-    @Value("${kafka.receiver.consumer.username:}")
-    private String receiverUsername;
-    @Value("${kafka.receiver.consumer.password:}")
-    private String receiverPassword;
-    @Value("${kafka.receiver.client-id}")
-    private String receiverClientId;
-    @Value("${kafka.receiver.consumer.group}")
-    private String receiverConsumerGroup;
+    @Value("${kafka.consumer.topic}")
+    private String topicName;
+    @Value("${kafka.consumer.username:}")
+    private String username;
+    @Value("${kafka.consumer.password:}")
+    private String password;
+    @Value("${kafka.client-id}")
+    private String clientId;
+    @Value("${kafka.consumer.group}")
+    private String consumerGroup;
 
     @Value("${kafka.login-module:org.apache.kafka.common.security.plain.PlainLoginModule}")
     private String loginModule;
@@ -74,32 +74,23 @@ public class ReactiveKafkaConfig {
     @Value("${kafka.consumer.max-fetch-size-bytes}")
     private Integer maxRequestSizeBytes;
 
-    @Value("${kafka.receiver.schemaRegistry.url}")
-    private String receiverSchemaRegistryUrl;
-    @Value("${kafka.receiver.schemaRegistry.username}")
-    private String receiverSchemaRegistryUsername;
-    @Value("${kafka.receiver.schemaRegistry.password}")
-    private String receiverSchemaRegistryPassword;
+    @Value("${kafka.schemaRegistry.url}")
+    private String schemaRegistryUrl;
+    @Value("${kafka.schemaRegistry.username}")
+    private String schemaRegistryUsername;
+    @Value("${kafka.schemaRegistry.password}")
+    private String schemaRegistryPassword;
 
-
-    @Value("${kafka.producer.bootstrap-servers}")
-    private String producerBootstrapServers;
-    @Value("${kafka.producer.schemaRegistry.url}")
-    private String producerSchemaRegistryUrl;
-    @Value("${kafka.producer.schemaRegistry.username}")
-    private String producerSchemaRegistryUsername;
-    @Value("${kafka.producer.schemaRegistry.password}")
-    private String producerSchemaRegistryPassword;
 
     @Bean
     KafkaReceiver<String, GEMSPubType> kafkaReceiver() {
-        return KafkaReceiver.create(kafkaReceiverOptions(receiverConsumerGroup, receiverClientId, receiverUsername, receiverPassword, receiverTopicName));
+        return KafkaReceiver.create(kafkaReceiverOptions(consumerGroup, clientId, username, password, topicName));
     }
 
     private ReceiverOptions<String, GEMSPubType> kafkaReceiverOptions(String consumerGroup, String clientId,
                                                                       String username, String password, String topicName) {
         Map<String, Object> properties = new HashMap<>();
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, receiverBootstrapServers);
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
         properties.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class);
@@ -108,9 +99,9 @@ public class ReactiveKafkaConfig {
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         properties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, consumerMaxPollRecords);
         properties.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, maxRequestSizeBytes);
-        properties.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, receiverSchemaRegistryUrl);
+        properties.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
         properties.put(AbstractKafkaSchemaSerDeConfig.BASIC_AUTH_CREDENTIALS_SOURCE, "USER_INFO");
-        properties.put(AbstractKafkaSchemaSerDeConfig.USER_INFO_CONFIG, receiverSchemaRegistryUsername + ":" + receiverSchemaRegistryPassword);
+        properties.put(AbstractKafkaSchemaSerDeConfig.USER_INFO_CONFIG, schemaRegistryUsername + ":" + schemaRegistryPassword);
         properties.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, consumerGroup);
         properties.put(ConsumerConfig.CLIENT_ID_CONFIG, clientId);
@@ -125,14 +116,14 @@ public class ReactiveKafkaConfig {
     private SenderOptions<String, DcsaTrackTraceEvent> kafkaSenderOptions() {
 
         Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapServers);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "sample-producer");
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
         props.put(AbstractKafkaSchemaSerDeConfig.BASIC_AUTH_CREDENTIALS_SOURCE, "USER_INFO");
-        props.put(AbstractKafkaSchemaSerDeConfig.USER_INFO_CONFIG, producerSchemaRegistryUsername + ":" + producerSchemaRegistryPassword);
-        props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, producerSchemaRegistryUrl);
+        props.put(AbstractKafkaSchemaSerDeConfig.USER_INFO_CONFIG, schemaRegistryUsername + ":" + schemaRegistryPassword);
+        props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
         return SenderOptions.create(props);
 
     }

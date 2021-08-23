@@ -2,7 +2,7 @@ ENABLE_AZURE_VAULT: false
 KAFKA_BOOTSTRAP_SERVERS: "localhost:9092"
 KAFKA_CONSUMER_TOPIC: MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1
 KAFKA_CONSUMER_GROUP: MSK.external.dcsa.consumerGroup.v1
-KAFKA_PUBLISHER_TOPIC: DEMO.shipment.test.dummyEvents.topic.internal.any.v1
+KAFKA_PUBLISHER_TOPIC: MSK.shipment.test.externalDcsaEvents.topic.internal.any.v1
 KAFKA_SCHEMA_REGISTRY_URL: "http://localhost:8081"
 kafkaSchemaRegistryUsername:
 kafkaSchemaRegistryPassword:
@@ -14,18 +14,15 @@ azure:
     uri: ${AZURE_VAULT_ADDRESS}
 
 kafka:
-  receiver:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
-    schemaRegistry:
-      url: ${KAFKA_SCHEMA_REGISTRY_URL}
-      username: ${kafkaSchemaRegistryUsername}
-      password: ${kafkaSchemaRegistryPassword}
-    producer:
-      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
-      schemaRegistry:
-        url: ${KAFKA_SCHEMA_REGISTRY_URL}
-        username: ${kafkaSchemaRegistryUsername}
-        password: ${kafkaSchemaRegistryPassword}
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+  schemaRegistry:
+    url: ${KAFKA_SCHEMA_REGISTRY_URL}
+    username: ${kafkaSchemaRegistryUsername}
+    password: ${kafkaSchemaRegistryPassword}
+    receiver:
+      pro:
+        topic:
+
 
   login-module: org.apache.kafka.common.security.plain.PlainLoginModule
   security-protocol: SASL_SSL
