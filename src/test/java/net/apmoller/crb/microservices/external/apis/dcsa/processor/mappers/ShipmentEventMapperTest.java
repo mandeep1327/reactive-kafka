@@ -5,12 +5,20 @@ import MSK.com.external.dcsa.ShipmentEventType;
 import MSK.com.external.dcsa.ShipmentInformationType;
 import MSK.com.gems.GEMSPubType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.ShipmentEventMapperImpl;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DocumentIdMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ShipmentEventTypeMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ShipmentInformationTypeMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.ShipmentEventMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.ShipmentEventMapperImpl;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -40,10 +48,17 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDa
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {ShipmentEventMapperImpl.class,
+        ShipmentEventTypeMapper.class,
+        ShipmentInformationTypeMapper.class,
+        DocumentIdMapper.class})
 class ShipmentEventMapperTest {
 
     private final static Event baseEventData = getEventForShipmentEventType();
-    private ShipmentEventMapperImpl shipmentEventMapper = new ShipmentEventMapperImpl();
+
+    @Autowired
+    ShipmentEventMapper shipmentEventMapper;
 
     @ParameterizedTest
     @MethodSource("createShipmentEventTestData")

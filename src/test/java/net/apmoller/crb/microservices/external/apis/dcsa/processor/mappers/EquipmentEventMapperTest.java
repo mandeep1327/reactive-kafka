@@ -9,12 +9,18 @@ import MSK.com.external.dcsa.TransportCall;
 import MSK.com.gems.GEMSPubType;
 import MSK.com.gems.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.EquipmentEventTypeMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapperImpl;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +51,14 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDa
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {EquipmentEventMapperImpl.class, EquipmentEventTypeMapper.class})
 class EquipmentEventMapperTest {
 
     private final static Event baseEventData = getEventForEquipmentEventType();
-    private EquipmentEventMapperImpl equipmentEventMapper = new EquipmentEventMapperImpl();
+
+    @Autowired
+    EquipmentEventMapper equipmentEventMapper;
 
     @ParameterizedTest
     @MethodSource("createEquipmentEventTestData")

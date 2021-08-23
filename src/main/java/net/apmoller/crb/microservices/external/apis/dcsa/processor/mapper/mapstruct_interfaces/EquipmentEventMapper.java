@@ -2,13 +2,13 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapst
 
 import MSK.com.external.dcsa.EmptyIndicatorCode;
 import MSK.com.external.dcsa.EquipmentEvent;
-import MSK.com.external.dcsa.EquipmentEventType;
 import MSK.com.external.dcsa.SealSource;
 import MSK.com.external.dcsa.Seals;
 import MSK.com.external.dcsa.TransportCall;
 import MSK.com.gems.MoveType;
 import MSK.com.gems.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DocumentReferenceMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.EquipmentEventTypeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ServiceTypeMapper;
@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 import static MSK.com.external.dcsa.EmptyIndicatorCode.EMPTY;
 import static MSK.com.external.dcsa.EmptyIndicatorCode.LADEN;
 import static MSK.com.external.dcsa.SealSource.CAR;
@@ -30,25 +29,27 @@ import static MSK.com.external.dcsa.SealSource.CUS;
 import static MSK.com.external.dcsa.SealSource.SHI;
 import static MSK.com.external.dcsa.SealSource.VET;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.TransportCallMapper.fromPubsetToTransportCallBase;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getEquipmentEventType;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstEquipmentElement;
 
 @Mapper(componentModel = "spring",
-        imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class, ServiceTypeMapper.class, DocumentReferenceMapper.class})
+        imports = {
+                EventUtility.class,
+                PartyMapper.class,
+                ReferenceMapper.class,
+                ServiceTypeMapper.class,
+                DocumentReferenceMapper.class
+        },
+        uses = {
+                EquipmentEventTypeMapper.class})
 public interface EquipmentEventMapper {
 
-    @Mapping(expression = "java(getEquipmentEventTypeFromEventAct(pubSetType.getEvent().getEventAct()))", target = "equipmentEventType")
+    @Mapping(source = "pubSetType.event.eventAct", target = "equipmentEventType")
     @Mapping(expression = "java(fromPubSetTypeToEmptyIndicatorCode(pubSetType))", target = "emptyIndicatorCode")
     @Mapping(expression = "java(DocumentReferenceMapper.fromPubsetTypeToDocumentReferences(pubSetType))", target = "documentReferences")
     @Mapping(expression = "java(fromPubSetTypeToTransportCall(pubSetType))", target = "transportCall")
     @Mapping(expression = "java(fromPubSetTypeToIsoEquipmentCode(pubSetType))", target = "isoEquipmentCode")
     @Mapping(expression = "java(fromPubSetTypeToSeals(pubSetType))", target = "seals")
     EquipmentEvent fromPubSetToEquipmentEvent(PubSetType pubSetType, Event baseEvent);
-
-
-    default EquipmentEventType getEquipmentEventTypeFromEventAct(String eventAct) {
-        return getEquipmentEventType(eventAct);
-    }
 
     default EmptyIndicatorCode fromPubSetTypeToEmptyIndicatorCode(PubSetType pubSetType) {
         return Optional.ofNullable(getFirstEquipmentElement(pubSetType).getMove())
