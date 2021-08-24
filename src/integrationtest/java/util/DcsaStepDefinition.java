@@ -13,7 +13,6 @@ public class DcsaStepDefinition extends CucumberSpringConfiguration {
     @Given("set a message on kafka with {string}")
     public void send(String jsonfile) throws Exception {
         jsonContent = TestDataUtils.loadDataJson(jsonfile);
-        KafkaTestContainer.setupKafkaContainer();
         KafkaTestContainer.sendToProducer(jsonContent);
     }
 

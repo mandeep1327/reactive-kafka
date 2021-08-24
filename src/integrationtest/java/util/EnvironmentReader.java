@@ -18,6 +18,7 @@ public class EnvironmentReader {
     private String kafkaSchemaRegistryUrl;
     private String kafkaPort;
     private String kafkaPublisherTopic;
+    private String kafkaBootstrapPort;
 
     public EnvironmentReader() {
         try (InputStream input = new FileInputStream("src/integrationtest/resources/testConfiguration.properties")) {
@@ -29,6 +30,7 @@ public class EnvironmentReader {
             this.kafkaSchemaRegistryUrl = prop.getProperty("KAFKA_SCHEMA_REGISTRY_URL");
             this.kafkaPort = prop.getProperty("KAKFA_PORT");
             this.kafkaPublisherTopic = prop.getProperty("KAFKA_PUBLISHER_TOPIC");
+            this.kafkaBootstrapPort = prop.getProperty("KAKFA_BOOTSTRAP_PORT");
 
         } catch (IOException e) {
             log.error("Exception: " + e);

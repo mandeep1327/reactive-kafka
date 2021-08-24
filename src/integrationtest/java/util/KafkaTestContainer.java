@@ -27,31 +27,33 @@ import org.testcontainers.utility.DockerImageName;
 
 public class KafkaTestContainer {
     private static final DockerImageName KAFKA_IMAGE = DockerImageName.parse("confluentinc/cp-kafka:5.4.3");
+    public static EnvironmentReader environmentReader;
     private static KafkaProducer<String, String> producer;
     private static KafkaConsumer<String, String> consumer;
     private static ConsumerRecords<String, String> records;
-    public static EnvironmentReader environmentReader;
     private static KafkaContainer kafka;
-    public static void setupKafkaContainer() throws Exception {
+
+    public static KafkaContainer setupKafkaContainer() throws Exception {
         Network network = Network.newNetwork();
 
         environmentReader = new EnvironmentReader();
 
-         kafka = new KafkaContainer(KAFKA_IMAGE)
-                .withNetwork(network)
-        .withEnv("KAFKA_CLIENT_PORT", environmentReader.getKafkaPort())
-        .withEnv("KAFKA_ADVERTISED_LISTENERS",environmentReader.getKafkaPort());
+         kafka = new KafkaContainer(KAFKA_IMAGE);
+//                 .withEnv("KAFKA_CLIENT_PORT", environmentReader.getKafkaPort())
+//                .withEnv("KAFKA_ADVERTISED_LISTENERS",environmentReader.getKafkaPort());
 
-        kafka.start();
+         kafka.start();
 
         setupKafkaProducer();
+
+        return kafka;
 
     }
 
     public static void setupKafkaProducer(){
         producer = new KafkaProducer<>(
                 ImmutableMap.of(
-                        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "http://localhost:9092",
+                        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
                         ProducerConfig.CLIENT_ID_CONFIG,"external-dcsa-events-processor"),
                 new StringSerializer(),
                 new StringSerializer()
@@ -69,7 +71,7 @@ public class KafkaTestContainer {
     }
 
     protected static void setupConfig(int partitions, int rf) throws Exception {
-        try (
+/*        try (
                 AdminClient adminClient = AdminClient.create(ImmutableMap.of(
                         AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers()
                 ));
@@ -77,13 +79,13 @@ public class KafkaTestContainer {
 
             Collection<NewTopic> topics = singletonList(new NewTopic(environmentReader.getKafkaConsumerTopic(), partitions, (short) rf));
             adminClient.createTopics(topics).all().get(30, TimeUnit.SECONDS);
-
+*/
             consumer.subscribe(singletonList(environmentReader.getKafkaPublisherTopic()));
 
-        }
+        //}
     }
 
-    protected static void sendToProducer(String content) throws Exception {
+    protected static void sendToProducer(String content) {
         producer.send(new ProducerRecord<>(environmentReader.getKafkaConsumerTopic(), content));
         }
 
@@ -103,4 +105,8 @@ public class KafkaTestContainer {
 
         return allRecords;
     }
+
+    public static String getBootstrapServers() {
+        return kafka.getBootstrapServers();
     }
+}

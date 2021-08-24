@@ -83,12 +83,15 @@ public class ReactiveKafkaConfig {
 
 
     @Bean
-    KafkaReceiver<String, GEMSPubType> kafkaReceiver() {
-        return KafkaReceiver.create(kafkaReceiverOptions(consumerGroup, clientId, username, password, topicName));
+    KafkaReceiver<String, GEMSPubType> kafkaReceiver(ReceiverOptions<String, GEMSPubType> kafkaReceiverOptions) {
+        return KafkaReceiver.create(kafkaReceiverOptions.pollTimeout(Duration.ofMillis(pollTimeout))
+                .subscription(List.of(topicName))
+                .addAssignListener(partitions -> log.info("Assigned Partitions {} on Thread named {} Id {}",
+                                partitions, Thread.currentThread().getName(), Thread.currentThread().getId())));
     }
 
-    private ReceiverOptions<String, GEMSPubType> kafkaReceiverOptions(String consumerGroup, String clientId,
-                                                                      String username, String password, String topicName) {
+    @Bean
+    ReceiverOptions<String, GEMSPubType> kafkaReceiverOptions() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
@@ -106,14 +109,12 @@ public class ReactiveKafkaConfig {
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, consumerGroup);
         properties.put(ConsumerConfig.CLIENT_ID_CONFIG, clientId);
         addSaslProperties(properties, saslMechanism, securityProtocol, loginModule, username, password);
-        ReceiverOptions<String, GEMSPubType> options = ReceiverOptions.create(properties);
-        return options.pollTimeout(Duration.ofMillis(pollTimeout))
-                .subscription(List.of(topicName))
-                .addAssignListener(partitions -> log.info("Assigned Partitions {} on Thread named {} Id {}", partitions, Thread.currentThread().getName(), Thread.currentThread().getId()));
+        return ReceiverOptions.create(properties);
     }
 
 
-    private SenderOptions<String, DcsaTrackTraceEvent> kafkaSenderOptions() {
+    @Bean
+    SenderOptions<String, DcsaTrackTraceEvent> kafkaSenderOptions() {
 
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -131,8 +132,8 @@ public class ReactiveKafkaConfig {
 
 
     @Bean
-    KafkaSender<String, DcsaTrackTraceEvent> kafkaSender() {
-        return KafkaSender.create(kafkaSenderOptions());
+    KafkaSender<String, DcsaTrackTraceEvent> kafkaSender(SenderOptions<String, DcsaTrackTraceEvent> kafkaSenderOptions) {
+        return KafkaSender.create(kafkaSenderOptions);
     }
 
 
