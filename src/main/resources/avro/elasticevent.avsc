@@ -23,6 +23,11 @@
               "default": null
             },
             {
+              "name": "transportDocumentTypeCode",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
               "name": "eventDateTime",
               "type": ["null", "string"],
               "default": null
@@ -252,6 +257,11 @@
               "default": null
             },
             {
+              "name": "transportDocumentTypeCode",
+              "type": ["null", "string"],
+              "default": null
+            },
+            {
               "type": "EventType",
               "name": "eventType"
             },
@@ -347,10 +357,10 @@
                   "type": "record",
                   "fields": [
                     {
-                      "name": "key",
+                      "name": "documentReferenceType",
                       "type": ["null", {
                         "type": "enum",
-                        "name": "Key",
+                        "name": "DocumentReferenceType",
                         "symbols": [
                           "BKG",
                           "TRD"
@@ -359,7 +369,7 @@
                       "default": null
                     },
                     {
-                      "name": "value",
+                      "name": "documentReferenceValue",
                       "type": ["null", "string"]
                     }
                   ]
@@ -618,6 +628,11 @@
             {
               "name": "eventDateTime",
               "type": "string"
+            },
+            {
+              "name": "transportDocumentTypeCode",
+              "type": ["null", "string"],
+              "default": null
             },
             {
               "type": "EventType",

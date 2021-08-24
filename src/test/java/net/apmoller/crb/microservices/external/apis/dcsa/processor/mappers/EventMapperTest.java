@@ -108,9 +108,7 @@ class EventMapperTest {
                 Arguments.arguments(getPubSetTypeWithCONTAINER_ARRIVALEventAct(), getEventForTransportEventType()),
                 Arguments.arguments(getPubSetTypeWithCONTAINER_DEPARTUREEventAct(), getEventForTransportEventType()),
                 Arguments.arguments(getPubSetTypeWithRAIL_ARRIVAL_AT_DESTINATIONEventAct(), getEventForTransportEventType()),
-                Arguments.arguments(getPubSetTypeWithRAIL_DEPARTUREEventAct(), getEventForTransportEventType()),
-                Arguments.arguments(getPubSetTypeWithShipment_ETAEventAct(), getEventForTransportEventTypeWithESTEventAct()),
-                Arguments.arguments(getPubSetTypeWithShipment_ETDEventAct(), getEventForTransportEventTypeWithESTEventAct2())
+                Arguments.arguments(getPubSetTypeWithRAIL_DEPARTUREEventAct(), getEventForTransportEventType())
         );
     }
 }

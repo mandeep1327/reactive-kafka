@@ -19,5 +19,4 @@ public interface TransportEventMapper {
     @Mapping(expression = "java(DocumentReferenceMapper.fromPubsetTypeToDocumentReferences(pubSetType))", target = "documentReferences")
     TransportEvent fromPubSetToTransportEvent(PubSetType pubSetType, Event baseEvent);
 
-
 }

@@ -2,7 +2,6 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.utils;
 
 
 import MSK.com.external.dcsa.CarrierCode;
-import MSK.com.external.dcsa.EquipmentEventType;
 import MSK.com.external.dcsa.TransportEventType;
 import MSK.com.gems.EquipmentType;
 import MSK.com.gems.EventType;
@@ -10,11 +9,12 @@ import MSK.com.gems.MoveType;
 import MSK.com.gems.PubSetType;
 import MSK.com.gems.ShipmentType;
 import MSK.com.gems.TPDocType;
+import MSK.com.gems.TransportPlanType;
 import lombok.experimental.UtilityClass;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.PartyFunctionDTO;
 
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,17 +24,10 @@ import static MSK.com.external.dcsa.CarrierCode.MCCQ;
 import static MSK.com.external.dcsa.CarrierCode.SAFM;
 import static MSK.com.external.dcsa.CarrierCode.SEAU;
 import static MSK.com.external.dcsa.CarrierCode.SEJJ;
-import static MSK.com.external.dcsa.EquipmentEventType.DISC;
-import static MSK.com.external.dcsa.EquipmentEventType.GTIN;
-import static MSK.com.external.dcsa.EquipmentEventType.GTOT;
-import static MSK.com.external.dcsa.EquipmentEventType.LOAD;
-import static MSK.com.external.dcsa.EquipmentEventType.STRP;
-import static MSK.com.external.dcsa.EquipmentEventType.STUF;
 import static MSK.com.external.dcsa.PartyFunctionCode.CN;
 import static MSK.com.external.dcsa.PartyFunctionCode.DDR;
 import static MSK.com.external.dcsa.PartyFunctionCode.DDS;
 import static MSK.com.external.dcsa.PartyFunctionCode.N1;
-import static MSK.com.external.dcsa.PartyFunctionCode.N2;
 import static MSK.com.external.dcsa.PartyFunctionCode.OS;
 import static MSK.com.external.dcsa.TransportEventType.ARRI;
 import static MSK.com.external.dcsa.TransportEventType.DEPA;
@@ -185,33 +178,11 @@ public final class EventUtility {
 
     public static Map<Integer, PartyFunctionDTO> getMapOfPartyRoleAndFunctions (){
         return Map.ofEntries(
-                entry(1, PartyFunctionDTO.builder().functionName("Booked By").build()),
-                entry(2, PartyFunctionDTO.builder().functionName("Contractual Customer").build()),
                 entry(3, PartyFunctionDTO.builder().functionName("Shipper").functionCode(OS).build()),
                 entry(4, PartyFunctionDTO.builder().functionName("Consignee").functionCode(CN).build()),
                 entry(5, PartyFunctionDTO.builder().functionName("First Notify Party").functionCode(N1).build()),
-                entry(6, PartyFunctionDTO.builder().functionName("Additional Notify Party").functionCode(N2).build()),
-                entry(7, PartyFunctionDTO.builder().functionName("Allocation Owner").build()),
-                entry(11, PartyFunctionDTO.builder().functionName("Outward Customs Broker").build()),
-                entry(12, PartyFunctionDTO.builder().functionName("Inward Customs Broker").build()),
-                entry(13, PartyFunctionDTO.builder().functionName("Contractual Carrier''s Inward Agent").build()),
                 entry(15, PartyFunctionDTO.builder().functionName("Outward Forwarder").functionCode(DDR).build()),
-                entry(16, PartyFunctionDTO.builder().functionName("Inward Forwarder").functionCode(DDS).build()),
-                entry(22, PartyFunctionDTO.builder().functionName("Transport Document Receiver").build()),
-                entry(25, PartyFunctionDTO.builder().functionName("Contractual Carrier''s Outward Agent").build()),
-                entry(26, PartyFunctionDTO.builder().functionName("Credit Party").build()),
-                entry(27, PartyFunctionDTO.builder().functionName("Product Owner").build()),
-                entry(28, PartyFunctionDTO.builder().functionName("Outward Document Owner").build()),
-                entry(29, PartyFunctionDTO.builder().functionName("Inward Document Owner").build()),
-                entry(31, PartyFunctionDTO.builder().functionName("Release to Party").build()),
-                entry(32, PartyFunctionDTO.builder().functionName("Lawful (B/L) Holder").build()),
-                entry(33, PartyFunctionDTO.builder().functionName("Demurrage Invoice Party").build()),
-                entry(34, PartyFunctionDTO.builder().functionName("Detention Invoice Party").build()),
-                entry(35, PartyFunctionDTO.builder().functionName("Supplier").build()),
-                entry(36, PartyFunctionDTO.builder().functionName("House Shipper").build()),
-                entry(37, PartyFunctionDTO.builder().functionName("House Consignee").build()),
-                entry(38, PartyFunctionDTO.builder().functionName("Switched Shipper").build()),
-                entry(39, PartyFunctionDTO.builder().functionName("Switched Consignee").build())
+                entry(16, PartyFunctionDTO.builder().functionName("Inward Forwarder").functionCode(DDS).build())
         );
     }
 
@@ -219,6 +190,23 @@ public final class EventUtility {
         return Optional.ofNullable(pubSetType.getEvent())
                 .map(EventType::getSrcSys)
                 .orElse(null);
+    }
+
+    public static Optional<TransportPlanType> getLastTransportPlan(PubSetType pubSetType) {
+        return Optional.ofNullable(pubSetType)
+                .map(PubSetType::getTransportPlan)
+                .filter(transportPlanTypes -> !transportPlanTypes.isEmpty())
+                .orElse(new ArrayList<>())
+                .stream()
+                .reduce((first, second) -> second);
+    }
+
+
+    public static Optional<TransportPlanType> getFirstTransportPlanType(PubSetType pubSetType) {
+        return Optional.ofNullable(pubSetType)
+                .map(PubSetType::getTransportPlan)
+                .filter(transportPlanTypes -> !transportPlanTypes.isEmpty())
+                .flatMap(t -> t.stream().findFirst());
     }
 
     public static String getBookingNumber(PubSetType pubSetType) {
@@ -265,6 +253,13 @@ public final class EventUtility {
                 .map(MoveType::getOperator)
                 .orElse("")
                 .toUpperCase();
+    }
+
+    public static String getEventAct(PubSetType pubSetType) {
+        return Optional.ofNullable(pubSetType)
+                .map(PubSetType::getEvent)
+                .map(EventType::getEventAct)
+                .orElseThrow(MappingException::new);
     }
 
 }

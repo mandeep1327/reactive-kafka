@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static MSK.com.external.dcsa.DocumentReferenceType.BKG;
+import static MSK.com.external.dcsa.DocumentReferenceType.TRD;
 import static MSK.com.external.dcsa.EquipmentEventType.GTIN;
 import static MSK.com.external.dcsa.EquipmentEventType.GTOT;
 import static MSK.com.external.dcsa.EquipmentEventType.LOAD;
@@ -33,8 +35,6 @@ import static MSK.com.external.dcsa.FacilityType.CLOC;
 import static MSK.com.external.dcsa.FacilityType.DEPO;
 import static MSK.com.external.dcsa.FacilityType.INTE;
 import static MSK.com.external.dcsa.FacilityType.POTE;
-import static MSK.com.external.dcsa.Key.BKG;
-import static MSK.com.external.dcsa.Key.TRD;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithARRIVECUIMPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDEPARTCUEXPNEventAct;
@@ -143,15 +143,15 @@ class EquipmentEventMapperTest {
 
     private static DocumentReference getDocRefTrd() {
         var docRef = new DocumentReference();
-        docRef.setKey(TRD);
-        docRef.setValue("293156737");
+        docRef.setDocumentReferenceType(TRD);
+        docRef.setDocumentReferenceValue("293156737");
         return docRef;
     }
 
     private static DocumentReference getDocRefBkg() {
         var docRef = new DocumentReference();
-        docRef.setKey(BKG);
-        docRef.setValue("209989099");
+        docRef.setDocumentReferenceType(BKG);
+        docRef.setDocumentReferenceValue("209989099");
         return docRef;
     }
 }

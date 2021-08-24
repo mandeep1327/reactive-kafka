@@ -1,7 +1,7 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 
 import MSK.com.external.dcsa.DocumentReference;
-import MSK.com.external.dcsa.Key;
+import MSK.com.external.dcsa.DocumentReferenceType;
 import MSK.com.gems.PubSetType;
 import lombok.experimental.UtilityClass;
 
@@ -18,10 +18,10 @@ public final class DocumentReferenceMapper {
 
     public static List<DocumentReference> fromPubsetTypeToDocumentReferences(PubSetType pubSetType) {
 
-        var docRef1 = DocumentReference.newBuilder().setKey(Key.BKG).setValue(getBookingNumber(pubSetType)).build();
-        var docRef2 = DocumentReference.newBuilder().setKey(Key.TRD).setValue(getBolNumber(pubSetType)).build();
+        var docRef1 = DocumentReference.newBuilder().setDocumentReferenceType(DocumentReferenceType.BKG).setDocumentReferenceValue(getBookingNumber(pubSetType)).build();
+        var docRef2 = DocumentReference.newBuilder().setDocumentReferenceType(DocumentReferenceType.TRD).setDocumentReferenceValue(getBolNumber(pubSetType)).build();
         return Stream.of(docRef1, docRef2)
-                .filter(docRefs -> !Objects.isNull(docRefs.getValue()))
+                .filter(docRefs -> !Objects.isNull(docRefs.getDocumentReferenceValue()))
                 .collect(Collectors.toUnmodifiableList());
     }
 

@@ -18,10 +18,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static MSK.com.external.dcsa.DocumentReferenceType.BKG;
+import static MSK.com.external.dcsa.DocumentReferenceType.TRD;
 import static MSK.com.external.dcsa.FacilityType.INTE;
 import static MSK.com.external.dcsa.FacilityType.POTE;
-import static MSK.com.external.dcsa.Key.BKG;
-import static MSK.com.external.dcsa.Key.TRD;
 import static MSK.com.external.dcsa.TransPortMode.BARGE;
 import static MSK.com.external.dcsa.TransPortMode.RAIL;
 import static MSK.com.external.dcsa.TransPortMode.TRUCK;
@@ -80,9 +80,7 @@ class TransportEventMapperTest {
                 //test equipment event
                 Arguments.arguments("Could not map Transport Event Type of OFF-RAILIMPN", getPubSetTypeWithOFF_RAILIMPNEventAct()),
                 //test with payload having no transport plan
-                Arguments.arguments("TransportPlan can not be empty for the Transport Event", getPubSetTypeWithoutTransportPlan()),
-                 //test  payload having no vessel data
-                Arguments.arguments("Could not map TransportMode Code DEFAULT", getPubSetTypeWithoutVesselData())
+                Arguments.arguments("TransportPlan can not be empty for the Transport Event", getPubSetTypeWithoutTransportPlan())
         );
     }
 
@@ -111,15 +109,15 @@ class TransportEventMapperTest {
 
     private static DocumentReference getDocRefTrd() {
         var docRef = new DocumentReference();
-        docRef.setKey(TRD);
-        docRef.setValue("293156737");
+        docRef.setDocumentReferenceType(TRD);
+        docRef.setDocumentReferenceValue("293156737");
         return docRef;
     }
 
     private static DocumentReference getDocRefBkg() {
         var docRef = new DocumentReference();
-        docRef.setKey(BKG);
-        docRef.setValue("209989099");
+        docRef.setDocumentReferenceType(BKG);
+        docRef.setDocumentReferenceValue("209989099");
         return docRef;
     }
 

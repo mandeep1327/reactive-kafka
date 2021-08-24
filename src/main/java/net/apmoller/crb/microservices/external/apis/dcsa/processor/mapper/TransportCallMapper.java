@@ -6,13 +6,12 @@ import MSK.com.external.dcsa.TransportCall;
 import MSK.com.gems.EndLocType;
 import MSK.com.gems.EquipmentType;
 import MSK.com.gems.EventType;
-import MSK.com.gems.MoveType;
 import MSK.com.gems.PubSetType;
 import MSK.com.gems.StartLocType;
 import MSK.com.gems.TransportPlanType;
 import lombok.experimental.UtilityClass;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
 import lombok.extern.slf4j.Slf4j;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
 
 import java.util.List;
 import java.util.Map;
@@ -25,8 +24,13 @@ import static MSK.com.external.dcsa.FacilityType.CLOC;
 import static MSK.com.external.dcsa.FacilityType.DEPO;
 import static MSK.com.external.dcsa.FacilityType.INTE;
 import static MSK.com.external.dcsa.FacilityType.POTE;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETA;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETD;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDepartureEventType;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstEquipmentElement;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstTransportPlanType;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getLastTransportPlan;
 
 @UtilityClass
 @Slf4j
@@ -51,9 +55,28 @@ public final class TransportCallMapper {
         var base = fromPubsetToTransportCallBase(pubSetType);
         var transportPlanTypeList = pubSetType.getTransportPlan();
         var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
-        var transportPlan = Optional.ofNullable(getProperLocationFromTransportPlan(transportPlanTypeList, pubSetType.getEvent()))
-                .map(e -> e.get(getActLocation(equipmentFirstElement))).orElse(null);
+        var transportPlan = getTransportPlan(pubSetType, transportPlanTypeList, equipmentFirstElement);
         return getFatterTransportCall(base, transportPlan);
+    }
+
+    private TransportPlanType getTransportPlan(PubSetType pubSetType, List<TransportPlanType> transportPlanTypeList, EquipmentType equipmentFirstElement) {
+        var eventAct = getEventAct(pubSetType);
+        if (SHIPMENT_ETA.equals(eventAct) || SHIPMENT_ETD.equals(eventAct)){
+            if (SHIPMENT_ETA.equals(eventAct)) {
+                return getLastTransportPlan(pubSetType).orElse(null);
+            } else {
+                return getFirstTransportPlanType(pubSetType).orElse(null);
+            }
+        } else {
+            return getTransportPlanTypeForOtherEvents(pubSetType, transportPlanTypeList, equipmentFirstElement);
+        }
+    }
+
+
+
+    private TransportPlanType getTransportPlanTypeForOtherEvents(PubSetType pubSetType, List<TransportPlanType> transportPlanTypeList, EquipmentType equipmentFirstElement) {
+        return Optional.ofNullable(getProperLocationFromTransportPlan(transportPlanTypeList, pubSetType.getEvent()))
+                .map(e -> e.get(getActLocation(equipmentFirstElement))).orElse(null);
     }
 
     private static TransportCall getFatterTransportCall(TransportCall base, TransportPlanType transportPlan) {
@@ -102,7 +125,7 @@ public final class TransportCallMapper {
             case "RCO":
                 return TransPortMode.RAIL;
             default:
-                throw new MappingException("Could not map TransportMode Code ".concat(transportModeCode));
+                throw new MappingException("TransportPlan can not be empty for the Transport Event");
         }
     }
 
