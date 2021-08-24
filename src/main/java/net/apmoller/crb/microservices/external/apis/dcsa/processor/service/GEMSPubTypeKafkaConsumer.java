@@ -52,6 +52,4 @@ public class GEMSPubTypeKafkaConsumer {
                 .doOnNext(gemsPubType1 -> eventDelegator.checkCorrectEvent(gemsPubType))
                 .then();
     }
-
-
 }

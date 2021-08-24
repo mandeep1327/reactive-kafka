@@ -11,22 +11,25 @@ import java.util.Properties;
 @Slf4j
 @Data
 public class EnvironmentReader {
-    private String apiRoot;
-    private String apiBasePath;
-    private boolean wireMockEnabled;
-    private boolean useLocalWireMocks;
-    private int wireMockVgmGCSSServicesPort;
-    private int wireMockPartiesServicesPort;
-    private int wireMockForgeRockServicesPort;
-    private int wireMockEquipmentServicesPort;
-    private int wireMockIamAuthenticationServicesPort;
-    private InputStream inputStream;
+    private String ena;
+    private String kafkaBootsrapServers;
+    private String kafkaConsumerTopic;
+    private String kafkaConsumerGroup;
+    private String kafkaSchemaRegistryUrl;
+    private String kafkaPort;
+    private String kafkaPublisherTopic;
 
     public EnvironmentReader() {
         try (InputStream input = new FileInputStream("src/integrationtest/resources/testConfiguration.properties")) {
             Properties prop = new Properties();
             prop.load(input);
-            this.apiRoot = prop.getProperty("api.root");
+            this.kafkaBootsrapServers = prop.getProperty("KAFKA_BOOTSTRAP_SERVERS");
+            this.kafkaConsumerTopic = prop.getProperty("KAFKA_CONSUMER_TOPIC");
+            this.kafkaConsumerGroup = prop.getProperty("KAFKA_CONSUMER_GROUP");
+            this.kafkaSchemaRegistryUrl = prop.getProperty("KAFKA_SCHEMA_REGISTRY_URL");
+            this.kafkaPort = prop.getProperty("KAKFA_PORT");
+            this.kafkaPublisherTopic = prop.getProperty("KAFKA_PUBLISHER_TOPIC");
+
         } catch (IOException e) {
             log.error("Exception: " + e);
         }

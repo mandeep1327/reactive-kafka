@@ -28,30 +28,26 @@ import org.testcontainers.utility.DockerImageName;
 
 public class KafkaTestContainer {
     private static final DockerImageName KAFKA_IMAGE = DockerImageName.parse("confluentinc/cp-kafka:5.4.3");
-    private static final String topicName = "MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1";
     private static KafkaProducer<String, String> producer;
     private static KafkaConsumer<String, String> consumer;
     private static ConsumerRecords<String, String> records;
-    public static final int KAFKA_PORT = 8081;
-
+    public static EnvironmentReader environmentReader;
     public static void setupKafkaContainer() throws Exception {
         Network network = Network.newNetwork();
 
-        System.out.println("GOT HERE TT");
+        EnvironmentReader environmentReader = new EnvironmentReader();
+
         KafkaContainer kafka = new KafkaContainer(KAFKA_IMAGE)
                 .withNetwork(network)
-        .withEnv("KAFKA_CLIENT_PORT", "8081")
-        .withEnv("KAFKA_ADVERTISED_LISTENERS","8081");
+        .withEnv("KAFKA_CLIENT_PORT", environmentReader.getKafkaPort())
+        .withEnv("KAFKA_ADVERTISED_LISTENERS",environmentReader.getKafkaPort());
 
-        System.out.println("STARTING");
         kafka.start();
-        System.out.println("STARTED");
-        System.out.println("KAFKA BOOTSTRAP SERVER " + kafka.getBootstrapServers());
 
         setupKafkaProducer(kafka);
         setupKafkaConsumer(kafka);
         setupConfig(kafka.getBootstrapServers(), 1, 1);
-        producer.send(new ProducerRecord<>(topicName, "resr", "rsr"));
+        producer.send(new ProducerRecord<>(environmentReader.getKafkaConsumerTopic(), "resr", "rsr"));
         System.out.println("WAITING");
 
         Thread.sleep(5000);
@@ -76,7 +72,7 @@ public class KafkaTestContainer {
         consumer = new KafkaConsumer<>(
                 ImmutableMap.of(
                         ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
-                        ConsumerConfig.GROUP_ID_CONFIG, "MSK.external.dcsa.consumerGroup.v1"),
+                        ConsumerConfig.GROUP_ID_CONFIG, environmentReader.getKafkaConsumerGroup()),
                 new StringDeserializer(),
                 new StringDeserializer()
         );
@@ -89,16 +85,16 @@ public class KafkaTestContainer {
                 ));
         ) {
 
-            Collection<NewTopic> topics = singletonList(new NewTopic(topicName, partitions, (short) rf));
+            Collection<NewTopic> topics = singletonList(new NewTopic(environmentReader.getKafkaConsumerTopic(), partitions, (short) rf));
             adminClient.createTopics(topics).all().get(30, TimeUnit.SECONDS);
 
-            consumer.subscribe(singletonList(topicName));
+            consumer.subscribe(singletonList(environmentReader.getKafkaConsumerTopic()));
 
         }
     }
 
     protected static void sendToProducer(String key, String value) throws Exception {
-        producer.send(new ProducerRecord<>(topicName, key, value));
+        producer.send(new ProducerRecord<>(environmentReader.getKafkaConsumerTopic(), key, value));
         }
 
 
