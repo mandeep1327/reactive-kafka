@@ -24,17 +24,19 @@ import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.utility.DockerImageName;
+import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
+import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderOptions;
 
+import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "src/integrationtest/resources/features",
         plugin = {"pretty", "junit:target/cucumber-reports/Cucumber.xml"})
-@Import(CucumberIntegrationIT.KafkaTestContainerConfiguration.class)
-@SpringBootTest(classes = DcsaEventProcessorApplication.class)
 public class CucumberIntegrationIT {
 
     @ClassRule
@@ -42,11 +44,19 @@ public class CucumberIntegrationIT {
          return KafkaTestContainer.setupKafkaContainer();
     }
 
-//    @ClassRule
-//    public static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:5.4.3"));
-
     @TestConfiguration
     static class KafkaTestContainerConfiguration {
+
+        @Bean
+        KafkaReceiver<String, GEMSPubType> kafkaReceiver(ReceiverOptions<String, GEMSPubType> kafkaReceiverOptions) {
+            return KafkaReceiver.create(kafkaReceiverOptions.pollTimeout(Duration.ofMillis(5000))
+                    .subscription(List.of("MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1")));
+        }
+
+        @Bean
+        KafkaSender<String, DcsaTrackTraceEvent> kafkaSender(SenderOptions<String, DcsaTrackTraceEvent> kafkaSenderOptions) {
+            return KafkaSender.create(kafkaSenderOptions);
+        }
 
         @Bean
         SenderOptions<String, DcsaTrackTraceEvent> kafkaSenderOptions() {
