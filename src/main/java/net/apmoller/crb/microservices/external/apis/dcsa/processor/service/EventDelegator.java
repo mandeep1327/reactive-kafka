@@ -87,7 +87,6 @@ public class EventDelegator {
                 default:
                     throw new MappingException("Not acceptable event type of type" + dcsaTrackAndTraceToBeStored);
             }
-            log.info("The payload is this : {}", dcsaTrackAndTraceToBeStored);
             sendMessage(dcsaTrackAndTraceToBeStored, keyForKafkaPayload);
         } else {
             log.warn("The payload of event type {} was dropped" , eventAct);
