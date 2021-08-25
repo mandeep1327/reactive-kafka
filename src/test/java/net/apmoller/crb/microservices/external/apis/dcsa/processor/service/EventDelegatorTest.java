@@ -3,11 +3,13 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.service;
 
 import MSK.com.external.dcsa.DcsaTrackTraceEvent;
 import MSK.com.external.dcsa.EquipmentEvent;
+import MSK.com.external.dcsa.EventType;
 import MSK.com.external.dcsa.ShipmentEvent;
 import MSK.com.external.dcsa.TransportEvent;
 import MSK.com.gems.GEMSPubType;
 import MSK.com.gems.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DCSAEventTypeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.ShipmentEventMapper;
@@ -44,9 +46,10 @@ class EventDelegatorTest {
     private final EquipmentEventMapper equipmentMapper = mock(EquipmentEventMapper.class);
     private final TransportEventMapper transportMapper = mock(TransportEventMapper.class);
     private final EventMapper eventMapper = mock(EventMapper.class);
+    private final DCSAEventTypeMapper eventTypeMapper = mock(DCSAEventTypeMapper.class);
     private final KafkaSender<String, DcsaTrackTraceEvent> kafkaSender = mock(KafkaSender.class);
 
-    private final EventDelegator eventDelegator = new EventDelegator( eventMapper, shipmentMapper, equipmentMapper, transportMapper, kafkaSender);
+    private final EventDelegator eventDelegator = new EventDelegator( eventMapper, shipmentMapper, equipmentMapper, transportMapper, eventTypeMapper,kafkaSender);
 
     @BeforeEach
     void setUpKafka(){
@@ -78,7 +81,7 @@ class EventDelegatorTest {
         when(eventMapper.fromPubSetTypeToEvent(any())).thenReturn(null);
 
         var mappingException = assertThrows(MappingException.class, () -> eventDelegator.checkCorrectEvent(gemsPubTypeWithBlankPubSetData));
-        assertEquals("The Pubset element is empty" ,mappingException.getMessage(), "The mapping exception does not match");
+        assertEquals("The pubset data does not contain any Event Act" ,mappingException.getMessage(), "The mapping exception does not match");
     }
 
 
@@ -86,6 +89,7 @@ class EventDelegatorTest {
     void testWithPubSetContainingShipmentEvent(){
         var gemsPubTypeWithBlankPubSetData = getGemsData(List.of(getPubSetTypeWithConfirm_Shipment_ClosedEventAct()));
         when(eventMapper.fromPubSetTypeToEvent(getPubSetTypeWithConfirm_Shipment_ClosedEventAct())).thenReturn(getEventForShipmentEventType());
+        when(eventTypeMapper.asDCSAEventType(any())).thenReturn(EventType.SHIPMENT);
         when(shipmentMapper.fromPubSetTypeToShipmentEvent(getPubSetTypeWithConfirm_Shipment_ClosedEventAct(), getEventForShipmentEventType())).thenReturn(new ShipmentEvent());
 
         eventDelegator.checkCorrectEvent(gemsPubTypeWithBlankPubSetData);
@@ -99,6 +103,7 @@ class EventDelegatorTest {
         var gemsPubTypeWithEquipmentPubSetData = getGemsData(List.of(getPubSetTypeWithARRIVECUIMPNEventAct()));
         when(eventMapper.fromPubSetTypeToEvent(getPubSetTypeWithARRIVECUIMPNEventAct())).thenReturn(getEventForEquipmentEventType());
         when(equipmentMapper.fromPubSetToEquipmentEvent(getPubSetTypeWithARRIVECUIMPNEventAct(), getEventForEquipmentEventType())).thenReturn(new EquipmentEvent());
+        when(eventTypeMapper.asDCSAEventType(any())).thenReturn(EventType.EQUIPMENT);
 
 
         eventDelegator.checkCorrectEvent(gemsPubTypeWithEquipmentPubSetData);
@@ -113,6 +118,7 @@ class EventDelegatorTest {
         var gemsPubTypeWithTransportPubSetData = getGemsData(List.of(getPubSetTypeWithCONTAINER_ARRIVALEventAct()));
         when(eventMapper.fromPubSetTypeToEvent(getPubSetTypeWithCONTAINER_ARRIVALEventAct())).thenReturn(getEventForTransportEventType());
         when(transportMapper.fromPubSetToTransportEvent(getPubSetTypeWithCONTAINER_ARRIVALEventAct(), getEventForTransportEventType())).thenReturn(new TransportEvent());
+        when(eventTypeMapper.asDCSAEventType(any())).thenReturn(EventType.TRANSPORT);
 
 
         eventDelegator.checkCorrectEvent(gemsPubTypeWithTransportPubSetData);

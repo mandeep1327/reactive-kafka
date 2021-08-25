@@ -1,7 +1,6 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 
 import MSK.com.external.dcsa.EventType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
 import org.springframework.stereotype.Component;
 
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.EQUIPMENT_EVENTS;
@@ -19,6 +18,6 @@ public class DCSAEventTypeMapper {
         } else if (EQUIPMENT_EVENTS.contains(act)) {
             return EventType.EQUIPMENT;
         }
-        throw new MappingException("Could not map eventType");
+        return null;
     }
 }

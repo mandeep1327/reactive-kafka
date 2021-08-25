@@ -82,15 +82,14 @@ public interface EventMapper {
     default String getEventDateTimeForSpecialTransportEvents(PubSetType pubSetType, String eventAct){
         if (SHIPMENT_ETA.equals(eventAct)) {
             return getLastTransportPlan(pubSetType)
-                    .map(TransportPlanType::getGttsexpArvTS)
+                    .map(this::getPrioritizedTimestampForArrival)
                     .orElse(null);
         } else {
             return getFirstTransportPlanType(pubSetType)
-                    .map(TransportPlanType::getGttsexpDepTS)
+                    .map(this::getPrioritizedTimestampForDeparture)
                     .orElse(null);
         }
     }
-
 
     private String getEventDateTimeForOtherTransportEvents(PubSetType pubSetType) {
         var date = Optional.ofNullable(pubSetType)
@@ -106,6 +105,30 @@ public interface EventMapper {
             return pubSetType.getEvent().getGemstsutc();
         } else {
             return date.concat(time);
+        }
+    }
+
+    private String getPrioritizedTimestampForArrival(TransportPlanType tp) {
+        if (tp.getGttsexpArvTS() != null) {
+            return tp.getGttsexpArvTS();
+        } else {
+            if (tp.getGcssexpArvTS() != null) {
+                return tp.getGcssexpArvTS();
+            } else {
+                return tp.getGsisexpArvTS();
+            }
+        }
+    }
+
+    private String getPrioritizedTimestampForDeparture(TransportPlanType tp) {
+        if (tp.getGttsexpDepTS() != null) {
+            return tp.getGttsexpDepTS();
+        } else {
+            if (tp.getGcssexpDepTS() != null) {
+                return tp.getGcssexpDepTS();
+            } else {
+                return tp.getGsisexpDepTS();
+            }
         }
     }
 }

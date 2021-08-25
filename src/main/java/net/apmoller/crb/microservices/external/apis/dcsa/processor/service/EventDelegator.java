@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DCSAEventTypeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.ShipmentEventMapper;
@@ -22,6 +23,7 @@ import reactor.kafka.sender.SenderRecord;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getEventAct;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class EventDelegator {
     private final ShipmentEventMapper shipmentEventMapper;
     private final EquipmentEventMapper equipmentEventMapper;
     private final TransportEventMapper transportEventMapper;
+    private final DCSAEventTypeMapper eventTypeMapper;
     private static final String PUBSET_IS_EMPTY = "The Pubset element is empty";
     private final KafkaSender<String, DcsaTrackTraceEvent> kafkaSender;
 
@@ -60,30 +63,35 @@ public class EventDelegator {
 
     public void checkCorrectEvent(GEMSPubType gemsBaseStructure) {
         var pubSetType = getPubSetType(gemsBaseStructure).orElseThrow(getExceptionSupplier(PUBSET_IS_EMPTY));
-        var baseEvent = getBaseEventFromGemSEvent(gemsBaseStructure);
-        var dcsaTrackAndTraceToBeStored = new DcsaTrackTraceEvent();
-        String keyForKafkaPayload;
-        switch (baseEvent.getEventType()) {
-            case SHIPMENT:
-                var shipmentEvent = shipmentEventMapper.fromPubSetTypeToShipmentEvent(pubSetType, baseEvent);
-                dcsaTrackAndTraceToBeStored.setShipmentEvent(shipmentEvent);
-                keyForKafkaPayload = getKeyForKafkaPayload(shipmentEvent.getEventID());
-                break;
-            case TRANSPORT:
-                var transportEvent = transportEventMapper.fromPubSetToTransportEvent(pubSetType, baseEvent);
-                dcsaTrackAndTraceToBeStored.setTransportEvent(transportEvent);
-                keyForKafkaPayload = getKeyForKafkaPayload(transportEvent.getEventID());
-                break;
-            case EQUIPMENT:
-                var equipmentEvent = equipmentEventMapper.fromPubSetToEquipmentEvent(pubSetType, baseEvent);
-                dcsaTrackAndTraceToBeStored.setEquipmentEvent(equipmentEvent);
-                keyForKafkaPayload = getKeyForKafkaPayload(equipmentEvent.getEventID());
-                break;
-            default:
-                throw new MappingException("Not acceptable event type of type" + dcsaTrackAndTraceToBeStored);
+        var eventAct = getEventAct(pubSetType);
+        if (eventTypeMapper.asDCSAEventType(eventAct) != null) {
+            var baseEvent = getBaseEventFromGemSEvent(gemsBaseStructure);
+            var dcsaTrackAndTraceToBeStored = new DcsaTrackTraceEvent();
+            String keyForKafkaPayload;
+            switch (baseEvent.getEventType()) {
+                case SHIPMENT:
+                    var shipmentEvent = shipmentEventMapper.fromPubSetTypeToShipmentEvent(pubSetType, baseEvent);
+                    dcsaTrackAndTraceToBeStored.setShipmentEvent(shipmentEvent);
+                    keyForKafkaPayload = getKeyForKafkaPayload(shipmentEvent.getEventID());
+                    break;
+                case TRANSPORT:
+                    var transportEvent = transportEventMapper.fromPubSetToTransportEvent(pubSetType, baseEvent);
+                    dcsaTrackAndTraceToBeStored.setTransportEvent(transportEvent);
+                    keyForKafkaPayload = getKeyForKafkaPayload(transportEvent.getEventID());
+                    break;
+                case EQUIPMENT:
+                    var equipmentEvent = equipmentEventMapper.fromPubSetToEquipmentEvent(pubSetType, baseEvent);
+                    dcsaTrackAndTraceToBeStored.setEquipmentEvent(equipmentEvent);
+                    keyForKafkaPayload = getKeyForKafkaPayload(equipmentEvent.getEventID());
+                    break;
+                default:
+                    throw new MappingException("Not acceptable event type of type" + dcsaTrackAndTraceToBeStored);
+            }
+            log.info("The payload is this : {}", dcsaTrackAndTraceToBeStored);
+            sendMessage(dcsaTrackAndTraceToBeStored, keyForKafkaPayload);
+        } else {
+            log.warn("The payload of event type {} was dropped" , eventAct);
         }
-
-        sendMessage(dcsaTrackAndTraceToBeStored, keyForKafkaPayload);
     }
 
     private String getKeyForKafkaPayload(String eventId) {

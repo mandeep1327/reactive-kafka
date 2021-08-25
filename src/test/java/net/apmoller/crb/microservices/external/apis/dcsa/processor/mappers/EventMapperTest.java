@@ -66,7 +66,6 @@ class EventMapperTest {
                 Arguments.arguments(getPubSetTypeWithArrange_Cargo_Release_OpenEventAct(), getEventForShipmentEventType()),
                 Arguments.arguments(getPubSetTypeWithARRIVAL_NOTICEEventAct(), getEventForShipmentEventType()),
                 Arguments.arguments(getPubSetTypeWithConfirm_Shipment_ClosedEventAct(), getEventForShipmentEventType()),
-                Arguments.arguments(getPubSetTypeWithEquipment_VGM_Details_UpdatedEventAct(), getEventForShipmentEventType()),
                 Arguments.arguments(getPubSetTypeWithIssue_Original_TPDOC_ClosedEventAct(), getEventForShipmentEventType()),
                 Arguments.arguments(getPubSetTypeWithRELEASEEventAct(), getEventForShipmentEventType()),
                 Arguments.arguments(getPubSetTypeWithReceive_Transport_Document_Instructions_ClosedEventAct(), getEventForShipmentEventType()),

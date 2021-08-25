@@ -69,7 +69,6 @@ public final class EventUtility {
             CONFIRM_SHIPMENT_CLOSED,
             SHIPMENT_CANCELLED,
             RECEIVE_TRANSPORT_DOCUMENT_INSTRUCTIONS_CLOSED,
-            EQUIPMENT_VGM_DETAILS_UPDATED,
             ARRANGE_CARGO_RELEASE_CLOSED,
             ARRANGE_CARGO_RELEASE_OPEN,
             ISSUE_ORIGINAL_TPDOC_CLOSED,
@@ -117,7 +116,6 @@ public final class EventUtility {
             CONFIRM_SHIPMENT_CLOSED,
             SHIPMENT_CANCELLED,
             RECEIVE_TRANSPORT_DOCUMENT_INSTRUCTIONS_CLOSED,
-            EQUIPMENT_VGM_DETAILS_UPDATED,
             ISSUE_ORIGINAL_TPDOC_CLOSED,
             ISSUE_VERIFY_COPY_OF_TPDOC_CLOSED,
             RELEASE,
@@ -259,7 +257,7 @@ public final class EventUtility {
         return Optional.ofNullable(pubSetType)
                 .map(PubSetType::getEvent)
                 .map(EventType::getEventAct)
-                .orElseThrow(MappingException::new);
+                .orElseThrow(() -> new MappingException("The pubset data does not contain any Event Act"));
     }
 
 }

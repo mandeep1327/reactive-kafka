@@ -27,7 +27,7 @@ public class GEMSPubTypeKafkaConsumer {
     public Disposable startKafkaConsumer() {
         return kafkaReceiver
                 .receive()
-                .doOnNext(gemsRecord -> log.info("Received event: key {}, value {}", gemsRecord.key(), gemsRecord.value()))
+                .doOnNext(gemsRecord -> log.info("Received event: key {}", gemsRecord.key()))
                 .doOnError(error -> log.error("Error receiving shipment record", error))
                 .flatMap(this::handleSubscriptionResponseEvent)
                 .doOnNext(gemsRecord -> gemsRecord.receiverOffset().acknowledge())
