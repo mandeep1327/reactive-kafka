@@ -7,6 +7,7 @@ import MSK.com.gems.ShipmentType;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,9 @@ public final class PartyMapper {
         var partiesList = Optional.ofNullable(pubSetType.getShipment())
                 .map(ShipmentType::getParty)
                 .map(s -> s.stream().map(PartyMapper::getPartiesFromEvent)
-                .collect(Collectors.toList())).orElse(List.of());
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList()))
+                .orElse(List.of());
 
         partiesList.stream()
                 .filter(party -> N2.equals(party.getPartyFunctionCode()))
@@ -34,14 +37,17 @@ public final class PartyMapper {
 
     private static Party getPartiesFromEvent(PartyType partyType) {
 
-        var roleType = partyType.getRoletyp();
-        var partyFunctions = getMapOfPartyRoleAndFunctions().get(Integer.valueOf(roleType));
-        return Party.newBuilder()
-                .setPartyID(partyType.getCustNo())
-                .setPartyName(partyType.getCustName())
-                .setPartyFunctionCode(partyFunctions.getFunctionCode())
-                .setPartyFunctionName(partyFunctions.getFunctionName())
-                .build();
+        var roleType = Integer.valueOf(partyType.getRoletyp());
+        if (getMapOfPartyRoleAndFunctions().containsKey(roleType)) {
+            var partyFunctions = getMapOfPartyRoleAndFunctions().get(roleType);
+            return Party.newBuilder()
+                    .setPartyID(partyType.getCustNo())
+                    .setPartyName(partyType.getCustName())
+                    .setPartyFunctionCode(partyFunctions.getFunctionCode())
+                    .setPartyFunctionName(partyFunctions.getFunctionName())
+                    .build();
+        }
+        return null;
     }
 
     private static void setAsAdditionalNotifyParty(Party party) {

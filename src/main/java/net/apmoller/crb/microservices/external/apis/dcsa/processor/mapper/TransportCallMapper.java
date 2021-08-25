@@ -6,6 +6,7 @@ import MSK.com.external.dcsa.TransportCall;
 import MSK.com.gems.EndLocType;
 import MSK.com.gems.EquipmentType;
 import MSK.com.gems.EventType;
+import MSK.com.gems.MoveType;
 import MSK.com.gems.PubSetType;
 import MSK.com.gems.StartLocType;
 import MSK.com.gems.TransportPlanType;
@@ -99,7 +100,8 @@ public final class TransportCallMapper {
     }
 
     private static String getLocation(EquipmentType equipmentTypeElement){
-        return Optional.ofNullable(equipmentTypeElement.getMove().getActLoc())
+        return Optional.ofNullable(equipmentTypeElement.getMove())
+                .map(MoveType::getActLoc)
                 .orElse(null);
     }
 
