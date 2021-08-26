@@ -80,6 +80,7 @@ public class CucumberIntegrationIT {
             properties.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://testUrl");
             properties.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, "true");
             properties.put(ConsumerConfig.GROUP_ID_CONFIG, "MSK.external.dcsa.consumerGroup.v1");
+            properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
             return ReceiverOptions.create(properties);
         }
     }

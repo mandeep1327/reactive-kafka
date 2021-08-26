@@ -3,6 +3,7 @@ package util;
 import MSK.com.gems.GEMSPubType;
 import com.google.common.collect.ImmutableMap;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
+import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -12,6 +13,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.rnorth.ducttape.unreliables.Unreliables;
 import org.testcontainers.containers.KafkaContainer;
@@ -31,52 +33,44 @@ public class KafkaTestContainer {
     public static EnvironmentReader environmentReader;
     private static KafkaProducer<String, GEMSPubType> producer;
     private static KafkaConsumer<String, GEMSPubType> consumer;
-    private static ConsumerRecords<String, GEMSPubType> records;
     private static KafkaContainer kafka;
 
     public static KafkaContainer setupKafkaContainer() throws Exception {
-        Network network = Network.newNetwork();
 
         environmentReader = new EnvironmentReader();
-
-         kafka = new KafkaContainer(KAFKA_IMAGE);
-//                 .withEnv("KAFKA_CLIENT_PORT", environmentReader.getKafkaPort())
-//                .withEnv("KAFKA_ADVERTISED_LISTENERS",environmentReader.getKafkaPort());
-
-         kafka.start();
-
+        kafka = new KafkaContainer(KAFKA_IMAGE);
+        kafka.start();
         setupKafkaProducer();
-
+        setupKafkaConsumer();
+        setupConfig( 1, 1);
         return kafka;
-
     }
 
-    public static void setupKafkaProducer(){
+    public static void setupKafkaProducer() {
         producer = new KafkaProducer(
                 ImmutableMap.of(
                         ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
-                        ProducerConfig.CLIENT_ID_CONFIG,"external-dcsa-events-processor",
+                        ProducerConfig.CLIENT_ID_CONFIG, "external-dcsa-events-processor",
                         AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://testUrl",
                         ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class,
                         ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class)
         );
     }
 
-    public static void setupKafkaConsumer(){
+    public static void setupKafkaConsumer() {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers());
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
         props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://testUrl");
         props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, "true");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "kafkatest");
         consumer = new KafkaConsumer(props);
     }
 
-    protected static void setupConfig(int partitions, int rf) throws Exception {
-            consumer.subscribe(singletonList(environmentReader.getKafkaPublisherTopic()));
-
-        //}
+    protected static void setupConfig(int partitions, int rf) {
+        consumer.subscribe(singletonList(environmentReader.getKafkaPublisherTopic()));
     }
 
     protected static void sendToProducer(String content) {
@@ -85,8 +79,7 @@ public class KafkaTestContainer {
     }
 
 
-    protected static List<ConsumerRecord<String, GEMSPubType>> drain(
-            int expectedRecordCount) {
+    protected static List<ConsumerRecord<String, GEMSPubType>> drain(int expectedRecordCount) {
 
         List<ConsumerRecord<String, GEMSPubType>> allRecords = new ArrayList<>();
 

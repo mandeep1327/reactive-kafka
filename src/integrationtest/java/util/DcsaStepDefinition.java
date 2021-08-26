@@ -22,13 +22,11 @@ public class DcsaStepDefinition extends CucumberSpringConfiguration {
 
     @And("I wait external-dcsa-events-processor consumes the message")
     public void iWaitExternalDcsaEventsProcessorConsumesTheMessage() throws InterruptedException {
-        await().atMost(30, TimeUnit.SECONDS).until(() -> false);
+       Thread.sleep(5000);
     }
 
     @Then("the EMPv2 topic should produce a message")
     public void theEMPvTopicShouldProduceAMessage() throws Exception {
-        KafkaTestContainer.setupKafkaConsumer();
-        KafkaTestContainer.setupConfig( 1, 1);
 
         List<ConsumerRecord<String, GEMSPubType>> changeEvents =
                 KafkaTestContainer.drain( 1);

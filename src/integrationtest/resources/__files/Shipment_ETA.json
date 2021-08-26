@@ -1,0 +1,216 @@
+{
+  "partner": {
+    "ampscntlNo": "23712423946356",
+    "ampsmsgType": "XML*GEMS",
+    "ampsrcvrID": "ALWAYSON",
+    "ampssndrID": "GEMS",
+    "gemssubID": "DCSA_18_S_ETA",
+    "languageCode": null,
+    "sendAMPSIsaCntlNoToGEMS": "N"
+  },
+  "pubSet": [
+    {
+      "cargo": {
+        "totCargQuan": 0,
+        "totCargVol": [
+          {
+            "qual": "CBM",
+            "value": 0
+          },
+          {
+            "qual": "CBS",
+            "value": 0
+          }
+        ],
+        "totCargWgt": [
+          {
+            "qual": "KGS",
+            "value": 0
+          },
+          {
+            "qual": "LBS",
+            "value": 0
+          }
+        ]
+      },
+      "customs": [],
+      "deadline": null,
+      "equipment": [],
+      "event": {
+        "eventAct": "Shipment_ETA",
+        "eventId": 96654975,
+        "gemstsutc": "2021-08-25 12:42:07",
+        "reasons": null,
+        "rkemmove": null,
+        "srcSys": "GCSS",
+        "srcSysTimestamp": "2021-08-25 12:42:00"
+      },
+      "gttsvessel": null,
+      "hermesEvent": null,
+      "initialTransportPlan": [
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "2",
+            "value": "DKAARPT"
+          },
+          "endLocCntry": "DK",
+          "endState": null,
+          "endTerm": null,
+          "gcssexpArvTS": "2021-09-21 23:00:00",
+          "gcssexpArvTSUTC": "2021-09-21 22:00:00",
+          "gcssexpDepTS": "2021-09-21 22:00:00",
+          "gcssexpDepTSUTC": "2021-09-21 21:00:00",
+          "gsisexpArvTS": null,
+          "gsisexpDepTS": null,
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": null,
+          "gttsexpDepTS": null,
+          "legSeq": "1",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "1",
+            "value": "DEBRVTM"
+          },
+          "startLocCntry": "DE",
+          "startState": null,
+          "startTerm": null,
+          "transMode": "MVS",
+          "vesselCde": "1NL",
+          "voyDoc": null,
+          "voyage": "139S"
+        }
+      ],
+      "lctransportPlan": [],
+      "motherTransportPlan": [],
+      "operationalCAT": [],
+      "productCAT": [],
+      "referenceShipments": [],
+      "shipment": {
+        "bookNo": "203643055",
+        "breakBulk": "N",
+        "cargoTypes": null,
+        "cargoes": null,
+        "delSvc": "CY",
+        "equipmentAssignments": null,
+        "haulageArrangements": null,
+        "historyOfReasonsForTransportPlan": null,
+        "milTStamp": null,
+        "operationalRouteRef": null,
+        "operator": "MSL",
+        "party": [
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [
+              "203643055"
+            ],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "1",
+            "state": null
+          },
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "2",
+            "state": null
+          }
+        ],
+        "pcfn": "203643055",
+        "publishSpotROTPNotification": "false",
+        "publishSpotTPNotification": "false",
+        "rcvSvc": "CY",
+        "reference": [
+          {
+            "name": null,
+            "typ": "1",
+            "value": "203643055"
+          }
+        ],
+        "tpchangeReason": {
+          "reason": [
+            {
+              "code": "98",
+              "type": "short",
+              "value": "Unforeseen contingency"
+            },
+            {
+              "code": "98",
+              "type": "details",
+              "value": "As a result of an unforeseen operational constraint, your shipment has now been replanned to the next available vessel."
+            }
+          ]
+        },
+        "tpinfo": []
+      },
+      "tpdoc": [
+        {
+          "bolNo": "203643055",
+          "documentProperties": null,
+          "haulageArrangements": null,
+          "operator": null,
+          "party": [],
+          "reference": [
+            {
+              "name": null,
+              "typ": "5",
+              "value": "203643055"
+            }
+          ]
+        }
+      ],
+      "transportPlan": [
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "2",
+            "value": "DKAARPT"
+          },
+          "endLocCntry": "DK",
+          "endState": null,
+          "endTerm": "Aarhus APM Terminal",
+          "gcssexpArvTS": "2021-09-21 23:00:00",
+          "gcssexpArvTSUTC": "2021-09-21 22:00:00",
+          "gcssexpDepTS": "2021-09-21 22:00:00",
+          "gcssexpDepTSUTC": "2021-09-21 21:00:00",
+          "gsisexpArvTS": "2021-10-18 18:32:00",
+          "gsisexpDepTS": "2021-10-18 07:30:00",
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": "2021-10-18 18:32:00",
+          "gttsexpDepTS": "2021-10-18 07:30:00",
+          "legSeq": "1",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "1",
+            "value": "DEBRVTM"
+          },
+          "startLocCntry": "DE",
+          "startState": "HB",
+          "startTerm": "NTB North SEA Terminal Bremerhaven",
+          "transMode": "MVS",
+          "vesselCde": "1NL",
+          "voyDoc": null,
+          "voyage": "139S"
+        }
+      ]
+    }
+  ]
+}
