@@ -1,5 +1,8 @@
 package util;
 
+import MSK.com.gems.GEMSPubType;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 
@@ -20,5 +23,16 @@ public class TestDataUtils {
             log.error("Could not load file with data {}", e.getMessage());
         }
         return null;
+    }
+
+    public static GEMSPubType getGemsData(String jsonPayload){
+        ObjectMapper mapper = new ObjectMapper();
+        GEMSPubType gemsPayload = null;
+        try {
+            gemsPayload = mapper.readValue(jsonPayload, GEMSPubType.class);
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage(), e);
+        }
+        return gemsPayload;
     }
 }

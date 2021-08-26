@@ -9,4 +9,7 @@ Feature: dcsa-events
     Examples:
       | dataFileName         |
       | gems_data_event.json |
-      | transport_event.json |
+
+    Scenario:
+      Given Nothing given
+      Then Nothing

@@ -2,28 +2,23 @@ package util;
 
 import MSK.com.external.dcsa.DcsaTrackTraceEvent;
 import MSK.com.gems.GEMSPubType;
-import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
+import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
-import io.cucumber.spring.CucumberContextConfiguration;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.DcsaEventProcessorApplication;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
-import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.utility.DockerImageName;
 import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
 import reactor.kafka.sender.KafkaSender;
@@ -37,6 +32,7 @@ import java.util.Map;
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "src/integrationtest/resources/features",
         plugin = {"pretty", "junit:target/cucumber-reports/Cucumber.xml"})
+@Slf4j
 public class CucumberIntegrationIT {
 
     @ClassRule
@@ -50,7 +46,9 @@ public class CucumberIntegrationIT {
         @Bean
         KafkaReceiver<String, GEMSPubType> kafkaReceiver(ReceiverOptions<String, GEMSPubType> kafkaReceiverOptions) {
             return KafkaReceiver.create(kafkaReceiverOptions.pollTimeout(Duration.ofMillis(5000))
-                    .subscription(List.of("MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1")));
+                    .subscription(List.of("MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1"))
+                    .addAssignListener(partitions -> log.info("Assigned Partitions {} on Thread named {} Id {}",
+                    partitions, Thread.currentThread().getName(), Thread.currentThread().getId())));
         }
 
         @Bean
@@ -67,6 +65,8 @@ public class CucumberIntegrationIT {
             props.put(ProducerConfig.ACKS_CONFIG, "all");
             props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
             props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+            props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://testUrl");
+            props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, "true");
             return SenderOptions.create(props);
 
         }
@@ -77,9 +77,9 @@ public class CucumberIntegrationIT {
             properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaTestContainer.getBootstrapServers());
             properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
             properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
-            properties.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class);
-            properties.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, ErrorHandlingDeserializer.class);
-            properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+            properties.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://testUrl");
+            properties.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, "true");
+            properties.put(ConsumerConfig.GROUP_ID_CONFIG, "MSK.external.dcsa.consumerGroup.v1");
             return ReceiverOptions.create(properties);
         }
     }

@@ -25,7 +25,6 @@ public class GEMSPubTypeKafkaConsumer {
 
     @EventListener(ApplicationStartedEvent.class)
     public Disposable startKafkaConsumer() {
-        log.info("!!!!!!!!!!!! startKafkaConsumer !!!!!!!!!!!");
         return kafkaReceiver
                 .receive()
                 .doOnNext(gemsRecord -> log.info("Received event: key {}", gemsRecord.key()))

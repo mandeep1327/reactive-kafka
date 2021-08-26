@@ -1,16 +1,10 @@
 package util;
 
-import static java.util.Collections.singletonList;
-
+import MSK.com.gems.GEMSPubType;
 import com.google.common.collect.ImmutableMap;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.NewTopic;
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
+import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -18,19 +12,26 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.rnorth.ducttape.unreliables.Unreliables;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.utility.DockerImageName;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import static java.util.Collections.singletonList;
+
 public class KafkaTestContainer {
     private static final DockerImageName KAFKA_IMAGE = DockerImageName.parse("confluentinc/cp-kafka:5.4.3");
     public static EnvironmentReader environmentReader;
-    private static KafkaProducer<String, String> producer;
-    private static KafkaConsumer<String, String> consumer;
-    private static ConsumerRecords<String, String> records;
+    private static KafkaProducer<String, GEMSPubType> producer;
+    private static KafkaConsumer<String, GEMSPubType> consumer;
+    private static ConsumerRecords<String, GEMSPubType> records;
     private static KafkaContainer kafka;
 
     public static KafkaContainer setupKafkaContainer() throws Exception {
@@ -51,49 +52,43 @@ public class KafkaTestContainer {
     }
 
     public static void setupKafkaProducer(){
-        producer = new KafkaProducer<>(
+        producer = new KafkaProducer(
                 ImmutableMap.of(
                         ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
-                        ProducerConfig.CLIENT_ID_CONFIG,"external-dcsa-events-processor"),
-                new StringSerializer(),
-                new StringSerializer()
+                        ProducerConfig.CLIENT_ID_CONFIG,"external-dcsa-events-processor",
+                        AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://testUrl",
+                        ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class,
+                        ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class)
         );
     }
 
     public static void setupKafkaConsumer(){
-        consumer = new KafkaConsumer<>(
-                ImmutableMap.of(
-                        ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
-                        ConsumerConfig.GROUP_ID_CONFIG, "1"),
-                new StringDeserializer(),
-                new StringDeserializer()
-        );
+        Properties props = new Properties();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers());
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+        props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://testUrl");
+        props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, "true");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "kafkatest");
+        consumer = new KafkaConsumer(props);
     }
 
     protected static void setupConfig(int partitions, int rf) throws Exception {
-/*        try (
-                AdminClient adminClient = AdminClient.create(ImmutableMap.of(
-                        AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers()
-                ));
-        ) {
-
-            Collection<NewTopic> topics = singletonList(new NewTopic(environmentReader.getKafkaConsumerTopic(), partitions, (short) rf));
-            adminClient.createTopics(topics).all().get(30, TimeUnit.SECONDS);
-*/
             consumer.subscribe(singletonList(environmentReader.getKafkaPublisherTopic()));
 
         //}
     }
 
     protected static void sendToProducer(String content) {
-        producer.send(new ProducerRecord<>(environmentReader.getKafkaConsumerTopic(), content));
-        }
+        GEMSPubType gemContent = TestDataUtils.getGemsData(content);
+        producer.send(new ProducerRecord<>(environmentReader.getKafkaConsumerTopic(), gemContent));
+    }
 
 
-    protected static List<ConsumerRecord<String, String>> drain(
+    protected static List<ConsumerRecord<String, GEMSPubType>> drain(
             int expectedRecordCount) {
 
-        List<ConsumerRecord<String, String>> allRecords = new ArrayList<>();
+        List<ConsumerRecord<String, GEMSPubType>> allRecords = new ArrayList<>();
 
         Unreliables.retryUntilTrue(10, TimeUnit.SECONDS, () -> {
             consumer.poll(Duration.ofMillis(50))
