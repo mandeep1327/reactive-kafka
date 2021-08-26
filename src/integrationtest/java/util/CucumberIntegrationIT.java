@@ -36,7 +36,7 @@ import java.util.Map;
 public class CucumberIntegrationIT {
 
     @ClassRule
-    public static KafkaContainer startKafka() throws Exception {
+    public static KafkaContainer startKafka() {
          return KafkaTestContainer.setupKafkaContainer();
     }
 
@@ -46,7 +46,7 @@ public class CucumberIntegrationIT {
         @Bean
         KafkaReceiver<String, GEMSPubType> kafkaReceiver(ReceiverOptions<String, GEMSPubType> kafkaReceiverOptions) {
             return KafkaReceiver.create(kafkaReceiverOptions.pollTimeout(Duration.ofMillis(5000))
-                    .subscription(List.of("MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1"))
+                    .subscription(List.of(EnvironmentReader.getInstance().getKafkaConsumerTopic()))
                     .addAssignListener(partitions -> log.info("Assigned Partitions {} on Thread named {} Id {}",
                     partitions, Thread.currentThread().getName(), Thread.currentThread().getId())));
         }
@@ -79,7 +79,7 @@ public class CucumberIntegrationIT {
             properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
             properties.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://testUrl");
             properties.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, "true");
-            properties.put(ConsumerConfig.GROUP_ID_CONFIG, "MSK.external.dcsa.consumerGroup.v1");
+            properties.put(ConsumerConfig.GROUP_ID_CONFIG, EnvironmentReader.getInstance().getKafkaConsumerTopic());
             properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
             return ReceiverOptions.create(properties);
         }

@@ -7,38 +7,20 @@ import io.cucumber.java.en.Then;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import static org.awaitility.Awaitility.await;
 
 public class DcsaStepDefinition extends CucumberSpringConfiguration {
-    private String jsonContent;
 
     @Given("set a message on kafka with {string}")
     public void send(String jsonfile) throws Exception {
-        jsonContent = TestDataUtils.loadDataJson(jsonfile);
+        var jsonContent = TestDataUtils.loadDataJson(jsonfile);
         KafkaTestContainer.sendToProducer(jsonContent);
-    }
-
-    @And("I wait external-dcsa-events-processor consumes the message")
-    public void iWaitExternalDcsaEventsProcessorConsumesTheMessage() throws InterruptedException {
-       Thread.sleep(5000);
     }
 
     @Then("the EMPv2 topic should produce a message")
     public void theEMPvTopicShouldProduceAMessage() throws Exception {
-
         List<ConsumerRecord<String, GEMSPubType>> changeEvents =
                 KafkaTestContainer.drain( 1);
         System.out.println("EVENTS " + changeEvents.get(0));
 
-    }
-
-    @Given("Nothing given")
-    public void nothing() {
-
-    }
-    @Then("Nothing")
-    public void thenNothing() {
     }
 }
