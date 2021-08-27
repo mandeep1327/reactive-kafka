@@ -1,5 +1,6 @@
 package util;
 
+import MSK.com.external.dcsa.DcsaTrackTraceEvent;
 import MSK.com.gems.GEMSPubType;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
@@ -28,7 +29,7 @@ import static java.util.Collections.singletonList;
 public class KafkaTestContainer {
     private static final DockerImageName KAFKA_IMAGE = DockerImageName.parse("confluentinc/cp-kafka:5.4.3");
     private static KafkaProducer<String, GEMSPubType> producer;
-    private static KafkaConsumer<String, GEMSPubType> consumer;
+    private static KafkaConsumer<String, DcsaTrackTraceEvent> consumer;
     private static KafkaContainer kafka;
 
     public static KafkaContainer setupKafkaContainer() {
@@ -72,9 +73,9 @@ public class KafkaTestContainer {
     }
 
 
-    protected static List<ConsumerRecord<String, GEMSPubType>> drain(int expectedRecordCount) {
+    protected static List<ConsumerRecord<String, DcsaTrackTraceEvent>> drain(int expectedRecordCount) {
 
-        List<ConsumerRecord<String, GEMSPubType>> allRecords = new ArrayList<>();
+        List<ConsumerRecord<String, DcsaTrackTraceEvent>> allRecords = new ArrayList<>();
 
         Unreliables.retryUntilTrue(10, TimeUnit.SECONDS, () -> {
             consumer.poll(Duration.ofMillis(50))
