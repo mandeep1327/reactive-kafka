@@ -23,8 +23,8 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_EVENTS;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.TRANSPORT_EVENTS;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getEventAct;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstTransportPlanType;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getLastTransportPlan;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstTransportPlanTypeWithPortOfLoad;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getLastTransportPlanWithPortOfDischarge;
 
 @Mapper(componentModel = "spring",
         imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class, ServiceTypeMapper.class},
@@ -81,11 +81,11 @@ public interface EventMapper {
 
     default String getEventDateTimeForSpecialTransportEvents(PubSetType pubSetType, String eventAct){
         if (SHIPMENT_ETA.equals(eventAct)) {
-            return getLastTransportPlan(pubSetType)
+            return getLastTransportPlanWithPortOfDischarge(pubSetType)
                     .map(this::getPrioritizedTimestampForArrival)
                     .orElse(null);
         } else {
-            return getFirstTransportPlanType(pubSetType)
+            return getFirstTransportPlanTypeWithPortOfLoad(pubSetType)
                     .map(this::getPrioritizedTimestampForDeparture)
                     .orElse(null);
         }

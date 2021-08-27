@@ -9,8 +9,8 @@ import MSK.com.external.dcsa.TransportEventType;
 import MSK.com.gems.GEMSPubType;
 import MSK.com.gems.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.TransportEventMapperImpl;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.TransportEventMapperImpl;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -31,21 +31,22 @@ import static MSK.com.external.dcsa.TransportEventType.DEPA;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithCONTAINER_ARRIVALEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithCONTAINER_DEPARTUREEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithCONTAINER_DEPARTUREEventActAndBARTransportMode;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithCONTAINER_DEPARTUREEventActAndRCOTransportMode;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDemoEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithOFF_RAILIMPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithRAIL_ARRIVAL_AT_DESTINATIONEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithRAIL_DEPARTUREEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithRAIL_DEPARTUREEventActAndRCOTransportMode;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_CancelledEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETAEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventAct;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventActAndBARTransportMode;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventActAndBCOTransportMode;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventActAndFEFTransportMode;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventActAndFEOTransportMode;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventActAndRCOTransportMode;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventActAndTRKTransportMode;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventActAndVSFTransportMode;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventActAndVSLTransportMode;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventActAndVSMTransportMode;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithoutTransportPlan;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithoutVesselData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForTransportEventType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -87,20 +88,20 @@ class TransportEventMapperTest {
 
     protected static Stream<Arguments> createTransportEventTestData() {
         return Stream.of(
-                //checking facilty type codes and transport event types
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithCONTAINER_ARRIVALEventAct())), baseEventData, getTransportEventTestData(ARRI, getTransportCall(POTE, VESSEL), getDocumentRef())),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithCONTAINER_DEPARTUREEventAct())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithRAIL_ARRIVAL_AT_DESTINATIONEventAct())), baseEventData, getTransportEventTestData(ARRI, getTransportCall(INTE, VESSEL), getDocumentRef())),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithRAIL_DEPARTUREEventAct())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(INTE, VESSEL), getDocumentRef())),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETAEventAct())), baseEventData, getTransportEventTestData(ARRI, getTransportCall(POTE, VESSEL), getDocumentRef())),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventAct())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())),
-                //checking transport modes
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndBARTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, BARGE), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndBCOTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, BARGE), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndFEFTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndVSFTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndFEOTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndVSMTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndTRKTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, TRUCK), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndRCOTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, RAIL), getDocumentRef())));
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithRAIL_DEPARTUREEventActAndRCOTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(INTE, RAIL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithCONTAINER_DEPARTUREEventActAndRCOTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, TRUCK), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithCONTAINER_DEPARTUREEventActAndBARTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, BARGE), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndVSLTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())));
     }
 
     private static List<DocumentReference> getDocumentRef() {

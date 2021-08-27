@@ -30,8 +30,8 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDepartureEventType;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstEquipmentElement;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstTransportPlanType;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getLastTransportPlan;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstTransportPlanTypeWithPortOfLoad;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getLastTransportPlanWithPortOfDischarge;
 
 @UtilityClass
 @Slf4j
@@ -64,9 +64,9 @@ public final class TransportCallMapper {
         var eventAct = getEventAct(pubSetType);
         if (SHIPMENT_ETA.equals(eventAct) || SHIPMENT_ETD.equals(eventAct)){
             if (SHIPMENT_ETA.equals(eventAct)) {
-                return getLastTransportPlan(pubSetType).orElse(null);
+                return getLastTransportPlanWithPortOfDischarge(pubSetType).orElse(null);
             } else {
-                return getFirstTransportPlanType(pubSetType).orElse(null);
+                return getFirstTransportPlanTypeWithPortOfLoad(pubSetType).orElse(null);
             }
         } else {
             return getTransportPlanTypeForOtherEvents(pubSetType, transportPlanTypeList, equipmentFirstElement);

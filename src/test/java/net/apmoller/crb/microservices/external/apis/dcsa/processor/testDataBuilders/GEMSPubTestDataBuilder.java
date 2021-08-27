@@ -69,15 +69,15 @@ public final class GEMSPubTestDataBuilder {
         return pubSetType;
     }
 
-    private static PubSetType getPubSetForDepartureWithTransportPlanAndBARTransportMode(EventType eventType, List<PartyType> parties) {
+    private static PubSetType getPubSetForDepartureWithTransportPlanAndFEFTransportMode(EventType eventType, List<PartyType> parties) {
         var pubSetType = getPubSetWithTransportPlan(eventType, parties);
-        pubSetType.setTransportPlan(List.of(getTransportPlanForDeparture("BAR")));
+        pubSetType.setTransportPlan(List.of(getTransportPlanForDeparture("FEF")));
         return pubSetType;
     }
 
-    private static PubSetType getPubSetForDepartureWithTransportPlanAndBCOTransportMode(EventType eventType, List<PartyType> parties) {
+    private static PubSetType getPubSetForDepartureWithTransportPlanAndVSFTransportMode(EventType eventType, List<PartyType> parties) {
         var pubSetType = getPubSetWithTransportPlan(eventType, parties);
-        pubSetType.setTransportPlan(List.of(getTransportPlanForDeparture("BCO")));
+        pubSetType.setTransportPlan(List.of(getTransportPlanForDeparture("VSF")));
         return pubSetType;
     }
 
@@ -93,9 +93,9 @@ public final class GEMSPubTestDataBuilder {
         return pubSetType;
     }
 
-    private static PubSetType getPubSetForDepartureWithTransportPlanAndTRKTransportMode(EventType eventType, List<PartyType> parties) {
+    private static PubSetType getPubSetForDepartureWithTransportPlanAndVSLTransportMode(EventType eventType, List<PartyType> parties) {
         var pubSetType = getPubSetWithTransportPlan(eventType, parties);
-        pubSetType.setTransportPlan(List.of(getTransportPlanForDeparture("TRK")));
+        pubSetType.setTransportPlan(List.of(getTransportPlanForDeparture("VSL")));
         return pubSetType;
     }
 
@@ -106,7 +106,19 @@ public final class GEMSPubTestDataBuilder {
         return pubSetType;
     }
 
-    @NotNull
+    private static PubSetType getPubSetForDepartureWithTransportPlanAndTRKTransportMode(EventType eventType, List<PartyType> parties) {
+        var pubSetType = getPubSetWithTransportPlan(eventType, parties);
+        pubSetType.setTransportPlan(List.of(getTransportPlanForDeparture("TRK")));
+        return pubSetType;
+    }
+
+    private static PubSetType getPubSetForDepartureWithTransportPlanAndBARTransportMode(EventType eventType, List<PartyType> parties) {
+        var pubSetType = getPubSetWithTransportPlan(eventType, parties);
+        pubSetType.setTransportPlan(List.of(getTransportPlanForDeparture("BAR")));
+        return pubSetType;
+    }
+
+
     public static PubSetType getCommonPubSetTypeWithVesselData(EventType eventType, List<PartyType> parties) {
         var pubSetType = getPubSet(eventType, parties);
         pubSetType.setGttsvessel(getVesselData());
@@ -200,7 +212,7 @@ public final class GEMSPubTestDataBuilder {
         return getPubSetWithTransportPlan(getEventTypeData("ARRIVECUIMPN"), getPartyList2());
     }
     public static PubSetType getPubSetTypeWithDEPARTCUEXPNEventAct(){
-        return getPubSetForDepartureWithTransportPlanAndBARTransportMode(getEventTypeData("DEPARTCUEXPN"), getPartyList2());
+        return getPubSetForDepartureWithTransportPlanAndFEFTransportMode(getEventTypeData("DEPARTCUEXPN"), getPartyList2());
     }
     public static PubSetType getPubSetTypeWithDISCHARG_NEventAct(){
         return getPubSet(getEventTypeData("DISCHARG   N"));
@@ -246,11 +258,23 @@ public final class GEMSPubTestDataBuilder {
     public static PubSetType getPubSetTypeWithShipment_ETDEventAct(){
         return getPubSetForDepartureWithTransportPlan(getEventTypeData("Shipment_ETD"), getPartyList4());
     }
-    public static PubSetType getPubSetTypeWithShipment_ETDEventActAndBARTransportMode(){
-        return getPubSetForDepartureWithTransportPlanAndBARTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());
+    public static PubSetType getPubSetTypeWithShipment_ETDEventActAndFEFTransportMode(){
+        return getPubSetForDepartureWithTransportPlanAndFEFTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());
     }
-    public static PubSetType getPubSetTypeWithShipment_ETDEventActAndBCOTransportMode(){
-        return getPubSetForDepartureWithTransportPlanAndBCOTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());
+    public static PubSetType getPubSetTypeWithRAIL_DEPARTUREEventActAndRCOTransportMode(){
+        return getPubSetForDepartureWithTransportPlanAndRCOTransportMode(getEventTypeData("RAIL_DEPARTURE"), getPartyList2());
+    }
+
+    public static PubSetType getPubSetTypeWithCONTAINER_DEPARTUREEventActAndRCOTransportMode(){
+        return getPubSetForDepartureWithTransportPlanAndTRKTransportMode(getEventTypeData("CONTAINER DEPARTURE"), getPartyList2());
+    }
+
+    public static PubSetType getPubSetTypeWithCONTAINER_DEPARTUREEventActAndBARTransportMode(){
+        return getPubSetForDepartureWithTransportPlanAndBARTransportMode(getEventTypeData("CONTAINER DEPARTURE"), getPartyList2());
+    }
+
+    public static PubSetType getPubSetTypeWithShipment_ETDEventActAndVSFTransportMode(){
+        return getPubSetForDepartureWithTransportPlanAndVSFTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());
     }
     public static PubSetType getPubSetTypeWithShipment_ETDEventActAndFEOTransportMode(){
         return getPubSetForDepartureWithTransportPlanAndFEOTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());
@@ -258,8 +282,8 @@ public final class GEMSPubTestDataBuilder {
     public static PubSetType getPubSetTypeWithShipment_ETDEventActAndVSMTransportMode(){
         return getPubSetForDepartureWithTransportPlanAndVSMTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());
     }
-    public static PubSetType getPubSetTypeWithShipment_ETDEventActAndTRKTransportMode(){
-        return getPubSetForDepartureWithTransportPlanAndTRKTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());
+    public static PubSetType getPubSetTypeWithShipment_ETDEventActAndVSLTransportMode(){
+        return getPubSetForDepartureWithTransportPlanAndVSLTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());
     }
     public static PubSetType getPubSetTypeWithShipment_ETDEventActAndRCOTransportMode(){
         return getPubSetForDepartureWithTransportPlanAndRCOTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());

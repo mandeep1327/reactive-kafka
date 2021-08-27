@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static MSK.com.external.dcsa.CarrierCode.MAEU;
 import static MSK.com.external.dcsa.CarrierCode.MCCQ;
@@ -41,7 +44,6 @@ public final class EventUtility {
     public static final String CONFIRM_SHIPMENT_CLOSED = "Confirm_Shipment_Closed";
     public static final String SHIPMENT_CANCELLED = "Shipment_Cancelled";
     public static final String RECEIVE_TRANSPORT_DOCUMENT_INSTRUCTIONS_CLOSED = "Receive_Transport_Document_Instructions_Closed";
-    public static final String EQUIPMENT_VGM_DETAILS_UPDATED = "Equipment_VGM_Details_Updated";
     public static final String ISSUE_ORIGINAL_TPDOC_CLOSED = "Issue_Original_TPDOC_Closed";
     public static final String ISSUE_VERIFY_COPY_OF_TPDOC_CLOSED = "Issue_Verify_Copy_of_TPDOC_Closed";
     public static final String RELEASE = "RELEASE";
@@ -190,21 +192,28 @@ public final class EventUtility {
                 .orElse(null);
     }
 
-    public static Optional<TransportPlanType> getLastTransportPlan(PubSetType pubSetType) {
+    public static Optional<TransportPlanType> getLastTransportPlanWithPortOfDischarge(PubSetType pubSetType) {
+        return getTransportPlanTypeForPoLNPoD(pubSetType)
+                .reduce((first, second) -> second);
+    }
+
+    public static Optional<TransportPlanType> getFirstTransportPlanTypeWithPortOfLoad(PubSetType pubSetType) {
+        return getTransportPlanTypeForPoLNPoD(pubSetType)
+                .findFirst();
+    }
+
+    private static Stream<TransportPlanType> getTransportPlanTypeForPoLNPoD(PubSetType pubSetType) {
         return Optional.ofNullable(pubSetType)
                 .map(PubSetType::getTransportPlan)
                 .filter(transportPlanTypes -> !transportPlanTypes.isEmpty())
                 .orElse(new ArrayList<>())
                 .stream()
-                .reduce((first, second) -> second);
+                .filter(getTransportPlanTypePredicate());
     }
 
-
-    public static Optional<TransportPlanType> getFirstTransportPlanType(PubSetType pubSetType) {
-        return Optional.ofNullable(pubSetType)
-                .map(PubSetType::getTransportPlan)
-                .filter(transportPlanTypes -> !transportPlanTypes.isEmpty())
-                .flatMap(t -> t.stream().findFirst());
+    private static Predicate<TransportPlanType> getTransportPlanTypePredicate() {
+        var stream  = Stream.of("FEF", "FEO", "MVS", "VSF", "VSM", "VSL").collect(Collectors.toUnmodifiableList());
+        return transportPlanType -> transportPlanType.getTransMode() != null && stream.contains(transportPlanType.getTransMode());
     }
 
     public static String getBookingNumber(PubSetType pubSetType) {
