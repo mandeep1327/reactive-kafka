@@ -1,19 +1,25 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.config;
 
+import MSK.com.external.dcsa.DcsaTrackTraceEvent;
 import MSK.com.gems.GEMSPubType;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
+import reactor.kafka.sender.KafkaSender;
+import reactor.kafka.sender.SenderOptions;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -106,12 +112,36 @@ public class ReactiveKafkaConfig {
                 .addAssignListener(partitions -> log.info("Assigned Partitions {} on Thread named {} Id {}", partitions, Thread.currentThread().getName(), Thread.currentThread().getId()));
     }
 
+
+    private SenderOptions<String, DcsaTrackTraceEvent> kafkaSenderOptions() {
+
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ProducerConfig.CLIENT_ID_CONFIG, "dcsa-processor-producer");
+        props.put(ProducerConfig.ACKS_CONFIG, "all");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+        props.put(AbstractKafkaSchemaSerDeConfig.BASIC_AUTH_CREDENTIALS_SOURCE, "USER_INFO");
+        props.put(AbstractKafkaSchemaSerDeConfig.USER_INFO_CONFIG, schemaRegistryUsername + ":" + schemaRegistryPassword);
+        props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
+        addSaslProperties(props, saslMechanism, securityProtocol, loginModule, username, password);
+        return SenderOptions.create(props);
+
+    }
+
+
+    @Bean
+    KafkaSender<String, DcsaTrackTraceEvent> kafkaSender() {
+        return KafkaSender.create(kafkaSenderOptions());
+    }
+
+
     private static void addSaslProperties(Map<String, Object> properties, String saslMechanism, String securityProtocol,
                                           String loginModule, String username, String password) {
         if (nonNull(username) && !username.isBlank()) {
             properties.put("security.protocol", securityProtocol);
             properties.put("sasl.mechanism", saslMechanism);
-            String saslJassConfig = String.format("%s required username=\"%s\" password=\"%s\" ;", loginModule, username, password);
+            var saslJassConfig = String.format("%s required username=\"%s\" password=\"%s\" ;", loginModule, username, password);
             properties.put("sasl.jaas.config", saslJassConfig);
         }
     }

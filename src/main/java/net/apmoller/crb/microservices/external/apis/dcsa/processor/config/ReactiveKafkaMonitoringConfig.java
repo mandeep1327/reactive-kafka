@@ -60,7 +60,7 @@ public class ReactiveKafkaMonitoringConfig {
         if (nonNull(username) && !username.isBlank()) {
             properties.put("security.protocol", securityProtocol);
             properties.put("sasl.mechanism", saslMechanism);
-            String saslJassConfig = String.format("%s required username=\"%s\" password=\"%s\" ;", loginModule, username, password);
+            var saslJassConfig = String.format("%s required username=\"%s\" password=\"%s\" ;", loginModule, username, password);
             properties.put("sasl.jaas.config", saslJassConfig);
         }
     }
