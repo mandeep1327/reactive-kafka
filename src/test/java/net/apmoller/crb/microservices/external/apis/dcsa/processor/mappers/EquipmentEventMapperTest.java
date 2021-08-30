@@ -4,16 +4,14 @@ import MSK.com.external.dcsa.DocumentReference;
 import MSK.com.external.dcsa.EmptyIndicatorCode;
 import MSK.com.external.dcsa.EquipmentEvent;
 import MSK.com.external.dcsa.EquipmentEventType;
-import MSK.com.external.dcsa.FacilityType;
 import MSK.com.external.dcsa.TransportCall;
 import MSK.com.gems.GEMSPubType;
 import MSK.com.gems.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.EquipmentEventTypeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapperImpl;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
-
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -31,10 +29,6 @@ import static MSK.com.external.dcsa.DocumentReferenceType.TRD;
 import static MSK.com.external.dcsa.EquipmentEventType.GTIN;
 import static MSK.com.external.dcsa.EquipmentEventType.GTOT;
 import static MSK.com.external.dcsa.EquipmentEventType.LOAD;
-import static MSK.com.external.dcsa.FacilityType.CLOC;
-import static MSK.com.external.dcsa.FacilityType.DEPO;
-import static MSK.com.external.dcsa.FacilityType.INTE;
-import static MSK.com.external.dcsa.FacilityType.POTE;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithARRIVECUIMPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDEPARTCUEXPNEventAct;
@@ -77,13 +71,13 @@ class EquipmentEventMapperTest {
 
     private static Stream<Arguments> createEquipmentEventTestData() {
         return Stream.of(
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithARRIVECUIMPNEventAct())), getEquipmentEventTestData(GTIN, CLOC)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_IN_EXPNEventAct())), getEquipmentEventTestData(GTIN, POTE)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithOFF_RAILIMPNEventAct())), getEquipmentEventTestData(GTIN, INTE)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithDEPARTCUEXPNEventAct())), getEquipmentEventTestData(GTOT, CLOC)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithON_RAIL_EXPNEventAct())), getEquipmentEventTestData(GTOT, INTE)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventAct())), getEquipmentEventTestData(GTOT, DEPO)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithLOAD_NEventAct())), getEquipmentEventTestData(LOAD, POTE))
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithARRIVECUIMPNEventAct())), getEquipmentEventTestData(GTIN)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_IN_EXPNEventAct())), getEquipmentEventTestData(GTIN)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithOFF_RAILIMPNEventAct())), getEquipmentEventTestData(GTIN)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithDEPARTCUEXPNEventAct())), getEquipmentEventTestData(GTOT)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithON_RAIL_EXPNEventAct())), getEquipmentEventTestData(GTOT)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventAct())), getEquipmentEventTestData(GTOT)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithLOAD_NEventAct())), getEquipmentEventTestData(LOAD))
         );
     }
 
@@ -100,10 +94,9 @@ class EquipmentEventMapperTest {
         );
     }
 
-    private static TransportCall getTransportCall(FacilityType facilityCode) {
+    private static TransportCall getTransportCall() {
 
         var transportCall = new TransportCall();
-        transportCall.setFacilityType(facilityCode);
         transportCall.setCarrierServiceCode("LineCode");
         transportCall.setOtherFacility("Copenhagen");
 
@@ -112,14 +105,14 @@ class EquipmentEventMapperTest {
 
 
 
-    private static EquipmentEvent getEquipmentEventTestData (EquipmentEventType eventType, FacilityType facilityTypeCode) {
+    private static EquipmentEvent getEquipmentEventTestData (EquipmentEventType eventType) {
          var equipmentEvent = new EquipmentEvent();
          equipmentEvent.setEquipmentEventType(eventType);
          equipmentEvent.setEmptyIndicatorCode(EmptyIndicatorCode.LADEN);
          equipmentEvent.setDocumentReferences(getDocumentRef());
          equipmentEvent.setSeals(new ArrayList<>());
          equipmentEvent.setEventID(baseEventData.getEventID());
-         equipmentEvent.setTransportCall(getTransportCall(facilityTypeCode));
+         equipmentEvent.setTransportCall(getTransportCall());
          equipmentEvent.setBookingReference(baseEventData.getBookingReference());
          equipmentEvent.setEventDateTime(baseEventData.getEventDateTime());
          equipmentEvent.setEventType(baseEventData.getEventType());

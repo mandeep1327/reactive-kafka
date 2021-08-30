@@ -1,6 +1,5 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 
-import MSK.com.external.dcsa.FacilityType;
 import MSK.com.external.dcsa.TransPortMode;
 import MSK.com.external.dcsa.TransportCall;
 import MSK.com.gems.EndLocType;
@@ -21,10 +20,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static MSK.com.external.dcsa.FacilityType.CLOC;
-import static MSK.com.external.dcsa.FacilityType.DEPO;
-import static MSK.com.external.dcsa.FacilityType.INTE;
-import static MSK.com.external.dcsa.FacilityType.POTE;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETA;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETD;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDepartureEventType;
@@ -38,15 +33,12 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 public final class TransportCallMapper {
 
     public static TransportCall fromPubsetToTransportCallBase(PubSetType pubSetType) {
-        var event = pubSetType.getEvent();
-        var eventAct = event.getEventAct();
         var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
-        return getTransportCall(eventAct, equipmentFirstElement);
+        return getTransportCall(equipmentFirstElement);
     }
 
-    private static TransportCall getTransportCall(String eventAct, EquipmentType equipmentFirstElement) {
+    private static TransportCall getTransportCall( EquipmentType equipmentFirstElement) {
         var transportCall = new TransportCall();
-        transportCall.setFacilityType(getFacilityCodeType(eventAct));
         transportCall.setCarrierServiceCode(getCarrierServiceCode(equipmentFirstElement));
         transportCall.setOtherFacility(getLocation(equipmentFirstElement));
         return transportCall;
@@ -62,7 +54,7 @@ public final class TransportCallMapper {
 
     private TransportPlanType getTransportPlan(PubSetType pubSetType, List<TransportPlanType> transportPlanTypeList, EquipmentType equipmentFirstElement) {
         var eventAct = getEventAct(pubSetType);
-        if (SHIPMENT_ETA.equals(eventAct) || SHIPMENT_ETD.equals(eventAct)){
+        if (isETAorETDEvent(eventAct)){
             if (SHIPMENT_ETA.equals(eventAct)) {
                 return getLastTransportPlanWithPortOfDischarge(pubSetType).orElse(null);
             } else {
@@ -73,6 +65,9 @@ public final class TransportCallMapper {
         }
     }
 
+    private boolean isETAorETDEvent(String eventAct) {
+        return SHIPMENT_ETA.equals(eventAct) || SHIPMENT_ETD.equals(eventAct);
+    }
 
 
     private TransportPlanType getTransportPlanTypeForOtherEvents(PubSetType pubSetType, List<TransportPlanType> transportPlanTypeList, EquipmentType equipmentFirstElement) {
@@ -131,31 +126,6 @@ public final class TransportCallMapper {
         }
     }
 
-    private static FacilityType getFacilityCodeType(String eventAct) {
-        switch (eventAct) {
-            case "ARRIVECUIMPN":
-            case "DEPARTCUEXPN":
-                return CLOC;
-            case "CONTAINER ARRIVAL":
-            case "CONTAINER DEPARTURE":
-            case "Shipment_ETA":
-            case "Shipment_ETD":
-            case "GATE-IN EXPN":
-            case "LOAD       N":
-            case "STRIPPIN   Y":
-            case "STUFFINGEXPN":
-                return POTE;
-            case "RAIL_ARRIVAL_AT_DESTINATION":
-            case "RAIL_DEPARTURE":
-            case "OFF-RAILIMPN":
-            case "ON-RAIL EXPN":
-                return INTE;
-            case "GATE-OUTEXPY":
-                return DEPO;
-            default:
-                throw new MappingException("Could not map Facility Code Type ".concat(eventAct));
-        }
-    }
 
     private static String getCarrierServiceCode(EquipmentType equipment) {
         if (!Objects.isNull(equipment.getMove()) &&

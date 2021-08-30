@@ -1,7 +1,6 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mappers;
 
 import MSK.com.external.dcsa.DocumentReference;
-import MSK.com.external.dcsa.FacilityType;
 import MSK.com.external.dcsa.TransPortMode;
 import MSK.com.external.dcsa.TransportCall;
 import MSK.com.external.dcsa.TransportEvent;
@@ -20,8 +19,6 @@ import java.util.stream.Stream;
 
 import static MSK.com.external.dcsa.DocumentReferenceType.BKG;
 import static MSK.com.external.dcsa.DocumentReferenceType.TRD;
-import static MSK.com.external.dcsa.FacilityType.INTE;
-import static MSK.com.external.dcsa.FacilityType.POTE;
 import static MSK.com.external.dcsa.TransPortMode.BARGE;
 import static MSK.com.external.dcsa.TransPortMode.RAIL;
 import static MSK.com.external.dcsa.TransPortMode.TRUCK;
@@ -88,20 +85,20 @@ class TransportEventMapperTest {
 
     protected static Stream<Arguments> createTransportEventTestData() {
         return Stream.of(
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithCONTAINER_ARRIVALEventAct())), baseEventData, getTransportEventTestData(ARRI, getTransportCall(POTE, VESSEL), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithCONTAINER_DEPARTUREEventAct())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithRAIL_ARRIVAL_AT_DESTINATIONEventAct())), baseEventData, getTransportEventTestData(ARRI, getTransportCall(INTE, VESSEL), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithRAIL_DEPARTUREEventAct())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(INTE, VESSEL), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETAEventAct())), baseEventData, getTransportEventTestData(ARRI, getTransportCall(POTE, VESSEL), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventAct())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndFEFTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndVSFTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndFEOTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndVSMTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithRAIL_DEPARTUREEventActAndRCOTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(INTE, RAIL), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithCONTAINER_DEPARTUREEventActAndRCOTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, TRUCK), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithCONTAINER_DEPARTUREEventActAndBARTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, BARGE), getDocumentRef())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndVSLTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(POTE, VESSEL), getDocumentRef())));
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithCONTAINER_ARRIVALEventAct())), baseEventData, getTransportEventTestData(ARRI, getTransportCall(VESSEL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithCONTAINER_DEPARTUREEventAct())), baseEventData, getTransportEventTestData(DEPA, getTransportCall( VESSEL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithRAIL_ARRIVAL_AT_DESTINATIONEventAct())), baseEventData, getTransportEventTestData(ARRI, getTransportCall( VESSEL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithRAIL_DEPARTUREEventAct())), baseEventData, getTransportEventTestData(DEPA, getTransportCall( VESSEL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETAEventAct())), baseEventData, getTransportEventTestData(ARRI, getTransportCall( VESSEL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventAct())), baseEventData, getTransportEventTestData(DEPA, getTransportCall( VESSEL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndFEFTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall( VESSEL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndVSFTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall( VESSEL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndFEOTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall( VESSEL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndVSMTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall( VESSEL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithRAIL_DEPARTUREEventActAndRCOTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall( RAIL), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithCONTAINER_DEPARTUREEventActAndRCOTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall( TRUCK), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithCONTAINER_DEPARTUREEventActAndBARTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall( BARGE), getDocumentRef())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithShipment_ETDEventActAndVSLTransportMode())), baseEventData, getTransportEventTestData(DEPA, getTransportCall(VESSEL), getDocumentRef())));
     }
 
     private static List<DocumentReference> getDocumentRef() {
@@ -122,10 +119,9 @@ class TransportEventMapperTest {
         return docRef;
     }
 
-    private static TransportCall getTransportCall(FacilityType facilityCode, TransPortMode transPortMode) {
+    private static TransportCall getTransportCall( TransPortMode transPortMode) {
         var transportCall = new TransportCall();
 
-        transportCall.setFacilityType(facilityCode);
         transportCall.setCarrierServiceCode("LineCode");
         transportCall.setCarrierVoyageNumber("MUMMRSK");
         transportCall.setOtherFacility("Copenhagen");
