@@ -1,12 +1,6 @@
 # external-dcsa-events-processor
 
-
-
-## Running Integration Test
-
-# Start docker locally 
-> mvn install failsafe:integration-test
-
+### Mapstruct
 
 For the mapstruct especially in this project, the lombok used was later than 1.18.16.
 
@@ -20,6 +14,6 @@ If you are using Lombok 1.18.16 or newer you also need to add lombok-mapstruct-b
         </dependency>
 ```
 
-## Running Integration Test
+### Running Integration Test
 
 > mvn install failsafe:integration-test

@@ -11,6 +11,6 @@ Feature: dcsa-events
     Examples:
       | dataFileName                            | eventType  | eventId  | eventClassifierCode |
       | gems_data_event.json                    | TRANSPORT  | 96483854 | EST                 |
-      | Issue_Verify_Cpoy_of_TPDoc_Closed.json  | SHIPMENT   | 96655021 | ACT                 |
-      | Shipment_ETA.json                       | TRANSPORT  | 96654975 | EST                 |
-      | Shipment_ETA_With_Parties.json          | TRANSPORT  | 96657859 | EST                 |
+      | issue_verify_copy_of_tpdoc_closed.json  | SHIPMENT   | 96655021 | ACT                 |
+      | shipment_eta.json                       | TRANSPORT  | 96654975 | EST                 |
+      | shipment_eta_with_parties.json          | TRANSPORT  | 96657859 | EST                 |
