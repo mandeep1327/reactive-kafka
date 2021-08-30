@@ -11,7 +11,7 @@ import MSK.com.gems.StartLocType;
 import MSK.com.gems.TransportPlanType;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 
 import java.util.List;
 import java.util.Map;

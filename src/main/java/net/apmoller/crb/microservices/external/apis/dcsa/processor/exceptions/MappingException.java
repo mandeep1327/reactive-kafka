@@ -1,4 +1,4 @@
-package net.apmoller.crb.microservices.external.apis.dcsa.processor;
+package net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions;
 
 public class MappingException extends RuntimeException {
 

@@ -1,7 +1,7 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 
 import MSK.com.external.dcsa.ShipmentEventType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import org.springframework.stereotype.Component;
 
 import static MSK.com.external.dcsa.ShipmentEventType.CONF;
@@ -11,7 +11,6 @@ import static MSK.com.external.dcsa.ShipmentEventType.PENA;
 import static MSK.com.external.dcsa.ShipmentEventType.RECE;
 import static MSK.com.external.dcsa.ShipmentEventType.REJE;
 import static MSK.com.external.dcsa.ShipmentEventType.SURR;
-import static java.util.Objects.isNull;
 
 @Component
 public class ShipmentEventTypeMapper {

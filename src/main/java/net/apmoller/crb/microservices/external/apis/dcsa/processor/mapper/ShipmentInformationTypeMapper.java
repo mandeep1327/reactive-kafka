@@ -1,7 +1,7 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 
 import MSK.com.external.dcsa.ShipmentInformationType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import org.springframework.stereotype.Component;
 
 import static MSK.com.external.dcsa.ShipmentInformationType.ARN;

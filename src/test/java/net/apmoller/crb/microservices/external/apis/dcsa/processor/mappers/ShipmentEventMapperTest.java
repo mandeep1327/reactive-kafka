@@ -4,7 +4,7 @@ import MSK.com.external.dcsa.ShipmentEvent;
 import MSK.com.external.dcsa.ShipmentEventType;
 import MSK.com.external.dcsa.ShipmentInformationType;
 import MSK.com.gems.GEMSPubType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DocumentIdMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ShipmentEventTypeMapper;

@@ -7,7 +7,7 @@ import MSK.com.external.dcsa.EquipmentEventType;
 import MSK.com.external.dcsa.TransportCall;
 import MSK.com.gems.GEMSPubType;
 import MSK.com.gems.PubSetType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.EquipmentEventTypeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapper;

@@ -1,7 +1,7 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper;
 
 import MSK.com.gems.PubSetType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +9,8 @@ import static java.util.Objects.isNull;
 
 @Component
 public class DocumentIdMapper {
+
+    private static final String BOOKING_NUMBER_NOT_AVAILABLE = "Booking Number is not available for Document ID";
 
     public String asDocumentId(PubSetType pubSetType) {
         switch (pubSetType.getEvent().getEventAct()) {
@@ -24,7 +26,7 @@ public class DocumentIdMapper {
             case "ARRIVAL_NOTICE":
                 return getDocumentIdForOthers(pubSetType);
             default:
-                throw new MappingException("Booking Number is not available for Document ID");
+                throw new MappingException(BOOKING_NUMBER_NOT_AVAILABLE);
         }
     }
 
@@ -35,7 +37,7 @@ public class DocumentIdMapper {
                 !isNull(pubSetType.getTpdoc().get(0).getBolNo())) {
             return pubSetType.getTpdoc().get(0).getBolNo();
         }
-        throw new MappingException("Booking Number is not available for Document ID");
+        throw new MappingException(BOOKING_NUMBER_NOT_AVAILABLE);
     }
 
     @NotNull
@@ -43,6 +45,6 @@ public class DocumentIdMapper {
         if (!isNull(pubSetType.getShipment()) && !isNull(pubSetType.getShipment().getBookNo())) {
             return pubSetType.getShipment().getBookNo();
         }
-        throw new MappingException("Booking Number is not available for Document ID");
+        throw new MappingException(BOOKING_NUMBER_NOT_AVAILABLE);
     }
 }

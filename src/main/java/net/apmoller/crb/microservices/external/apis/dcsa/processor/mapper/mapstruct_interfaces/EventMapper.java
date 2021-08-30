@@ -4,7 +4,7 @@ import MSK.com.gems.EquipmentType;
 import MSK.com.gems.GTTSVesselType;
 import MSK.com.gems.PubSetType;
 import MSK.com.gems.TransportPlanType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DCSAEventTypeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.EventClassifierCodeMapper;

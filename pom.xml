@@ -27,7 +27,7 @@
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
         <sonar.coverage.exclusions>
             **net/apmoller/crb/microservices/external/apis/dcsa/processor/config/**/*,
-            **net/apmoller/crb/microservices/external/apis/dcsa/processor/models/**/*,
+            **net/apmoller/crb/microservices/external/apis/dcsa/processor/exceptions/**/*,
         </sonar.coverage.exclusions>
     </properties>
     <scm>

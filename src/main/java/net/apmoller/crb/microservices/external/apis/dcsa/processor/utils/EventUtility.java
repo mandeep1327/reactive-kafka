@@ -11,7 +11,7 @@ import MSK.com.gems.ShipmentType;
 import MSK.com.gems.TPDocType;
 import MSK.com.gems.TransportPlanType;
 import lombok.experimental.UtilityClass;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.MappingException;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.PartyFunctionDTO;
 
 import java.util.ArrayList;
