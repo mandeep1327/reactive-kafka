@@ -4,11 +4,13 @@ import MSK.com.external.dcsa.DocumentReference;
 import MSK.com.external.dcsa.EmptyIndicatorCode;
 import MSK.com.external.dcsa.EquipmentEvent;
 import MSK.com.external.dcsa.EquipmentEventType;
+import MSK.com.external.dcsa.SealSource;
+import MSK.com.external.dcsa.Seals;
 import MSK.com.external.dcsa.TransportCall;
 import MSK.com.gems.GEMSPubType;
 import MSK.com.gems.PubSetType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.EquipmentEventTypeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapperImpl;
@@ -26,18 +28,25 @@ import java.util.stream.Stream;
 
 import static MSK.com.external.dcsa.DocumentReferenceType.BKG;
 import static MSK.com.external.dcsa.DocumentReferenceType.TRD;
+import static MSK.com.external.dcsa.EquipmentEventType.DISC;
 import static MSK.com.external.dcsa.EquipmentEventType.GTIN;
 import static MSK.com.external.dcsa.EquipmentEventType.GTOT;
 import static MSK.com.external.dcsa.EquipmentEventType.LOAD;
+import static MSK.com.external.dcsa.EquipmentEventType.STRP;
+import static MSK.com.external.dcsa.EquipmentEventType.STUF;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithARRIVECUIMPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDEPARTCUEXPNEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDISCHARGE_NEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDemoEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_IN_EXPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_OUTEXPYEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_OUTEXPYEventActAndSeals;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithLOAD_NEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithOFF_RAILIMPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithON_RAIL_EXPNEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithSTRIPPIN_YEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithSTUFFINGEXPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_CancelledEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithoutTransportPlan;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithoutVesselData;
@@ -75,8 +84,12 @@ class EquipmentEventMapperTest {
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_IN_EXPNEventAct())), getEquipmentEventTestData(GTIN)),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithOFF_RAILIMPNEventAct())), getEquipmentEventTestData(GTIN)),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithDEPARTCUEXPNEventAct())), getEquipmentEventTestData(GTOT)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithSTRIPPIN_YEventAct())), getEquipmentEventTestData(STRP)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithSTUFFINGEXPNEventAct())), getEquipmentEventTestData(STUF)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithDISCHARGE_NEventAct())), getEquipmentEventTestData(DISC)),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithON_RAIL_EXPNEventAct())), getEquipmentEventTestData(GTOT)),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventAct())), getEquipmentEventTestData(GTOT)),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventActAndSeals())), getEquipmentEventTestDataWithSeals(GTOT)),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithLOAD_NEventAct())), getEquipmentEventTestData(LOAD))
         );
     }
@@ -128,6 +141,19 @@ class EquipmentEventMapperTest {
          equipmentEvent.setCarrierCode(baseEventData.getCarrierCode());
 
         return equipmentEvent;
+    }
+
+    private static EquipmentEvent getEquipmentEventTestDataWithSeals (EquipmentEventType eventType) {
+         var equipmentEvent = getEquipmentEventTestData(eventType);
+         equipmentEvent.setSeals(getSealInformation());
+        return equipmentEvent;
+    }
+
+    private static List<Seals> getSealInformation() {
+        return List.of(new Seals("MaerskSeal", SealSource.CAR),
+                new Seals("ShipperValue", SealSource.SHI),
+                new Seals("VetValue", SealSource.VET),
+                new Seals("CustomsValue", SealSource.CUS));
     }
 
     private static List<DocumentReference> getDocumentRef() {

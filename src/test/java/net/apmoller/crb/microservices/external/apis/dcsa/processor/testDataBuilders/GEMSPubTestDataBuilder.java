@@ -13,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.EquipmentTestDataBuilder.getEquipmentList;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.EquipmentTestDataBuilder.getEquipmentTypeWithSeal;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getPartyList;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getPartyList2;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getPartyList3;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getPartyList4;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getShipmentValue;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.TPDocTypeTestDataBuilder.getTPDocList;
 
@@ -54,6 +54,17 @@ public final class GEMSPubTestDataBuilder {
 
     }
 
+    public static PubSetType getPubSetWithSealDetails(EventType eventType) {
+
+        var pubSetType = new PubSetType();
+        pubSetType.setEvent(eventType);
+        pubSetType.setShipment(getShipmentValue(getPartyList()));
+        pubSetType.setEquipment(getEquipmentTypeWithSeal());
+        pubSetType.setTpdoc(getTPDocList());
+        return pubSetType;
+
+    }
+
 
     public static PubSetType getPubSetWithTransportPlan(EventType eventType, List<PartyType> parties) {
 
@@ -63,11 +74,63 @@ public final class GEMSPubTestDataBuilder {
 
     }
 
+    public static PubSetType getPubSetWithTransportPlanWithNoTime(EventType eventType, List<PartyType> parties) {
+
+        PubSetType pubSetType = getCommonPubSetTypeWithVesselData(eventType, parties);
+        pubSetType.setTransportPlan(List.of(getTransportPlanWithNoTimes()));
+        return pubSetType;
+
+    }
+
+    public static PubSetType getPubSetWithTransportPlanEst(EventType eventType, List<PartyType> parties) {
+
+        PubSetType pubSetType = getCommonPubSetTypeWithVesselData(eventType, parties);
+        var transportPlanWithEstimatedTime = getTransportPlan();
+        transportPlanWithEstimatedTime.setGttsactArvTS(null);
+        transportPlanWithEstimatedTime.setGttsexpArvTS("2021-21-21 13:29");
+        pubSetType.setTransportPlan(List.of(transportPlanWithEstimatedTime));
+        return pubSetType;
+
+    }
+
+    private static PubSetType getPubSetForDepartureWithTransportPlanWithGcssEstimatedArrival(EventType eventType, List<PartyType> parties) {
+        var pubSetType = getCommonPubSetTypeWithVesselData(eventType, parties);
+        var transportPlanWithEstimatedTime = getTransportPlan();
+        transportPlanWithEstimatedTime.setGttsactArvTS(null);
+        transportPlanWithEstimatedTime.setGcssexpArvTS("2021-21-21 13:29");
+        pubSetType.setTransportPlan(List.of(transportPlanWithEstimatedTime));
+
+        return pubSetType;
+    }
+
     private static PubSetType getPubSetForDepartureWithTransportPlan(EventType eventType, List<PartyType> parties) {
         var pubSetType = getPubSetWithTransportPlan(eventType, parties);
         pubSetType.setTransportPlan(List.of(getTransportPlanForDeparture("MVS")));
         return pubSetType;
     }
+
+    private static PubSetType getPubSetForDepartureWithTransportPlanEst(EventType eventType, List<PartyType> parties) {
+        var pubSetType = getPubSetWithTransportPlan(eventType, parties);
+        var transportPlanWithEstimatedTime = getTransportPlanForDeparture("MVS");
+        transportPlanWithEstimatedTime.setGttsactDepTS(null);
+        transportPlanWithEstimatedTime.setGttsexpDepTS("2021-21-21 13:29");
+        pubSetType.setTransportPlan(List.of(transportPlanWithEstimatedTime));
+
+        return pubSetType;
+    }
+
+
+    private static PubSetType getPubSetForDepartureWithTransportPlanWithGcssEstimatedDeparture(EventType eventType, List<PartyType> parties) {
+        var pubSetType = getPubSetWithTransportPlan(eventType, parties);
+        var transportPlanWithEstimatedTime = getTransportPlanForDeparture("MVS");
+        transportPlanWithEstimatedTime.setGttsactDepTS(null);
+        transportPlanWithEstimatedTime.setGcssexpDepTS("2021-21-21 13:29");
+        pubSetType.setTransportPlan(List.of(transportPlanWithEstimatedTime));
+
+        return pubSetType;
+    }
+
+
 
     private static PubSetType getPubSetForDepartureWithTransportPlanAndFEFTransportMode(EventType eventType, List<PartyType> parties) {
         var pubSetType = getPubSetWithTransportPlan(eventType, parties);
@@ -128,12 +191,20 @@ public final class GEMSPubTestDataBuilder {
 
     private static TransportPlanType getTransportPlan() {
         TransportPlanType transportPlan = getCommonTransportPlanType(getStartLoc(), getEndLoc());
+        transportPlan.setGttsactArvTS("2021-21-21 13:29");
+        transportPlan.setTransMode("MVS");
+        return transportPlan;
+    }
+
+    private static TransportPlanType getTransportPlanWithNoTimes() {
+        TransportPlanType transportPlan = getCommonTransportPlanType(getStartLoc(), getEndLoc());
         transportPlan.setTransMode("MVS");
         return transportPlan;
     }
 
     private static TransportPlanType getTransportPlanForDeparture(String transportMode) {
         TransportPlanType transportPlan = getCommonTransportPlanType(getStartLocWithCopenhagen(), getEndLocWithKolkata());
+        transportPlan.setGttsactDepTS("2021-21-21 13:29");
         transportPlan.setTransMode(transportMode);
         return transportPlan;
     }
@@ -190,9 +261,7 @@ public final class GEMSPubTestDataBuilder {
     public static PubSetType getPubSetTypeWithConfirm_Shipment_ClosedEventAct(){
         return getPubSet(getEventTypeData("Confirm_Shipment_Closed"));
     }
-    public static PubSetType getPubSetTypeWithEquipment_VGM_Details_UpdatedEventAct(){
-        return getPubSet(getEventTypeData("Equipment_VGM_Details_Updated"));
-    }
+
     public static PubSetType getPubSetTypeWithIssue_Original_TPDOC_ClosedEventAct(){
         return getPubSet(getEventTypeData("Issue_Original_TPDOC_Closed"));
     }
@@ -223,6 +292,10 @@ public final class GEMSPubTestDataBuilder {
     public static PubSetType getPubSetTypeWithGATE_OUTEXPYEventAct(){
         return getPubSet(getEventTypeData("GATE-OUTEXPY"));
     }
+
+    public static PubSetType getPubSetTypeWithGATE_OUTEXPYEventActAndSeals(){
+        return getPubSetWithSealDetails(getEventTypeData("GATE-OUTEXPY"));
+    }
     public static PubSetType getPubSetTypeWithLOAD_NEventAct(){
         return getPubSet(getEventTypeData("LOAD       N"));
     }
@@ -234,6 +307,10 @@ public final class GEMSPubTestDataBuilder {
     }
     public static PubSetType getPubSetTypeWithSTRIPPIN_YEventAct(){
         return getPubSet(getEventTypeData("STRIPPIN   Y"));
+    }
+
+    public static PubSetType getPubSetTypeWithDISCHARGE_NEventAct(){
+        return getPubSet(getEventTypeData("DISCHARG   N"));
     }
     public static PubSetType getPubSetTypeWithSTUFFINGEXPNEventAct(){
         return getPubSet(getEventTypeData("STUFFINGEXPN"));
@@ -255,8 +332,28 @@ public final class GEMSPubTestDataBuilder {
     public static PubSetType getPubSetTypeWithShipment_ETAEventAct(){
         return getPubSetWithTransportPlan(getEventTypeData("Shipment_ETA"), getPartyList3());
     }
+
     public static PubSetType getPubSetTypeWithShipment_ETDEventAct(){
-        return getPubSetForDepartureWithTransportPlan(getEventTypeData("Shipment_ETD"), getPartyList4());
+        return getPubSetForDepartureWithTransportPlan(getEventTypeData("Shipment_ETD"), getPartyList3());
+    }
+
+    public static PubSetType getPubSetTypeWithShipment_ETAEventEst(){
+        return getPubSetWithTransportPlanEst(getEventTypeData("Shipment_ETA"), getPartyList3());
+    }
+    public static PubSetType getPubSetTypeWithShipment_ETDEventEst(){
+        return getPubSetForDepartureWithTransportPlanEst(getEventTypeData("Shipment_ETD"), getPartyList3());
+    }
+    public static PubSetType getPubSetTypeWithShipment_ETAEventEstWithGCSSExpArrival(){
+        return getPubSetForDepartureWithTransportPlanWithGcssEstimatedArrival(getEventTypeData("Shipment_ETA"), getPartyList3());
+    }
+    public static PubSetType getPubSetTypeWithShipment_ETDEventEstWithGCSSExpDeparture(){
+        return getPubSetForDepartureWithTransportPlanWithGcssEstimatedDeparture(getEventTypeData("Shipment_ETD"), getPartyList3());
+    }
+    public static PubSetType getPubSetTypeWithShipment_ETAEventEstWithNoTime(){
+        return getPubSetWithTransportPlanWithNoTime(getEventTypeData("Shipment_ETA"), getPartyList3());
+    }
+    public static PubSetType getPubSetTypeWithShipment_ETDEventEstWithNoTime(){
+        return getPubSetWithTransportPlanWithNoTime(getEventTypeData("Shipment_ETD"), getPartyList3());
     }
     public static PubSetType getPubSetTypeWithShipment_ETDEventActAndFEFTransportMode(){
         return getPubSetForDepartureWithTransportPlanAndFEFTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());
@@ -284,9 +381,6 @@ public final class GEMSPubTestDataBuilder {
     }
     public static PubSetType getPubSetTypeWithShipment_ETDEventActAndVSLTransportMode(){
         return getPubSetForDepartureWithTransportPlanAndVSLTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());
-    }
-    public static PubSetType getPubSetTypeWithShipment_ETDEventActAndRCOTransportMode(){
-        return getPubSetForDepartureWithTransportPlanAndRCOTransportMode(getEventTypeData("Shipment_ETD"), getPartyList2());
     }
     public static PubSetType getPubSetTypeWithoutTransportPlan(){
         return getCommonPubSetTypeWithVesselData(getEventTypeData("Shipment_ETD"), getPartyList2());

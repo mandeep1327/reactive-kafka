@@ -31,11 +31,17 @@ public final class EventDataBuilder {
         return getEventWithEventTypeAct(EventType.TRANSPORT, "2021-21-21 13:29", getParties2(), getReferences2());
     }
 
+    public static Event getEventForTransportEventACT() {
+        return getEventWithEventTypeAct(EventType.TRANSPORT,"2021-21-21 13:29", getParties3(), getReferences3());
+    }
+
     public static Event getEventForTransportEventTypeWithESTEventAct() {
         return getEventWithEventTypeEst( "2021-21-21 13:29", getParties3(), getReferences3());
     }
-    public static Event getEventForTransportEventTypeWithESTEventAct2() {
-        return getEventWithEventTypeEst("2021-21-21 13:29", getParties4(), getReferences4());
+
+
+    public static Event getEventForTransportEventTypeWithNoEventDateTime() {
+        return getEventWithEventTypeEst( null, getParties3(), getReferences3());
     }
 
     private static Event getEventWithEventTypeAct(EventType eventType, String eventDateTime, List<Party> parties, List<References> references) {
