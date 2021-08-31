@@ -1,6 +1,9 @@
 Feature: dcsa-events
 
-  Here goes the description.
+  This feature is described in APIS-1168.
+  The DCSA processor listens to GEMS events on one Kafka topic. It maps the message
+  into a format that the DCSA service understands and then place it on another
+  Kafka topic for storage where it can be retrieved by the DCSA service.
 
   Scenario Outline: Sending different files to Kafka
     Given set a message on kafka with "<dataFileName>"
