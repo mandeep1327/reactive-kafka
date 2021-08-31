@@ -1,0 +1,287 @@
+{
+  "partner": {
+    "ampscntlNo": "23111314591717",
+    "ampsmsgType": "XML*GEMS",
+    "ampsrcvrID": "ALWAYSON",
+    "ampssndrID": "GEMS",
+    "gemssubID": "DCSA_18_S_ETA",
+    "languageCode": null,
+    "sendAMPSIsaCntlNoToGEMS": "N"
+  },
+  "pubSet": [
+    {
+      "cargo": {
+        "totCargQuan": 0,
+        "totCargVol": [
+          {
+            "qual": "CBM",
+            "value": 0
+          },
+          {
+            "qual": "CBS",
+            "value": 0
+          }
+        ],
+        "totCargWgt": [
+          {
+            "qual": "KGS",
+            "value": 0
+          },
+          {
+            "qual": "LBS",
+            "value": 0
+          }
+        ]
+      },
+      "customs": [],
+      "deadline": null,
+      "equipment": [],
+      "event": {
+        "eventAct": "Shipment_ETA",
+        "eventId": 96483854,
+        "gemstsutc": "2021-08-19 11:31:14",
+        "reasons": null,
+        "rkemmove": null,
+        "srcSys": "GCSS",
+        "srcSysTimestamp": null
+      },
+      "gttsvessel": null,
+      "hermesEvent": null,
+      "initialTransportPlan": [
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "",
+            "value": "GTSDCTM"
+          },
+          "endLocCntry": "GT",
+          "endState": null,
+          "endTerm": null,
+          "gcssexpArvTS": "2021-08-24 12:00:00",
+          "gcssexpArvTSUTC": "2021-08-24 18:00:00",
+          "gcssexpDepTS": "2021-08-20 16:00:00",
+          "gcssexpDepTSUTC": "2021-08-20 21:00:00",
+          "gsisexpArvTS": null,
+          "gsisexpDepTS": null,
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": null,
+          "gttsexpDepTS": null,
+          "legSeq": "1",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "1",
+            "value": "USSAVGC"
+          },
+          "startLocCntry": "US",
+          "startState": null,
+          "startTerm": null,
+          "transMode": "MVS",
+          "vesselCde": "L1J",
+          "voyDoc": null,
+          "voyage": "132S"
+        },
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "2",
+            "value": "GTGUA"
+          },
+          "endLocCntry": "GT",
+          "endState": null,
+          "endTerm": null,
+          "gcssexpArvTS": "2021-08-25 18:00:00",
+          "gcssexpArvTSUTC": "2021-08-26 00:00:00",
+          "gcssexpDepTS": "2021-08-25 12:00:00",
+          "gcssexpDepTSUTC": "2021-08-25 18:00:00",
+          "gsisexpArvTS": null,
+          "gsisexpDepTS": null,
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": null,
+          "gttsexpDepTS": null,
+          "legSeq": "2",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "",
+            "value": "GTSDCTM"
+          },
+          "startLocCntry": "GT",
+          "startState": null,
+          "startTerm": null,
+          "transMode": "TRK",
+          "vesselCde": null,
+          "voyDoc": null,
+          "voyage": null
+        }
+      ],
+      "lctransportPlan": [],
+      "motherTransportPlan": [],
+      "operationalCAT": [],
+      "productCAT": [],
+      "referenceShipments": [],
+      "shipment": {
+        "bookNo": "203634611",
+        "breakBulk": "N",
+        "cargoTypes": null,
+        "cargoes": null,
+        "delSvc": "SD",
+        "equipmentAssignments": null,
+        "haulageArrangements": null,
+        "historyOfReasonsForTransportPlan": null,
+        "milTStamp": null,
+        "operationalRouteRef": null,
+        "operator": "SEA",
+        "party": [
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [
+              "203634611"
+            ],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "1",
+            "state": null
+          },
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "2",
+            "state": null
+          }
+        ],
+        "pcfn": "203634611",
+        "publishSpotROTPNotification": "false",
+        "publishSpotTPNotification": "false",
+        "rcvSvc": "CY",
+        "reference": [
+          {
+            "name": null,
+            "typ": "1",
+            "value": "203634611"
+          },
+          {
+            "name": "TAX REFERENCE(NIT)",
+            "typ": "OY8SYCTGNYNIB",
+            "value": null
+          }
+        ],
+        "tpchangeReason": {
+          "reason": [
+            {
+              "code": "98",
+              "type": "short",
+              "value": "Unforeseen contingency"
+            },
+            {
+              "code": "98",
+              "type": "details",
+              "value": "As a result of an unforeseen operational constraint, your shipment has now been replanned to the next available vessel."
+            }
+          ]
+        },
+        "tpinfo": []
+      },
+      "tpdoc": [
+        {
+          "bolNo": "203634611",
+          "documentProperties": null,
+          "haulageArrangements": null,
+          "operator": null,
+          "party": [],
+          "reference": [
+            {
+              "name": null,
+              "typ": "5",
+              "value": "203634611"
+            }
+          ]
+        }
+      ],
+      "transportPlan": [
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "",
+            "value": "GTSDCTM"
+          },
+          "endLocCntry": "GT",
+          "endState": null,
+          "endTerm": "Santo Tomas Terminal",
+          "gcssexpArvTS": "2021-08-24 12:00:00",
+          "gcssexpArvTSUTC": "2021-08-24 18:00:00",
+          "gcssexpDepTS": "2021-08-20 16:00:00",
+          "gcssexpDepTSUTC": "2021-08-20 21:00:00",
+          "gsisexpArvTS": null,
+          "gsisexpDepTS": null,
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": null,
+          "gttsexpDepTS": null,
+          "legSeq": "1",
+          "startCustomsLoc": "L738",
+          "startLoc": {
+            "func": "1",
+            "value": "USSAVGC"
+          },
+          "startLocCntry": "US",
+          "startState": "GA",
+          "startTerm": "Savannah Garden City Terminal L738",
+          "transMode": "MVS",
+          "vesselCde": "L1J",
+          "voyDoc": null,
+          "voyage": "132S"
+        },
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "2",
+            "value": "GTGUA"
+          },
+          "endLocCntry": "GT",
+          "endState": null,
+          "endTerm": null,
+          "gcssexpArvTS": "2021-08-25 18:00:00",
+          "gcssexpArvTSUTC": "2021-08-26 00:00:00",
+          "gcssexpDepTS": "2021-08-25 12:00:00",
+          "gcssexpDepTSUTC": "2021-08-25 18:00:00",
+          "gsisexpArvTS": null,
+          "gsisexpDepTS": null,
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": null,
+          "gttsexpDepTS": null,
+          "legSeq": "2",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "",
+            "value": "GTSDCTM"
+          },
+          "startLocCntry": "GT",
+          "startState": null,
+          "startTerm": "Santo Tomas Terminal",
+          "transMode": "TRK",
+          "vesselCde": null,
+          "voyDoc": null,
+          "voyage": null
+        }
+      ]
+    }
+  ]
+}
