@@ -11,8 +11,8 @@ import MSK.com.gems.ShipmentType;
 import MSK.com.gems.TPDocType;
 import MSK.com.gems.TransportPlanType;
 import lombok.experimental.UtilityClass;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.PartyFunctionDTO;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,7 @@ import static MSK.com.external.dcsa.PartyFunctionCode.CN;
 import static MSK.com.external.dcsa.PartyFunctionCode.DDR;
 import static MSK.com.external.dcsa.PartyFunctionCode.DDS;
 import static MSK.com.external.dcsa.PartyFunctionCode.N1;
+import static MSK.com.external.dcsa.PartyFunctionCode.N2;
 import static MSK.com.external.dcsa.PartyFunctionCode.OS;
 import static MSK.com.external.dcsa.TransportEventType.ARRI;
 import static MSK.com.external.dcsa.TransportEventType.DEPA;
@@ -161,9 +162,7 @@ public final class EventUtility {
 
 
     public static TransportEventType getTPEventTypeFromPubSetType(PubSetType pubSetType) {
-        var eventAct = Optional.ofNullable(pubSetType.getEvent())
-                .map(EventType::getEventAct)
-                .orElse("");
+        var eventAct = getEventAct(pubSetType);
         return getArrivalOrDepartureEventType(eventAct);
     }
 
@@ -181,6 +180,7 @@ public final class EventUtility {
                 entry(3, PartyFunctionDTO.builder().functionName("Shipper").functionCode(OS).build()),
                 entry(4, PartyFunctionDTO.builder().functionName("Consignee").functionCode(CN).build()),
                 entry(5, PartyFunctionDTO.builder().functionName("First Notify Party").functionCode(N1).build()),
+                entry(6, PartyFunctionDTO.builder().functionName("Additional Notify Party").functionCode(N2).build()),
                 entry(15, PartyFunctionDTO.builder().functionName("Outward Forwarder").functionCode(DDR).build()),
                 entry(16, PartyFunctionDTO.builder().functionName("Inward Forwarder").functionCode(DDS).build())
         );

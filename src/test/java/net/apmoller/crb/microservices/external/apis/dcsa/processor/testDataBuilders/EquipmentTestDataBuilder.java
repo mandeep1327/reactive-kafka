@@ -2,6 +2,7 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuil
 
 import MSK.com.gems.EquipmentType;
 import MSK.com.gems.MoveType;
+import MSK.com.gems.SealType;
 
 import java.util.List;
 
@@ -25,6 +26,13 @@ public final class EquipmentTestDataBuilder {
         return equipmentType;
     }
 
+    public static List<EquipmentType> getEquipmentTypeWithSeal() {
+        var equipmentType = getEquipmentType("TCNU6816702");
+        equipmentType.setMove(getMoveTypeWithSeal());
+
+        return List.of(equipmentType);
+    }
+
     private static MoveType getMoveType() {
 
         MoveType moveType = new MoveType();
@@ -36,6 +44,19 @@ public final class EquipmentTestDataBuilder {
         moveType.setActLoc("Copenhagen");
         return moveType;
 
+    }
+
+    private static MoveType getMoveTypeWithSeal() {
+        var plainMoveType = getMoveType();
+        plainMoveType.setSeal(getSeals());
+        return plainMoveType;
+    }
+
+    private static List<SealType> getSeals() {
+        return List.of(new SealType("MAERSK", "MaerskSeal"),
+                new SealType("SHIPPER", "ShipperValue"),
+                new SealType("VET", "VetValue"),
+                new SealType("CUSTOMS", "CustomsValue"));
     }
 
     private static EquipmentType getEquipment1() {

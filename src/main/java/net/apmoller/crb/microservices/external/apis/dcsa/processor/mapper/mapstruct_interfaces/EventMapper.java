@@ -1,5 +1,6 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces;
 
+import MSK.com.external.dcsa.EventClassifierCode;
 import MSK.com.gems.EquipmentType;
 import MSK.com.gems.GTTSVesselType;
 import MSK.com.gems.PubSetType;
@@ -7,7 +8,6 @@ import MSK.com.gems.TransportPlanType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DCSAEventTypeMapper;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.EventClassifierCodeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ServiceTypeMapper;
@@ -17,7 +17,10 @@ import org.mapstruct.Mapping;
 
 import java.util.Optional;
 
+import static MSK.com.external.dcsa.EventClassifierCode.ACT;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.ACT_EVENTS;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.EQUIPMENT_EVENTS;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.EST_EVENTS;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETA;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETD;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_EVENTS;
@@ -28,7 +31,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 
 @Mapper(componentModel = "spring",
         imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class, ServiceTypeMapper.class},
-        uses = {DCSAEventTypeMapper.class, EventClassifierCodeMapper.class})
+        uses = {DCSAEventTypeMapper.class})
 public interface EventMapper {
 
     @Mapping(target = "eventID", source = "event.eventId")
@@ -36,7 +39,7 @@ public interface EventMapper {
     @Mapping(target = "eventDateTime", expression = "java(getDCSAEventDateTime(details))")
     @Mapping(target = "eventCreatedDateTime", source = "event.gemstsutc")
     @Mapping(target = "eventType", source = "details.event.eventAct")
-    @Mapping(target = "eventClassifierCode", source = "details.event.eventAct")
+    @Mapping(target = "eventClassifierCode", expression = "java(getClassifierCode(details))")
     @Mapping(expression = "java(ReferenceMapper.getReferencesFromPubSetType(details))", target = "references")
     @Mapping(expression = "java(PartyMapper.getPartiesFromPubSetType(details))", target = "parties")
     @Mapping(expression = "java(EventUtility.getSourceSystemFromPubsetType(details))", target = "sourceSystem")
@@ -59,8 +62,31 @@ public interface EventMapper {
         throw new MappingException("Could not map eventType");
     }
 
+
+    default EventClassifierCode getClassifierCode(PubSetType pubSetType) {
+        var act = getEventAct(pubSetType);
+        if (EST_EVENTS.contains(act)) {
+            return getEventClassifierCodeForESTEvents(pubSetType, act);
+        } else if (ACT_EVENTS.contains(act)) {
+            return ACT;
+        }
+        throw new MappingException("Could not map EventClassifierCode");
+    }
+
+    private EventClassifierCode getEventClassifierCodeForESTEvents(PubSetType pubSetType, String act) {
+        if (SHIPMENT_ETA.equals(act)) {
+            return getLastTransportPlanWithPortOfDischarge(pubSetType)
+                    .map(TransportPlanType::getGttsactArvTS)
+                    .isPresent() ? ACT : EventClassifierCode.EST;
+        } else {
+            return getFirstTransportPlanTypeWithPortOfLoad(pubSetType)
+                    .map(TransportPlanType::getGttsactDepTS)
+                    .isPresent() ? ACT : EventClassifierCode.EST;
+        }
+    }
+
     private String getEventDateTimeForTransportEvents(PubSetType pubSetType, String eventAct) {
-        if (SHIPMENT_ETA.equals(eventAct) || SHIPMENT_ETD.equals(eventAct)){
+        if (SHIPMENT_ETA.equals(eventAct) || SHIPMENT_ETD.equals(eventAct)) {
             return getEventDateTimeForSpecialTransportEvents(pubSetType, eventAct);
         } else {
             return getEventDateTimeForOtherTransportEvents(pubSetType);
@@ -79,16 +105,30 @@ public interface EventMapper {
         return date.concat(time);
     }
 
-    default String getEventDateTimeForSpecialTransportEvents(PubSetType pubSetType, String eventAct){
-        if (SHIPMENT_ETA.equals(eventAct)) {
-            return getLastTransportPlanWithPortOfDischarge(pubSetType)
-                    .map(this::getPrioritizedTimestampForArrival)
-                    .orElse(null);
-        } else {
-            return getFirstTransportPlanTypeWithPortOfLoad(pubSetType)
-                    .map(this::getPrioritizedTimestampForDeparture)
-                    .orElse(null);
+    default String getEventDateTimeForSpecialTransportEvents(PubSetType pubSetType, String eventAct) {
+        var eventClassifierCode = getEventClassifierCodeForESTEvents(pubSetType, eventAct);
+        var lastPortOfDischarge = getLastTransportPlanWithPortOfDischarge(pubSetType);
+        var firstPortOfLoad = getFirstTransportPlanTypeWithPortOfLoad(pubSetType);
+        switch (eventClassifierCode) {
+            case ACT:
+                return getActualEventDateTime(eventAct, lastPortOfDischarge, firstPortOfLoad);
+            case EST:
+                return getEstimatedEventDateTime(eventAct, lastPortOfDischarge, firstPortOfLoad);
+            default:
+                return null;
         }
+    }
+
+    private String getEstimatedEventDateTime(String eventAct, Optional<TransportPlanType> lastPOD, Optional<TransportPlanType> firstPOL) {
+        return SHIPMENT_ETA
+                .equals(eventAct) ? lastPOD.map(this::getPrioritizedTimestampForArrival).orElse(null)
+                : firstPOL.map(this::getPrioritizedTimestampForDeparture).orElse(null);
+    }
+
+    private String getActualEventDateTime(String eventAct, Optional<TransportPlanType> lastPOD, Optional<TransportPlanType> firstPOL) {
+        return SHIPMENT_ETA
+                .equals(eventAct) ? lastPOD.map(TransportPlanType::getGttsactArvTS).orElse(null)
+                : firstPOL.map(TransportPlanType::getGttsactDepTS).orElse(null);
     }
 
     private String getEventDateTimeForOtherTransportEvents(PubSetType pubSetType) {
@@ -111,24 +151,18 @@ public interface EventMapper {
     private String getPrioritizedTimestampForArrival(TransportPlanType tp) {
         if (tp.getGttsexpArvTS() != null) {
             return tp.getGttsexpArvTS();
-        } else {
-            if (tp.getGcssexpArvTS() != null) {
-                return tp.getGcssexpArvTS();
-            } else {
-                return tp.getGsisexpArvTS();
-            }
+        } else if (tp.getGcssexpArvTS() != null) {
+            return tp.getGcssexpArvTS();
         }
+        return null;
     }
 
     private String getPrioritizedTimestampForDeparture(TransportPlanType tp) {
         if (tp.getGttsexpDepTS() != null) {
             return tp.getGttsexpDepTS();
-        } else {
-            if (tp.getGcssexpDepTS() != null) {
-                return tp.getGcssexpDepTS();
-            } else {
-                return tp.getGsisexpDepTS();
-            }
+        } else if (tp.getGcssexpDepTS() != null) {
+            return tp.getGcssexpDepTS();
         }
+        return null;
     }
 }

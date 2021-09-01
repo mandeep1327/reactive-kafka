@@ -7,8 +7,8 @@ import MSK.com.external.dcsa.TransportEvent;
 import MSK.com.external.dcsa.TransportEventType;
 import MSK.com.gems.GEMSPubType;
 import MSK.com.gems.PubSetType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.TransportEventMapperImpl;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -119,13 +119,13 @@ class TransportEventMapperTest {
         return docRef;
     }
 
-    private static TransportCall getTransportCall( TransPortMode transPortMode) {
+    private static TransportCall getTransportCall( TransPortMode transportMode) {
         var transportCall = new TransportCall();
 
         transportCall.setCarrierServiceCode("LineCode");
         transportCall.setCarrierVoyageNumber("MUMMRSK");
         transportCall.setOtherFacility("Copenhagen");
-        transportCall.setModeOfTransport(transPortMode);
+        transportCall.setModeOfTransport(transportMode);
 
         return transportCall;
     }

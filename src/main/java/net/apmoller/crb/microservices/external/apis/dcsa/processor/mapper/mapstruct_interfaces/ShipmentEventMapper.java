@@ -18,21 +18,6 @@ public interface ShipmentEventMapper {
     @Mapping(source = "pubSetType.event.eventAct", target = "shipmentEventType")
     @Mapping(source = "pubSetType.event.eventAct", target = "shipmentInformationType")
     @Mapping(source = "pubSetType", target = "documentID")
-    @Mapping(source = "baseData.eventID", target = "eventID")
-    @Mapping(source = "baseData.bookingReference", target = "bookingReference")
-    @Mapping(source = "baseData.eventDateTime", target = "eventDateTime")
-    @Mapping(source = "baseData.eventType", target = "eventType")
-    @Mapping(source = "baseData.eventCreatedDateTime", target = "eventCreatedDateTime")
-    @Mapping(source = "baseData.eventClassifierCode", target = "eventClassifierCode")
-    @Mapping(source = "baseData.parties", target = "parties")
-    @Mapping(source = "baseData.references", target = "references")
-    @Mapping(source = "baseData.equipmentReference", target = "equipmentReference")
-    @Mapping(source = "baseData.carrierBookingReference", target = "carrierBookingReference")
-    @Mapping(source = "baseData.transportDocumentReference", target = "transportDocumentReference")
-    @Mapping(source = "baseData.sourceSystem", target = "sourceSystem")
-    @Mapping(source = "baseData.serviceType", target = "serviceType")
-    @Mapping(source = "baseData.carrierCode", target = "carrierCode")
     ShipmentEvent fromPubSetTypeToShipmentEvent(PubSetType pubSetType, Event baseData);
-
 
 }

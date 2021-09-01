@@ -2,7 +2,6 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.mappers;
 
 import MSK.com.gems.PubSetType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DCSAEventTypeMapper;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.EventClassifierCodeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapperImpl;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
@@ -23,7 +22,6 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDa
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithCONTAINER_DEPARTUREEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithConfirm_Shipment_ClosedEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDISCHARG_NEventAct;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithEquipment_VGM_Details_UpdatedEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_IN_EXPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_OUTEXPYEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithIssue_Original_TPDOC_ClosedEventAct;
@@ -38,16 +36,23 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDa
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithSTUFFINGEXPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_CancelledEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETAEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETAEventEst;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETAEventEstWithGCSSExpArrival;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETAEventEstWithNoTime;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventEst;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventEstWithGCSSExpDeparture;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventEstWithNoTime;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForEquipmentEventType;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForShipmentEventType;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForTransportEventACT;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForTransportEventType;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForTransportEventTypeWithESTEventAct;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForTransportEventTypeWithESTEventAct2;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForTransportEventTypeWithNoEventDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {EventMapperImpl.class, EventClassifierCodeMapper.class, DCSAEventTypeMapper.class})
+@ContextConfiguration(classes = {EventMapperImpl.class, DCSAEventTypeMapper.class})
 class EventMapperTest {
 
     @Autowired
@@ -107,6 +112,14 @@ class EventMapperTest {
                 Arguments.arguments(getPubSetTypeWithCONTAINER_ARRIVALEventAct(), getEventForTransportEventType()),
                 Arguments.arguments(getPubSetTypeWithCONTAINER_DEPARTUREEventAct(), getEventForTransportEventType()),
                 Arguments.arguments(getPubSetTypeWithRAIL_ARRIVAL_AT_DESTINATIONEventAct(), getEventForTransportEventType()),
+                Arguments.arguments(getPubSetTypeWithShipment_ETAEventAct(), getEventForTransportEventACT()),
+                Arguments.arguments(getPubSetTypeWithShipment_ETDEventAct(), getEventForTransportEventACT()),
+                Arguments.arguments(getPubSetTypeWithShipment_ETAEventEst(), getEventForTransportEventTypeWithESTEventAct()),
+                Arguments.arguments(getPubSetTypeWithShipment_ETDEventEst(), getEventForTransportEventTypeWithESTEventAct()),
+                Arguments.arguments(getPubSetTypeWithShipment_ETAEventEstWithGCSSExpArrival(), getEventForTransportEventTypeWithESTEventAct()),
+                Arguments.arguments(getPubSetTypeWithShipment_ETDEventEstWithGCSSExpDeparture(), getEventForTransportEventTypeWithESTEventAct()),
+                Arguments.arguments(getPubSetTypeWithShipment_ETAEventEstWithNoTime(), getEventForTransportEventTypeWithNoEventDateTime()),
+                Arguments.arguments(getPubSetTypeWithShipment_ETDEventEstWithNoTime(), getEventForTransportEventTypeWithNoEventDateTime()),
                 Arguments.arguments(getPubSetTypeWithRAIL_DEPARTUREEventAct(), getEventForTransportEventType())
         );
     }
