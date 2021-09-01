@@ -1,0 +1,297 @@
+{
+  "partner": {
+    "ampscntlNo": "23713015058164",
+    "ampsmsgType": "XML*GEMS",
+    "ampsrcvrID": "ALWAYSON",
+    "ampssndrID": "GEMS",
+    "gemssubID": "DCSA_18_S_ETA",
+    "languageCode": null,
+    "sendAMPSIsaCntlNoToGEMS": "N"
+  },
+  "pubSet": [
+    {
+      "cargo": {
+        "totCargQuan": 0,
+        "totCargVol": [
+          {
+            "qual": "CBM",
+            "value": 0
+          },
+          {
+            "qual": "CBS",
+            "value": 0
+          }
+        ],
+        "totCargWgt": [
+          {
+            "qual": "KGS",
+            "value": 0
+          },
+          {
+            "qual": "LBS",
+            "value": 0
+          }
+        ]
+      },
+      "customs": [],
+      "deadline": null,
+      "equipment": [],
+      "event": {
+        "eventAct": "Shipment_ETA",
+        "eventId": 96657859,
+        "gemstsutc": "2021-08-25 13:01:19",
+        "reasons": null,
+        "rkemmove": null,
+        "srcSys": "GCSS",
+        "srcSysTimestamp": "2021-08-25 13:01:09"
+      },
+      "gttsvessel": null,
+      "hermesEvent": null,
+      "initialTransportPlan": [
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "2",
+            "value": "INJHTTM"
+          },
+          "endLocCntry": "IN",
+          "endState": null,
+          "endTerm": null,
+          "gcssexpArvTS": "2021-08-31 13:00:00",
+          "gcssexpArvTSUTC": "2021-08-31 07:30:00",
+          "gcssexpDepTS": "2021-08-26 08:00:00",
+          "gcssexpDepTSUTC": "2021-08-26 04:00:00",
+          "gsisexpArvTS": null,
+          "gsisexpDepTS": null,
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": null,
+          "gttsexpDepTS": null,
+          "legSeq": "1",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "1",
+            "value": "AEJALT2"
+          },
+          "startLocCntry": "AE",
+          "startState": null,
+          "startTerm": null,
+          "transMode": "MVS",
+          "vesselCde": "5G2",
+          "voyDoc": null,
+          "voyage": "134W"
+        }
+      ],
+      "lctransportPlan": [],
+      "motherTransportPlan": [],
+      "operationalCAT": [],
+      "productCAT": [],
+      "referenceShipments": [],
+      "shipment": {
+        "bookNo": "IVCTEST01",
+        "breakBulk": "N",
+        "cargoTypes": null,
+        "cargoes": null,
+        "delSvc": "CY",
+        "equipmentAssignments": null,
+        "haulageArrangements": null,
+        "historyOfReasonsForTransportPlan": null,
+        "milTStamp": null,
+        "operationalRouteRef": null,
+        "operator": "MSL",
+        "party": [
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [
+              "IVCTEST01"
+            ],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "1",
+            "state": null
+          },
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "4",
+            "state": null
+          },
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "3",
+            "state": null
+          },
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "44",
+            "state": null
+          },
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "2",
+            "state": null
+          }
+        ],
+        "pcfn": "IVCTEST01",
+        "publishSpotROTPNotification": "false",
+        "publishSpotTPNotification": "false",
+        "rcvSvc": "CY",
+        "reference": [
+          {
+            "name": null,
+            "typ": "1",
+            "value": "IVCTEST01"
+          },
+          {
+            "name": "6 digit HS code",
+            "typ": "NOJLSID2CX2JB",
+            "value": null
+          }
+        ],
+        "tpchangeReason": {
+          "reason": [
+            {
+              "code": "98",
+              "type": "short",
+              "value": "Unforeseen contingency"
+            },
+            {
+              "code": "98",
+              "type": "details",
+              "value": "As a result of an unforeseen operational constraint, your shipment has now been replanned to the next available vessel."
+            }
+          ]
+        },
+        "tpinfo": []
+      },
+      "tpdoc": [
+        {
+          "bolNo": "IVCTEST01",
+          "documentProperties": null,
+          "haulageArrangements": null,
+          "operator": null,
+          "party": [
+            {
+              "addrLn1": "DAMPFAERGEVEJ",
+              "addrLn2": "PAKHUS D, 2ND FLOOR",
+              "addrLn3": null,
+              "city": "COPENHAGEN OE",
+              "cntry": "Denmark",
+              "concernCode": null,
+              "custName": "GCSS BOOKED BY",
+              "custNo": "10000007951",
+              "custRefNo": [],
+              "dodaac": "ABC123",
+              "postCde": "2100",
+              "roletyp": "5",
+              "state": null
+            },
+            {
+              "addrLn1": "1 CHURCH ROAD, OFFICE NO 505",
+              "addrLn2": "NEUCLEAUS MALL BUILDING",
+              "addrLn3": null,
+              "city": "PUNE",
+              "cntry": "India",
+              "concernCode": null,
+              "custName": "KUEHNE & NAGEL",
+              "custNo": "41000429159",
+              "custRefNo": [],
+              "dodaac": null,
+              "postCde": "411001",
+              "roletyp": "22",
+              "state": "MH"
+            }
+          ],
+          "reference": [
+            {
+              "name": null,
+              "typ": "5",
+              "value": "IVCTEST01"
+            }
+          ]
+        }
+      ],
+      "transportPlan": [
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "2",
+            "value": "INJHTTM"
+          },
+          "endLocCntry": "IN",
+          "endState": "27",
+          "endTerm": "Jawaharlal Nehru NSICT DPW",
+          "gcssexpArvTS": "2021-08-31 13:00:00",
+          "gcssexpArvTSUTC": "2021-08-31 07:30:00",
+          "gcssexpDepTS": "2021-08-26 08:00:00",
+          "gcssexpDepTSUTC": "2021-08-26 04:00:00",
+          "gsisexpArvTS": null,
+          "gsisexpDepTS": "2021-08-26 08:00:00",
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": null,
+          "gttsexpDepTS": "2021-08-26 08:00:00",
+          "legSeq": "1",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "1",
+            "value": "AEJALT2"
+          },
+          "startLocCntry": "AE",
+          "startState": null,
+          "startTerm": "Jebel Ali Terminal 2",
+          "transMode": "MVS",
+          "vesselCde": "5G2",
+          "voyDoc": null,
+          "voyage": "134W"
+        }
+      ]
+    }
+  ]
+}

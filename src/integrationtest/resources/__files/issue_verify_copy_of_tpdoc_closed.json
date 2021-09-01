@@ -1,0 +1,312 @@
+{
+  "partner": {
+    "ampscntlNo": "23712471831160",
+    "ampsmsgType": "XML*GEMS",
+    "ampsrcvrID": "ALWAYSON",
+    "ampssndrID": "GEMS",
+    "gemssubID": "DCSA_27_T_ISSUE_V",
+    "languageCode": null,
+    "sendAMPSIsaCntlNoToGEMS": "N"
+  },
+  "pubSet": [
+    {
+      "cargo": {
+        "totCargQuan": 0,
+        "totCargVol": [
+          {
+            "qual": "CBM",
+            "value": 0
+          },
+          {
+            "qual": "CBS",
+            "value": 0
+          }
+        ],
+        "totCargWgt": [
+          {
+            "qual": "KGS",
+            "value": 0
+          },
+          {
+            "qual": "LBS",
+            "value": 0
+          }
+        ]
+      },
+      "customs": [],
+      "deadline": null,
+      "equipment": [],
+      "event": {
+        "eventAct": "Issue_Verify_Copy_of_TPDOC_Closed",
+        "eventId": 96655021,
+        "gemstsutc": "2021-08-25 12:46:47",
+        "reasons": null,
+        "rkemmove": null,
+        "srcSys": "GCSS",
+        "srcSysTimestamp": null
+      },
+      "gttsvessel": null,
+      "hermesEvent": null,
+      "initialTransportPlan": [],
+      "lctransportPlan": [],
+      "motherTransportPlan": [],
+      "operationalCAT": [],
+      "productCAT": [],
+      "referenceShipments": [],
+      "shipment": {
+        "bookNo": "203643055",
+        "breakBulk": "N",
+        "cargoTypes": null,
+        "cargoes": null,
+        "delSvc": "CY",
+        "equipmentAssignments": {
+          "equipmentAssignment": [
+            {
+              "cargoes": {
+                "cargo": [
+                  {
+                    "commodityCode": "002801",
+                    "commodityName": "Books, newspapers, pictures, printed matter",
+                    "customerSpecifiedHSCode": "123456"
+                  }
+                ]
+              },
+              "eqptInstance": "XVYCYILO809KB",
+              "eqptNo": "CON1",
+              "grossWgt": [
+                {
+                  "qual": "KGS",
+                  "value": 3020
+                },
+                {
+                  "qual": "LBS",
+                  "value": 6657.9
+                }
+              ],
+              "isocode": "22G1",
+              "outHgtUnit": "8 6",
+              "ownTyp": "Y",
+              "size": "20",
+              "subType": "DRY",
+              "tareWgt": [
+                {
+                  "qual": "KGS",
+                  "value": 2020
+                },
+                {
+                  "qual": "LBS",
+                  "value": 4453.3
+                }
+              ],
+              "vent": null
+            }
+          ]
+        },
+        "haulageArrangements": null,
+        "historyOfReasonsForTransportPlan": null,
+        "milTStamp": null,
+        "operationalRouteRef": null,
+        "operator": "MSL",
+        "party": [
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "14",
+            "state": null
+          },
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "3",
+            "state": null
+          },
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "44",
+            "state": null
+          },
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "4",
+            "state": null
+          },
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [
+              "203643055"
+            ],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "1",
+            "state": null
+          },
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "2",
+            "state": null
+          },
+          {
+            "addrLn1": "DAMPFAERGEVEJ",
+            "addrLn2": "PAKHUS D, 2ND FLOOR",
+            "addrLn3": null,
+            "city": "COPENHAGEN OE",
+            "cntry": "Denmark",
+            "concernCode": null,
+            "custName": "GCSS BOOKED BY",
+            "custNo": "10000007951",
+            "custRefNo": [],
+            "dodaac": "ABC123",
+            "postCde": "2100",
+            "roletyp": "26",
+            "state": null
+          }
+        ],
+        "pcfn": "203643055",
+        "publishSpotROTPNotification": null,
+        "publishSpotTPNotification": null,
+        "rcvSvc": "CY",
+        "reference": [
+          {
+            "name": null,
+            "typ": "201",
+            "value": "N"
+          },
+          {
+            "name": null,
+            "typ": "1",
+            "value": "203643055"
+          },
+          {
+            "name": "Customs Seal",
+            "typ": "1002",
+            "value": "6789"
+          }
+        ],
+        "tpchangeReason": null,
+        "tpinfo": []
+      },
+      "tpdoc": [
+        {
+          "bolNo": "203643055",
+          "documentProperties": null,
+          "haulageArrangements": null,
+          "operator": "MSL",
+          "party": [
+            {
+              "addrLn1": "DAMPFAERGEVEJ",
+              "addrLn2": "PAKHUS D, 2ND FLOOR",
+              "addrLn3": null,
+              "city": "COPENHAGEN OE",
+              "cntry": "Denmark",
+              "concernCode": null,
+              "custName": "GCSS BOOKED BY",
+              "custNo": "10000007951",
+              "custRefNo": [],
+              "dodaac": "ABC123",
+              "postCde": "2100",
+              "roletyp": "22",
+              "state": null
+            }
+          ],
+          "reference": [
+            {
+              "name": null,
+              "typ": "5",
+              "value": "203643055"
+            }
+          ]
+        }
+      ],
+      "transportPlan": [
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "2",
+            "value": "DKAARPT"
+          },
+          "endLocCntry": "DK",
+          "endState": null,
+          "endTerm": "Aarhus APM Terminal",
+          "gcssexpArvTS": "2021-09-21 23:00:00",
+          "gcssexpArvTSUTC": "2021-09-21 22:00:00",
+          "gcssexpDepTS": "2021-09-21 22:00:00",
+          "gcssexpDepTSUTC": "2021-09-21 21:00:00",
+          "gsisexpArvTS": "2021-10-18 18:32:00",
+          "gsisexpDepTS": "2021-10-18 07:30:00",
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": "2021-10-18 18:32:00",
+          "gttsexpDepTS": "2021-10-18 07:30:00",
+          "legSeq": "1",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "1",
+            "value": "DEBRVTM"
+          },
+          "startLocCntry": "DE",
+          "startState": "HB",
+          "startTerm": "NTB North SEA Terminal Bremerhaven",
+          "transMode": "MVS",
+          "vesselCde": "1NL",
+          "voyDoc": null,
+          "voyage": "139S"
+        }
+      ]
+    }
+  ]
+}
