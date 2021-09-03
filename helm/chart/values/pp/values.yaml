@@ -2,11 +2,12 @@ appName: external-dcsa-events-processor
 product: external-apis
 image: sharedacrweexternalapis.azurecr.io/external-dcsa-events-processor
 region: westeurope
-replicaCount: 1
-vaultRole: dcsatracktrace-dev
+replicaCount: 2
+vaultRole: dcsatracktrace-preprod
 kafka:
   bootstrapServers: pkc-lq8gm.westeurope.azure.confluent.cloud:9092
-  topic: MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1
+  topic: MSK.shipment.miscellaneousEvents.topic.internal.any.v2
+  publisherTopic: MSK.shipment.externalDcsaEvents.topic.internal.any.v1
   username: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/username#username
   password: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/password#password
   consumerGroup: MSK.external.dcsa.consumerGroup.v1

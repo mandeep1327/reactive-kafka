@@ -47,6 +47,8 @@ spec:
               value: {{ .Values.kafka.schemaRegistryUsername }}
             - name: kafkaSchemaRegistryPassword
               value: {{ .Values.kafka.schemaRegistryPassword }}
+            - name: KAFKA_PUBLISHER_TOPIC
+              value: {{ .Values.kafka.publisherTopic}}
           imagePullPolicy: Always
           ports:
             - name: http

@@ -2,17 +2,18 @@ appName: external-dcsa-events-processor
 product: external-apis
 image: sharedacrweexternalapis.azurecr.io/external-dcsa-events-processor
 region: westeurope
-replicaCount: 1
-vaultRole: dcsatracktrace-dev
+replicaCount: 2
+vaultRole: dcsatracktrace-prod
 kafka:
   bootstrapServers: pkc-lq8gm.westeurope.azure.confluent.cloud:9092
-  topic: MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1
-  username: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/username#username
-  password: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/password#password
-  consumerGroup: MSK.shipment.mobile.consumerGroup.v1
+  topic: MSK.shipment.miscellaneousEvents.topic.internal.any.v2
+  publisherTopic: MSK.shipment.externalDcsaEvents.topic.internal.any.v1
+  username: vault:externalapis-kv/data/prod/services/dcsa-events-processor/kafka/username#username
+  password: vault:externalapis-kv/data/prod/services/dcsa-events-processor/kafka/password#password
+  consumerGroup: MSK.external.dcsa.consumerGroup.v1
   schemaRegistryUrl: https://psrc-4kk0p.westeurope.azure.confluent.cloud/
-  schemaRegistryUsername: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/schemaRegistryUsername#schemaRegistryUsername
-  schemaRegistryPassword: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/schemaRegistryPassword#schemaRegistryPassword
+  schemaRegistryUsername: vault:externalapis-kv/data/prod/services/dcsa-events-processor/kafka/schemaRegistryUsername#schemaRegistryUsername
+  schemaRegistryPassword: vault:externalapis-kv/data/prod/services/dcsa-events-processor/kafka/schemaRegistryPassword#schemaRegistryPassword
 resources:
   requests:
     memory: 512Mi
