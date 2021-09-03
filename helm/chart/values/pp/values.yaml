@@ -2,8 +2,8 @@ appName: external-dcsa-events-processor
 product: external-apis
 image: sharedacrweexternalapis.azurecr.io/external-dcsa-events-processor
 region: westeurope
-replicaCount: 1
-vaultRole: dcsatracktrace-dev
+replicaCount: 2
+vaultRole: dcsatracktrace-preprod
 kafka:
   bootstrapServers: pkc-lq8gm.westeurope.azure.confluent.cloud:9092
   topic: MSK.shipment.miscellaneousEvents.topic.internal.any.v2
