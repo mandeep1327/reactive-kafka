@@ -76,7 +76,7 @@ class TransportEventMapperTest {
                 //test shipment event
                 Arguments.arguments("Could not map Transport Event Type of Shipment_Cancelled", getPubSetTypeWithShipment_CancelledEventAct()),
                 //test equipment event
-                Arguments.arguments("Could not map Transport Event Type of OFF-RAILIMPN", getPubSetTypeWithOFF_RAILIMPNEventAct()),
+                Arguments.arguments("Could not map Transport Event Type of OFF-RAILIMPN", getPubSetTypeWithOFF_RAILIMPNEventAct(null)),
                 //test with payload having no transport plan
                 Arguments.arguments("TransportPlan can not be empty for the Transport Event", getPubSetTypeWithoutTransportPlan())
         );

@@ -73,7 +73,7 @@ public final class EventDataBuilder {
                 .parties(parties);
     }
 
-    private static List<Party> getParties() {
+    public static List<Party> getParties() {
         return List.of(getParty1(), getParty2());
     }
 

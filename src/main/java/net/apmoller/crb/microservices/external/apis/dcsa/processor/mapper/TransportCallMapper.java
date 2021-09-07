@@ -20,8 +20,11 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static MSK.com.external.dcsa.TransportEventType.ARRI;
+import static MSK.com.external.dcsa.TransportEventType.DEPA;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETA;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETD;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDepartureEquipmentEvent;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDepartureEventType;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstEquipmentElement;
@@ -32,58 +35,64 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 @Slf4j
 public final class TransportCallMapper {
 
-    public static TransportCall fromPubsetToTransportCallBase(PubSetType pubSetType) {
+    private static final String TRANSPORT_PLAN_EMPTY = "TransportPlan can not be empty for the Transport Event";
+
+    public static TransportCall getTransportCallForTransportEvents(PubSetType pubSetType) {
         var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
-        return getTransportCall(equipmentFirstElement);
+        var transportPlan = getTransportPlanForTransportEvent(pubSetType, equipmentFirstElement);
+        return createTransportCall(transportPlan, equipmentFirstElement);
     }
 
-    private static TransportCall getTransportCall( EquipmentType equipmentFirstElement) {
-        var transportCall = new TransportCall();
-        transportCall.setCarrierServiceCode(getCarrierServiceCode(equipmentFirstElement));
-        transportCall.setOtherFacility(getLocation(equipmentFirstElement));
-        return transportCall;
-    }
-
-    public static TransportCall fromPubsetToTransportCall(PubSetType pubSetType) {
-        var base = fromPubsetToTransportCallBase(pubSetType);
-        var transportPlanTypeList = pubSetType.getTransportPlan();
-        var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
-        var transportPlan = getTransportPlan(pubSetType, transportPlanTypeList, equipmentFirstElement);
-        return getFatterTransportCall(base, transportPlan);
-    }
-
-    private TransportPlanType getTransportPlan(PubSetType pubSetType, List<TransportPlanType> transportPlanTypeList, EquipmentType equipmentFirstElement) {
+    private TransportPlanType getTransportPlanForTransportEvent(PubSetType pubSetType, EquipmentType equipmentFirstElement) {
         var eventAct = getEventAct(pubSetType);
-        if (isETAorETDEvent(eventAct)){
-            if (SHIPMENT_ETA.equals(eventAct)) {
-                return getLastTransportPlanWithPortOfDischarge(pubSetType).orElse(null);
-            } else {
-                return getFirstTransportPlanTypeWithPortOfLoad(pubSetType).orElse(null);
-            }
-        } else {
-            return getTransportPlanTypeForOtherEvents(pubSetType, transportPlanTypeList, equipmentFirstElement);
+        if (isETAorETDEvent(eventAct)) {
+            return getTransportPlanTypeForShipmentEtaOrEtd(pubSetType, eventAct);
         }
+        return getTransportPlanTypeForCommonEvents(pubSetType, equipmentFirstElement, true);
+    }
+
+    private TransportPlanType getTransportPlanTypeForShipmentEtaOrEtd(PubSetType pubSetType, String eventAct) {
+        if (SHIPMENT_ETA.equals(eventAct)) {
+            return getLastTransportPlanWithPortOfDischarge(pubSetType).orElseThrow(() -> new MappingException(TRANSPORT_PLAN_EMPTY));
+        }
+        return getFirstTransportPlanTypeWithPortOfLoad(pubSetType).orElseThrow(() -> new MappingException(TRANSPORT_PLAN_EMPTY));
+    }
+
+    public static TransportCall getTransportCallForEquipmentEvents(PubSetType pubSetType) {
+        var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
+        var transportPlan = getTransportPlanTypeForCommonEvents(pubSetType, equipmentFirstElement, false);
+        return createTransportCall(transportPlan, equipmentFirstElement);
+    }
+
+
+    private TransportPlanType getTransportPlanTypeForCommonEvents(PubSetType pubSetType, EquipmentType equipmentFirstElement, boolean isTransportEvent) {
+        var transportPlanTypeList = pubSetType.getTransportPlan();
+        var mapOfTransportPlan = isTransportEvent
+                ? fetchForTransportEvents(pubSetType, transportPlanTypeList)
+                : fetchForEquipmentEvents(pubSetType, transportPlanTypeList);
+        return mapOfTransportPlan
+                .map(e -> e.get(getActLocation(equipmentFirstElement)))
+                .orElse(null);
+    }
+
+    private Optional<Map<String, TransportPlanType>> fetchForTransportEvents(PubSetType pubSetType, List<TransportPlanType> transportPlanTypeList) {
+        return Optional.ofNullable(getLocationAndTransportPlanForTransportEvents(transportPlanTypeList, pubSetType.getEvent()));
+    }
+
+    private Optional<Map<String, TransportPlanType>> fetchForEquipmentEvents(PubSetType pubSetType, List<TransportPlanType> transportPlanTypeList) {
+        return Optional.ofNullable(getLocationAndTransportPlanForEquipmentEvents(transportPlanTypeList, pubSetType.getEvent()));
     }
 
     private boolean isETAorETDEvent(String eventAct) {
         return SHIPMENT_ETA.equals(eventAct) || SHIPMENT_ETD.equals(eventAct);
     }
 
-
-    private TransportPlanType getTransportPlanTypeForOtherEvents(PubSetType pubSetType, List<TransportPlanType> transportPlanTypeList, EquipmentType equipmentFirstElement) {
-        return Optional.ofNullable(getProperLocationFromTransportPlan(transportPlanTypeList, pubSetType.getEvent()))
-                .map(e -> e.get(getActLocation(equipmentFirstElement))).orElse(null);
-    }
-
-    private static TransportCall getFatterTransportCall(TransportCall base, TransportPlanType transportPlan) {
-
+    private static TransportCall createTransportCall(TransportPlanType transportPlan, EquipmentType equipmentFirstElement) {
         var transportCall = new TransportCall();
-
-        transportCall.setFacilityType(base.getFacilityType());
-        transportCall.setCarrierServiceCode(base.getCarrierServiceCode());
+        transportCall.setCarrierServiceCode(getCarrierServiceCode(equipmentFirstElement));
         transportCall.setCarrierVoyageNumber(getVoyageNumberFromTransportPlan(transportPlan));
         transportCall.setModeOfTransport(getModeOfTransport(transportPlan));
-        transportCall.setOtherFacility(base.getOtherFacility());
+        transportCall.setOtherFacility(getLocation(equipmentFirstElement));
         return transportCall;
     }
 
@@ -94,7 +103,7 @@ public final class TransportCallMapper {
 
     }
 
-    private static String getLocation(EquipmentType equipmentTypeElement){
+    private static String getLocation(EquipmentType equipmentTypeElement) {
         return Optional.ofNullable(equipmentTypeElement.getMove())
                 .map(MoveType::getActLoc)
                 .orElse(null);
@@ -122,14 +131,14 @@ public final class TransportCallMapper {
             case "RCO":
                 return TransPortMode.RAIL;
             default:
-                throw new MappingException("TransportPlan can not be empty for the Transport Event");
+                return TransPortMode.NA;
         }
     }
 
 
     private static String getCarrierServiceCode(EquipmentType equipment) {
-        if (!Objects.isNull(equipment.getMove()) &&
-                !Objects.isNull(equipment.getMove().getLineCde())) {
+        if (Objects.nonNull(equipment.getMove()) &&
+                Objects.nonNull(equipment.getMove().getLineCde())) {
             return equipment.getMove().getLineCde();
         }
         log.error("Could not Map the carrier service code");
@@ -137,41 +146,63 @@ public final class TransportCallMapper {
     }
 
     private static String getActLocation(EquipmentType firstEquipmentType) {
-        if (!Objects.isNull(firstEquipmentType.getMove()) &&
-                !Objects.isNull(firstEquipmentType.getMove().getActLoc())) {
-                return firstEquipmentType.getMove().getActLoc();
+        if (Objects.nonNull(firstEquipmentType.getMove()) &&
+                Objects.nonNull(firstEquipmentType.getMove().getActLoc())) {
+            return firstEquipmentType.getMove().getActLoc();
         }
         return null;
     }
 
-    private static Map<String, TransportPlanType> getProperLocationFromTransportPlan(List<TransportPlanType> transportPlan, EventType eventType) {
+    private static Map<String, TransportPlanType> getLocationAndTransportPlanForTransportEvents(List<TransportPlanType> transportPlan, EventType eventType) {
         var typeOfTransport = getArrivalOrDepartureEventType(eventType.getEventAct());
-        var transportPlans = Optional.ofNullable(transportPlan)
-                .filter(transportPlanTypes -> !transportPlanTypes.isEmpty())
-                .orElseThrow(() -> new MappingException("TransportPlan can not be empty for the Transport Event"));
-        switch (typeOfTransport){
-            case ARRI:
-                return transportPlans.stream()
-                        .collect(Collectors.toMap(e -> getEndLocation(e.getEndLoc()), Function.identity()));
-            case DEPA:
-                return transportPlans.stream()
-                        .collect(Collectors.toMap(e -> getStartLocation(e.getStartLoc()), Function.identity()));
-            default:
-                return null;
-
-        }
+        var transportPlans = getNonNullTransportPlans(transportPlan);
+        return getTransportPlanMapBasedOnArrivalOrDepartureEvents(typeOfTransport, transportPlans);
     }
 
-    private static String getEndLocation (EndLocType endLocType){
-        if (!Objects.isNull(endLocType)){
+    private static Map<String, TransportPlanType> getLocationAndTransportPlanForEquipmentEvents(List<TransportPlanType> transportPlan, EventType eventType) {
+        var arrivalOrDeparture = getArrivalOrDepartureEquipmentEvent(eventType.getEventAct());
+        var transportPlans = getNonNullTransportPlans(transportPlan);
+        return getTransportPlanMapBasedOnArrivalOrDepartureEvents(arrivalOrDeparture, transportPlans);
+    }
+
+    private static Map<String, TransportPlanType> getTransportPlanMapBasedOnArrivalOrDepartureEvents
+            (MSK.com.external.dcsa.TransportEventType typeOfTransport, List<TransportPlanType> transportPlans) {
+        if (typeOfTransport.equals(ARRI)) {
+            return createMapOfEndLocationAndTransportPlans(transportPlans);
+        } else if (typeOfTransport.equals(DEPA)) {
+            return createMapOfStartLocationAndTransportPlans(transportPlans);
+        }
+        return null;
+    }
+
+    private static Map<String, TransportPlanType> createMapOfStartLocationAndTransportPlans(List<TransportPlanType> transportPlans) {
+        return transportPlans
+                .stream()
+                .collect(Collectors.toMap(e -> getStartLocation(e.getStartLoc()), Function.identity()));
+    }
+
+    private static Map<String, TransportPlanType> createMapOfEndLocationAndTransportPlans(List<TransportPlanType> transportPlans) {
+        return transportPlans
+                .stream()
+                .collect(Collectors.toMap(e -> getEndLocation(e.getEndLoc()), Function.identity()));
+    }
+
+    private static List<TransportPlanType> getNonNullTransportPlans(List<TransportPlanType> transportPlan) {
+        return Optional.ofNullable(transportPlan)
+                .filter(transportPlanTypes -> !transportPlanTypes.isEmpty())
+                .orElseThrow(() -> new MappingException(TRANSPORT_PLAN_EMPTY));
+    }
+
+    private static String getEndLocation(EndLocType endLocType) {
+        if (!Objects.isNull(endLocType)) {
             return (endLocType.getValue());
         }
         return null;
     }
 
-    private static String getStartLocation (StartLocType startLocType){
-        if (!Objects.isNull(startLocType)){
-            return (startLocType.getValue());
+    private static String getStartLocation(StartLocType startLocType) {
+        if (!Objects.isNull(startLocType)) {
+            return startLocType.getValue();
         }
         return null;
     }

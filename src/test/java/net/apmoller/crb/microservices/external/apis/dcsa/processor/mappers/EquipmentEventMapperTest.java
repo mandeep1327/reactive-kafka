@@ -6,6 +6,7 @@ import MSK.com.external.dcsa.EquipmentEvent;
 import MSK.com.external.dcsa.EquipmentEventType;
 import MSK.com.external.dcsa.SealSource;
 import MSK.com.external.dcsa.Seals;
+import MSK.com.external.dcsa.TransPortMode;
 import MSK.com.external.dcsa.TransportCall;
 import MSK.com.gems.GEMSPubType;
 import MSK.com.gems.PubSetType;
@@ -80,17 +81,15 @@ class EquipmentEventMapperTest {
 
     private static Stream<Arguments> createEquipmentEventTestData() {
         return Stream.of(
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithARRIVECUIMPNEventAct())), getEquipmentEventTestData(GTIN)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_IN_EXPNEventAct())), getEquipmentEventTestData(GTIN)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithOFF_RAILIMPNEventAct())), getEquipmentEventTestData(GTIN)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithDEPARTCUEXPNEventAct())), getEquipmentEventTestData(GTOT)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithSTRIPPIN_YEventAct())), getEquipmentEventTestData(STRP)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithSTUFFINGEXPNEventAct())), getEquipmentEventTestData(STUF)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithDISCHARGE_NEventAct())), getEquipmentEventTestData(DISC)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithON_RAIL_EXPNEventAct())), getEquipmentEventTestData(GTOT)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventAct())), getEquipmentEventTestData(GTOT)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventActAndSeals())), getEquipmentEventTestDataWithSeals(GTOT)),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithLOAD_NEventAct())), getEquipmentEventTestData(LOAD))
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithOFF_RAILIMPNEventAct(null))), getEquipmentEventTestData(GTIN, getTransportCall())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithDISCHARGE_NEventAct(null))), getEquipmentEventTestData(DISC, getTransportCall())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_IN_EXPNEventAct(null))), getEquipmentEventTestData(GTIN, getTransportCallForKolkata())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithSTRIPPIN_YEventAct(null))), getEquipmentEventTestData(STRP, getTransportCallWithNATransportMode())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithSTUFFINGEXPNEventAct(null))), getEquipmentEventTestData(STUF, getTransportCallForKolkata())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithON_RAIL_EXPNEventAct(null))), getEquipmentEventTestData(GTOT, getTransportCallForKolkata())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventAct(null))), getEquipmentEventTestData(GTOT, getTransportCallForKolkata())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventActAndSeals())), getEquipmentEventTestDataWithSeals(GTOT, getTransportCallForKolkata())),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithLOAD_NEventAct(null))), getEquipmentEventTestData(LOAD, getTransportCallForKolkata()))
         );
     }
 
@@ -112,20 +111,43 @@ class EquipmentEventMapperTest {
         var transportCall = new TransportCall();
         transportCall.setCarrierServiceCode("LineCode");
         transportCall.setOtherFacility("Copenhagen");
+        transportCall.setCarrierVoyageNumber("MUMMRSK");
+        transportCall.setModeOfTransport(TransPortMode.VESSEL);
+
+        return transportCall;
+    }
+
+    private static TransportCall getTransportCallWithNATransportMode() {
+
+        var transportCall = new TransportCall();
+        transportCall.setCarrierServiceCode("LineCode");
+        transportCall.setOtherFacility("Kolkata");
+        transportCall.setModeOfTransport(TransPortMode.NA);
+
+        return transportCall;
+    }
+
+    private static TransportCall getTransportCallForKolkata() {
+
+        var transportCall = new TransportCall();
+        transportCall.setCarrierServiceCode("LineCode");
+        transportCall.setCarrierVoyageNumber("MUMMRSK");
+        transportCall.setOtherFacility("Kolkata");
+        transportCall.setModeOfTransport(TransPortMode.VESSEL);
 
         return transportCall;
     }
 
 
 
-    private static EquipmentEvent getEquipmentEventTestData (EquipmentEventType eventType) {
+    private static EquipmentEvent getEquipmentEventTestData (EquipmentEventType eventType, TransportCall transportCall) {
          var equipmentEvent = new EquipmentEvent();
          equipmentEvent.setEquipmentEventType(eventType);
          equipmentEvent.setEmptyIndicatorCode(EmptyIndicatorCode.LADEN);
          equipmentEvent.setDocumentReferences(getDocumentRef());
          equipmentEvent.setSeals(new ArrayList<>());
          equipmentEvent.setEventID(baseEventData.getEventID());
-         equipmentEvent.setTransportCall(getTransportCall());
+         equipmentEvent.setTransportCall(transportCall);
          equipmentEvent.setBookingReference(baseEventData.getBookingReference());
          equipmentEvent.setEventDateTime(baseEventData.getEventDateTime());
          equipmentEvent.setEventType(baseEventData.getEventType());
@@ -143,8 +165,8 @@ class EquipmentEventMapperTest {
         return equipmentEvent;
     }
 
-    private static EquipmentEvent getEquipmentEventTestDataWithSeals (EquipmentEventType eventType) {
-         var equipmentEvent = getEquipmentEventTestData(eventType);
+    private static EquipmentEvent getEquipmentEventTestDataWithSeals (EquipmentEventType eventType, TransportCall transportCall) {
+         var equipmentEvent = getEquipmentEventTestData(eventType, transportCall);
          equipmentEvent.setSeals(getSealInformation());
         return equipmentEvent;
     }

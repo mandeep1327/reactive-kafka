@@ -28,7 +28,7 @@ import static MSK.com.external.dcsa.SealSource.CAR;
 import static MSK.com.external.dcsa.SealSource.CUS;
 import static MSK.com.external.dcsa.SealSource.SHI;
 import static MSK.com.external.dcsa.SealSource.VET;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.TransportCallMapper.fromPubsetToTransportCallBase;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.TransportCallMapper.getTransportCallForEquipmentEvents;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstEquipmentElement;
 
 @Mapper(componentModel = "spring",
@@ -60,7 +60,7 @@ public interface EquipmentEventMapper {
     }
 
     default TransportCall fromPubSetTypeToTransportCall(PubSetType pubSetType) {
-        return fromPubsetToTransportCallBase(pubSetType);
+        return getTransportCallForEquipmentEvents(pubSetType);
     }
 
     default String fromPubSetTypeToIsoEquipmentCode(PubSetType pubSetType) {

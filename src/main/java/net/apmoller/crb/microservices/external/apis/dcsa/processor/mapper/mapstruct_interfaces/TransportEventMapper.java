@@ -15,7 +15,7 @@ import org.mapstruct.Mapping;
 public interface TransportEventMapper {
 
     @Mapping(expression = "java(EventUtility.getTPEventTypeFromPubSetType(pubSetType))", target = "transportEventType")
-    @Mapping(expression = "java(TransportCallMapper.fromPubsetToTransportCall(pubSetType))", target = "transportCall")
+    @Mapping(expression = "java(TransportCallMapper.getTransportCallForTransportEvents(pubSetType))", target = "transportCall")
     @Mapping(expression = "java(DocumentReferenceMapper.fromPubsetTypeToDocumentReferences(pubSetType))", target = "documentReferences")
     TransportEvent fromPubSetToTransportEvent(PubSetType pubSetType, Event baseEvent);
 

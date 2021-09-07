@@ -1,10 +1,10 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mappers;
 
 import MSK.com.gems.PubSetType;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DCSAEventTypeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapperImpl;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -43,6 +43,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDa
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventEst;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventEstWithGCSSExpDeparture;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_ETDEventEstWithNoTime;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getPartyList;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForEquipmentEventType;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForShipmentEventType;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.output.EventDataBuilder.getEventForTransportEventACT;
@@ -88,13 +89,13 @@ class EventMapperTest {
     private static Stream<Arguments> testDataForEquipmentEventActs() {
         return Stream.of(
                 Arguments.arguments(getPubSetTypeWithDISCHARG_NEventAct(), getEventForEquipmentEventType()),
-                Arguments.arguments(getPubSetTypeWithGATE_IN_EXPNEventAct(), getEventForEquipmentEventType()),
-                Arguments.arguments(getPubSetTypeWithGATE_OUTEXPYEventAct(), getEventForEquipmentEventType()),
-                Arguments.arguments(getPubSetTypeWithLOAD_NEventAct(), getEventForEquipmentEventType()),
-                Arguments.arguments(getPubSetTypeWithOFF_RAILIMPNEventAct(), getEventForEquipmentEventType()),
-                Arguments.arguments(getPubSetTypeWithON_RAIL_EXPNEventAct(), getEventForEquipmentEventType()),
-                Arguments.arguments(getPubSetTypeWithSTRIPPIN_YEventAct(), getEventForEquipmentEventType()),
-                Arguments.arguments(getPubSetTypeWithSTUFFINGEXPNEventAct(), getEventForEquipmentEventType())
+                Arguments.arguments(getPubSetTypeWithGATE_IN_EXPNEventAct(getPartyList()), getEventForEquipmentEventType()),
+                Arguments.arguments(getPubSetTypeWithGATE_OUTEXPYEventAct(getPartyList()), getEventForEquipmentEventType()),
+                Arguments.arguments(getPubSetTypeWithLOAD_NEventAct(getPartyList()), getEventForEquipmentEventType()),
+                Arguments.arguments(getPubSetTypeWithOFF_RAILIMPNEventAct(getPartyList()), getEventForEquipmentEventType()),
+                Arguments.arguments(getPubSetTypeWithON_RAIL_EXPNEventAct(getPartyList()), getEventForEquipmentEventType()),
+                Arguments.arguments(getPubSetTypeWithSTRIPPIN_YEventAct(getPartyList()), getEventForEquipmentEventType()),
+                Arguments.arguments(getPubSetTypeWithSTUFFINGEXPNEventAct(getPartyList()), getEventForEquipmentEventType())
         );
     }
 

@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static MSK.com.external.dcsa.CarrierCode.MAEU;
@@ -35,6 +34,7 @@ import static MSK.com.external.dcsa.PartyFunctionCode.N2;
 import static MSK.com.external.dcsa.PartyFunctionCode.OS;
 import static MSK.com.external.dcsa.TransportEventType.ARRI;
 import static MSK.com.external.dcsa.TransportEventType.DEPA;
+import static MSK.com.external.dcsa.TransportEventType.OMIT;
 import static java.util.Map.entry;
 import static java.util.Objects.isNull;
 
@@ -160,6 +160,27 @@ public final class EventUtility {
         }
     }
 
+    public static TransportEventType getArrivalOrDepartureEquipmentEvent(String eventAct) {
+
+        if (isNull(eventAct)) {
+            throw new MappingException("Null Event Act");
+        }
+
+        switch (eventAct) {
+            case DISCHARG_N:
+            case OFF_RAILIMPN:
+                return ARRI;
+            case GATE_IN_EXPN:
+            case GATE_OUTEXPY:
+            case LOAD_N:
+            case ON_RAIL_EXPN:
+            case STUFFINGEXPN:
+                return DEPA;
+            default:
+               return OMIT;
+        }
+    }
+
 
     public static TransportEventType getTPEventTypeFromPubSetType(PubSetType pubSetType) {
         var eventAct = getEventAct(pubSetType);
@@ -203,17 +224,21 @@ public final class EventUtility {
     }
 
     private static Stream<TransportPlanType> getTransportPlanTypeForPoLNPoD(PubSetType pubSetType) {
+        return getTransportPlanTypeStream(pubSetType)
+                .filter(getTransportPlanTypePredicate());
+    }
+
+    private static Stream<TransportPlanType> getTransportPlanTypeStream(PubSetType pubSetType) {
         return Optional.ofNullable(pubSetType)
                 .map(PubSetType::getTransportPlan)
                 .filter(transportPlanTypes -> !transportPlanTypes.isEmpty())
                 .orElse(new ArrayList<>())
-                .stream()
-                .filter(getTransportPlanTypePredicate());
+                .stream();
     }
 
     private static Predicate<TransportPlanType> getTransportPlanTypePredicate() {
-        var stream  = Stream.of("FEF", "FEO", "MVS", "VSF", "VSM", "VSL").collect(Collectors.toUnmodifiableList());
-        return transportPlanType -> transportPlanType.getTransMode() != null && stream.contains(transportPlanType.getTransMode());
+        var transportPlanList  = List.of("FEF", "FEO", "MVS", "VSF", "VSM", "VSL");
+        return transportPlanType -> transportPlanType.getTransMode() != null && transportPlanList.contains(transportPlanType.getTransMode());
     }
 
     public static String getBookingNumber(PubSetType pubSetType) {

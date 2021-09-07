@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.EquipmentTestDataBuilder.getEquipmentList;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.EquipmentTestDataBuilder.getEquipmentList1;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.EquipmentTestDataBuilder.getEquipmentTypeWithSeal;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getPartyList;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.ShipmentTestDataBuilder.getPartyList2;
@@ -54,13 +55,26 @@ public final class GEMSPubTestDataBuilder {
 
     }
 
-    public static PubSetType getPubSetWithSealDetails(EventType eventType) {
+    public static PubSetType getPubSetWithTransportPlanWithStartLocationKolkata(EventType eventType, List<PartyType> party) {
+
+        var pubSetType = new PubSetType();
+        pubSetType.setEvent(eventType);
+        pubSetType.setShipment(getShipmentValue(party));
+        pubSetType.setEquipment(getEquipmentList1());
+        pubSetType.setTpdoc(getTPDocList());
+        pubSetType.setTransportPlan(List.of(getTransportPlan()));
+        return pubSetType;
+
+    }
+
+    public static PubSetType getPubSetWithTransportPlanWithStartLocationKolkataAndSealInformation(EventType eventType) {
 
         var pubSetType = new PubSetType();
         pubSetType.setEvent(eventType);
         pubSetType.setShipment(getShipmentValue(getPartyList()));
         pubSetType.setEquipment(getEquipmentTypeWithSeal());
         pubSetType.setTpdoc(getTPDocList());
+        pubSetType.setTransportPlan(List.of(getTransportPlan()));
         return pubSetType;
 
     }
@@ -188,7 +202,6 @@ public final class GEMSPubTestDataBuilder {
         return pubSetType;
     }
 
-
     private static TransportPlanType getTransportPlan() {
         TransportPlanType transportPlan = getCommonTransportPlanType(getStartLoc(), getEndLoc());
         transportPlan.setGttsactArvTS("2021-21-21 13:29");
@@ -286,34 +299,36 @@ public final class GEMSPubTestDataBuilder {
     public static PubSetType getPubSetTypeWithDISCHARG_NEventAct(){
         return getPubSet(getEventTypeData("DISCHARG   N"));
     }
-    public static PubSetType getPubSetTypeWithGATE_IN_EXPNEventAct(){
-        return getPubSet(getEventTypeData("GATE-IN EXPN"));
+    public static PubSetType getPubSetTypeWithGATE_IN_EXPNEventAct(List<PartyType> partiesInformation){
+        return getPubSetWithTransportPlanWithStartLocationKolkata(getEventTypeData("GATE-IN EXPN"), partiesInformation);
     }
-    public static PubSetType getPubSetTypeWithGATE_OUTEXPYEventAct(){
-        return getPubSet(getEventTypeData("GATE-OUTEXPY"));
+    public static PubSetType getPubSetTypeWithGATE_OUTEXPYEventAct(List<PartyType> partiesInformation){
+        return getPubSetWithTransportPlanWithStartLocationKolkata(getEventTypeData("GATE-OUTEXPY"), partiesInformation);
     }
 
     public static PubSetType getPubSetTypeWithGATE_OUTEXPYEventActAndSeals(){
-        return getPubSetWithSealDetails(getEventTypeData("GATE-OUTEXPY"));
+        return getPubSetWithTransportPlanWithStartLocationKolkataAndSealInformation(getEventTypeData("GATE-OUTEXPY"));
     }
-    public static PubSetType getPubSetTypeWithLOAD_NEventAct(){
-        return getPubSet(getEventTypeData("LOAD       N"));
-    }
-    public static PubSetType getPubSetTypeWithOFF_RAILIMPNEventAct(){
-        return getPubSet(getEventTypeData("OFF-RAILIMPN"));
-    }
-    public static PubSetType getPubSetTypeWithON_RAIL_EXPNEventAct(){
-        return getPubSet(getEventTypeData("ON-RAIL EXPN"));
-    }
-    public static PubSetType getPubSetTypeWithSTRIPPIN_YEventAct(){
-        return getPubSet(getEventTypeData("STRIPPIN   Y"));
+    public static PubSetType getPubSetTypeWithLOAD_NEventAct(List<PartyType> partiesInformation){
+        return getPubSetWithTransportPlanWithStartLocationKolkata(getEventTypeData("LOAD       N"), partiesInformation);
     }
 
-    public static PubSetType getPubSetTypeWithDISCHARGE_NEventAct(){
-        return getPubSet(getEventTypeData("DISCHARG   N"));
+    public static PubSetType getPubSetTypeWithOFF_RAILIMPNEventAct(List<PartyType> partiesInformation){
+        return getPubSetWithTransportPlan(getEventTypeData("OFF-RAILIMPN"),partiesInformation);
     }
-    public static PubSetType getPubSetTypeWithSTUFFINGEXPNEventAct(){
-        return getPubSet(getEventTypeData("STUFFINGEXPN"));
+
+    public static PubSetType getPubSetTypeWithON_RAIL_EXPNEventAct(List<PartyType> partiesInformation){
+        return getPubSetWithTransportPlanWithStartLocationKolkata(getEventTypeData("ON-RAIL EXPN"),partiesInformation);
+    }
+    public static PubSetType getPubSetTypeWithSTRIPPIN_YEventAct(List<PartyType> partiesInformation){
+        return getPubSetWithTransportPlanWithStartLocationKolkata(getEventTypeData("STRIPPIN   Y"), partiesInformation);
+    }
+
+    public static PubSetType getPubSetTypeWithDISCHARGE_NEventAct(List<PartyType> partiesInformation){
+        return getPubSetWithTransportPlan(getEventTypeData("DISCHARG   N"), partiesInformation);
+    }
+    public static PubSetType getPubSetTypeWithSTUFFINGEXPNEventAct(List<PartyType> partiesInformation){
+        return getPubSetWithTransportPlanWithStartLocationKolkata(getEventTypeData("STUFFINGEXPN"), partiesInformation);
     }
 
     public static PubSetType getPubSetTypeWithCONTAINER_ARRIVALEventAct(){
