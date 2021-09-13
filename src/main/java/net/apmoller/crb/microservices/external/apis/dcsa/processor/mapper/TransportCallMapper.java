@@ -131,7 +131,7 @@ public final class TransportCallMapper {
             case "RCO":
                 return TransPortMode.RAIL;
             default:
-                return TransPortMode.NA;
+                return null;
         }
     }
 

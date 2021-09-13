@@ -134,7 +134,7 @@ class TransportEventMapperTest {
     private static TransportEvent getTransportEventTestData(TransportEventType transportEventType, TransportCall transportCall, List<DocumentReference> documentReferences) {
 
         var transportEvent = new TransportEvent();
-        transportEvent.setTransportEventType(transportEventType);
+        transportEvent.setTransportEventTypeCode(transportEventType);
         transportEvent.setTransportCall(transportCall);
         transportEvent.setDocumentReferences(documentReferences);
         transportEvent.setEventID(baseEventData.getEventID());

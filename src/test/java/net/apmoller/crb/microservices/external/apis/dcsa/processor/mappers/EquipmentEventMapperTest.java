@@ -84,7 +84,6 @@ class EquipmentEventMapperTest {
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithOFF_RAILIMPNEventAct(null))), getEquipmentEventTestData(GTIN, getTransportCall())),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithDISCHARGE_NEventAct(null))), getEquipmentEventTestData(DISC, getTransportCall())),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_IN_EXPNEventAct(null))), getEquipmentEventTestData(GTIN, getTransportCallForKolkata())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithSTRIPPIN_YEventAct(null))), getEquipmentEventTestData(STRP, getTransportCallWithNATransportMode())),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithSTUFFINGEXPNEventAct(null))), getEquipmentEventTestData(STUF, getTransportCallForKolkata())),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithON_RAIL_EXPNEventAct(null))), getEquipmentEventTestData(GTOT, getTransportCallForKolkata())),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventAct(null))), getEquipmentEventTestData(GTOT, getTransportCallForKolkata())),
@@ -117,16 +116,6 @@ class EquipmentEventMapperTest {
         return transportCall;
     }
 
-    private static TransportCall getTransportCallWithNATransportMode() {
-
-        var transportCall = new TransportCall();
-        transportCall.setCarrierServiceCode("LineCode");
-        transportCall.setOtherFacility("Kolkata");
-        transportCall.setModeOfTransport(TransPortMode.NA);
-
-        return transportCall;
-    }
-
     private static TransportCall getTransportCallForKolkata() {
 
         var transportCall = new TransportCall();
@@ -142,7 +131,7 @@ class EquipmentEventMapperTest {
 
     private static EquipmentEvent getEquipmentEventTestData (EquipmentEventType eventType, TransportCall transportCall) {
          var equipmentEvent = new EquipmentEvent();
-         equipmentEvent.setEquipmentEventType(eventType);
+         equipmentEvent.setEquipmentEventTypeCode(eventType);
          equipmentEvent.setEmptyIndicatorCode(EmptyIndicatorCode.LADEN);
          equipmentEvent.setDocumentReferences(getDocumentRef());
          equipmentEvent.setSeals(new ArrayList<>());

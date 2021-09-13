@@ -208,7 +208,7 @@
               "default": null
             },
             {
-              "name": "shipmentEventType",
+              "name": "shipmentEventTypeCode",
               "type": {
                 "type": "enum",
                 "name": "ShipmentEventType",
@@ -321,7 +321,7 @@
               "default": null
             },
             {
-              "name": "equipmentEventType",
+              "name": "equipmentEventTypeCode",
               "type": ["null", {
                 "type": "enum",
                 "name": "EquipmentEventType",
@@ -465,8 +465,7 @@
                         "VESSEL",
                         "RAIL",
                         "TRUCK",
-                        "BARGE",
-                        "NA"
+                        "BARGE"
                       ]
                     }
                   },
@@ -695,7 +694,7 @@
               "default": null
             },
             {
-              "name": "transportEventType",
+              "name": "transportEventTypeCode",
               "type": ["null", {
                 "type": "enum",
                 "name": "TransportEventType",

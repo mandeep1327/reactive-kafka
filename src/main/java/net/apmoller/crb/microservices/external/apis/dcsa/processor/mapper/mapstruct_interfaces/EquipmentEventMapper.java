@@ -43,7 +43,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
                 EquipmentEventTypeMapper.class})
 public interface EquipmentEventMapper {
 
-    @Mapping(source = "pubSetType.event.eventAct", target = "equipmentEventType")
+    @Mapping(source = "pubSetType.event.eventAct", target = "equipmentEventTypeCode")
     @Mapping(expression = "java(fromPubSetTypeToEmptyIndicatorCode(pubSetType))", target = "emptyIndicatorCode")
     @Mapping(expression = "java(DocumentReferenceMapper.fromPubsetTypeToDocumentReferences(pubSetType))", target = "documentReferences")
     @Mapping(expression = "java(fromPubSetTypeToTransportCall(pubSetType))", target = "transportCall")

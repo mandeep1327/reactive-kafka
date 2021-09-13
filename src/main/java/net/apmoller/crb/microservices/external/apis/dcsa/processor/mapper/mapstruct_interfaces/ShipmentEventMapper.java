@@ -15,7 +15,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class},
         uses = {ShipmentEventTypeMapper.class, ShipmentInformationTypeMapper.class, DocumentIdMapper.class})
 public interface ShipmentEventMapper {
-    @Mapping(source = "pubSetType.event.eventAct", target = "shipmentEventType")
+    @Mapping(source = "pubSetType.event.eventAct", target = "shipmentEventTypeCode")
     @Mapping(source = "pubSetType.event.eventAct", target = "shipmentInformationType")
     @Mapping(source = "pubSetType", target = "documentID")
     ShipmentEvent fromPubSetTypeToShipmentEvent(PubSetType pubSetType, Event baseData);
