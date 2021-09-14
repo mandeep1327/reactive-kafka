@@ -11,9 +11,8 @@ import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
 import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverRecord;
-import reactor.util.retry.Retry;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.metric.MetricsService;
 
-import java.time.Duration;
 
 @Service
 @Slf4j
@@ -22,6 +21,7 @@ public class GEMSPubTypeKafkaConsumer {
 
     private final KafkaReceiver<String, GEMSPubType> kafkaReceiver;
     private final EventDelegator eventDelegator;
+    private final MetricsService metricsService;
 
     @EventListener(ApplicationStartedEvent.class)
     public Disposable startKafkaConsumer() {
@@ -38,9 +38,7 @@ public class GEMSPubTypeKafkaConsumer {
         return Mono.just(gemsRecord)
                 .map(ConsumerRecord::value)
                 .flatMap(this::handleSubscriptionResponse)
-                .doOnError(ex -> log.warn("Error processing event {}", gemsRecord.key(), ex))
-                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(5)))
-                .doOnError(ex -> log.error("Error processing event after all retries {}", gemsRecord.key(), ex))
+                .doOnError(ex -> logGemsError(gemsRecord,ex))
                 .onErrorResume(ex -> Mono.empty())
                 .doOnNext(event -> log.info("Successfully processed event"))
                 .then(Mono.just(gemsRecord));
@@ -49,7 +47,16 @@ public class GEMSPubTypeKafkaConsumer {
     private Mono<Void> handleSubscriptionResponse(GEMSPubType gemsPubType) {
         log.info("GEMS Event received:::: {}", gemsPubType);
         return Mono.just(gemsPubType)
+                .doOnNext(dummy -> metricsService.incrementRecievedGemsEvent().subscribe())
                 .doOnNext(gemsPubType1 -> eventDelegator.checkCorrectEvent(gemsPubType))
                 .then();
     }
+
+    private void logGemsError(ReceiverRecord<String, GEMSPubType> gemsRecord, Throwable ex){
+        log.warn("Error processing event {}", gemsRecord.key(), ex);
+        metricsService.incrementRecievedErrorEvent().subscribe();
+
+    }
+
+
 }

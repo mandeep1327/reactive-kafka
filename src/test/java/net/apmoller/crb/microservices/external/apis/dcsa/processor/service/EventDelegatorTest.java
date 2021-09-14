@@ -14,10 +14,12 @@ import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstr
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.ShipmentEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.TransportEventMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.metric.MetricsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.kafka.sender.KafkaSender;
 
 import java.util.Collections;
@@ -48,8 +50,10 @@ class EventDelegatorTest {
     private final EventMapper eventMapper = mock(EventMapper.class);
     private final DCSAEventTypeMapper eventTypeMapper = mock(DCSAEventTypeMapper.class);
     private final KafkaSender<String, DcsaTrackTraceEvent> kafkaSender = mock(KafkaSender.class);
+    private final MetricsService metricsService = mock(MetricsService.class);
 
-    private final EventDelegator eventDelegator = new EventDelegator( eventMapper, shipmentMapper, equipmentMapper, transportMapper, eventTypeMapper,kafkaSender);
+
+    private final EventDelegator eventDelegator = new EventDelegator( eventMapper, shipmentMapper, equipmentMapper, transportMapper, eventTypeMapper,kafkaSender,metricsService);
 
     @BeforeEach
     void setUpKafka(){
@@ -91,7 +95,7 @@ class EventDelegatorTest {
         when(eventMapper.fromPubSetTypeToEvent(getPubSetTypeWithConfirm_Shipment_ClosedEventAct())).thenReturn(getEventForShipmentEventType());
         when(eventTypeMapper.asDCSAEventType(any())).thenReturn(EventType.SHIPMENT);
         when(shipmentMapper.fromPubSetTypeToShipmentEvent(getPubSetTypeWithConfirm_Shipment_ClosedEventAct(), getEventForShipmentEventType())).thenReturn(new ShipmentEvent());
-
+        when(metricsService.incrementRecievedEventType(any())).thenReturn(Mono.empty());
         eventDelegator.checkCorrectEvent(gemsPubTypeWithBlankPubSetData);
         verify(shipmentMapper, times(1)).fromPubSetTypeToShipmentEvent(getPubSetTypeWithConfirm_Shipment_ClosedEventAct(), getEventForShipmentEventType());
         verifyNoInteractions(equipmentMapper);
@@ -104,6 +108,7 @@ class EventDelegatorTest {
         when(eventMapper.fromPubSetTypeToEvent(getPubSetTypeWithARRIVECUIMPNEventAct())).thenReturn(getEventForEquipmentEventType());
         when(equipmentMapper.fromPubSetToEquipmentEvent(getPubSetTypeWithARRIVECUIMPNEventAct(), getEventForEquipmentEventType())).thenReturn(new EquipmentEvent());
         when(eventTypeMapper.asDCSAEventType(any())).thenReturn(EventType.EQUIPMENT);
+        when(metricsService.incrementRecievedEventType(any())).thenReturn(Mono.empty());
 
 
         eventDelegator.checkCorrectEvent(gemsPubTypeWithEquipmentPubSetData);
@@ -119,6 +124,7 @@ class EventDelegatorTest {
         when(eventMapper.fromPubSetTypeToEvent(getPubSetTypeWithCONTAINER_ARRIVALEventAct())).thenReturn(getEventForTransportEventType());
         when(transportMapper.fromPubSetToTransportEvent(getPubSetTypeWithCONTAINER_ARRIVALEventAct(), getEventForTransportEventType())).thenReturn(new TransportEvent());
         when(eventTypeMapper.asDCSAEventType(any())).thenReturn(EventType.TRANSPORT);
+        when(metricsService.incrementRecievedEventType(any())).thenReturn(Mono.empty());
 
 
         eventDelegator.checkCorrectEvent(gemsPubTypeWithTransportPubSetData);

@@ -5,13 +5,14 @@ import MSK.com.gems.GEMSPubType;
 import MSK.com.gems.PubSetType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DCSAEventTypeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EquipmentEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.EventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.ShipmentEventMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces.TransportEventMapper;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.metric.MetricsService;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import reactor.kafka.sender.SenderRecord;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
+
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getEventAct;
 
 @Service
@@ -37,6 +39,7 @@ public class EventDelegator {
     private final DCSAEventTypeMapper eventTypeMapper;
     private static final String PUBSET_IS_EMPTY = "The Pubset element is empty";
     private final KafkaSender<String, DcsaTrackTraceEvent> kafkaSender;
+    private final MetricsService metricsService;
 
     @Value("${kafka.publisher.topic}")
     private String kafkaPublisherTopic;
@@ -73,16 +76,19 @@ public class EventDelegator {
                     var shipmentEvent = shipmentEventMapper.fromPubSetTypeToShipmentEvent(pubSetType, baseEvent);
                     dcsaTrackAndTraceToBeStored.setShipmentEvent(shipmentEvent);
                     keyForKafkaPayload = getKeyForKafkaPayload(shipmentEvent.getEventID());
+                    metricsService.incrementRecievedEventType("shipment").subscribe();
                     break;
                 case TRANSPORT:
                     var transportEvent = transportEventMapper.fromPubSetToTransportEvent(pubSetType, baseEvent);
                     dcsaTrackAndTraceToBeStored.setTransportEvent(transportEvent);
                     keyForKafkaPayload = getKeyForKafkaPayload(transportEvent.getEventID());
+                    metricsService.incrementRecievedEventType("transport").subscribe();
                     break;
                 case EQUIPMENT:
                     var equipmentEvent = equipmentEventMapper.fromPubSetToEquipmentEvent(pubSetType, baseEvent);
                     dcsaTrackAndTraceToBeStored.setEquipmentEvent(equipmentEvent);
                     keyForKafkaPayload = getKeyForKafkaPayload(equipmentEvent.getEventID());
+                    metricsService.incrementRecievedEventType("equipment").subscribe();
                     break;
                 default:
                     throw new MappingException("Not acceptable event type of type" + dcsaTrackAndTraceToBeStored);
@@ -90,6 +96,7 @@ public class EventDelegator {
             sendMessage(dcsaTrackAndTraceToBeStored, keyForKafkaPayload);
         } else {
             log.warn("The payload of event type {} was dropped" , eventAct);
+            metricsService.incrementRecievedDroppedEvent().subscribe();
         }
     }
 
@@ -105,7 +112,7 @@ public class EventDelegator {
                 new ProducerRecord<>(kafkaPublisherTopic, keyForKafkaPayload, dcsaTrackAndTraceToBeStored), keyForKafkaPayload));
 
         kafkaSender.send(senderRecord)
-                .doOnError(e -> log.error("This is the error message" + e.getMessage()))
+                .doOnError(this::logKafkaError)
                 .subscribe(r -> {
                     var metadata = r.recordMetadata();
                     log.info("Message {} sent successfully, topic-partition={}-{} offset={}\n",
@@ -113,7 +120,13 @@ public class EventDelegator {
                             metadata.topic(),
                             metadata.partition(),
                             metadata.offset());
+                    metricsService.incrementSentKafkaMessage().subscribe();
                 });
+    }
+
+    private void logKafkaError(Throwable e){
+        log.error("This is the error message" + e.getMessage());
+        metricsService.incrementErrorKafka().subscribe();
     }
 }
 

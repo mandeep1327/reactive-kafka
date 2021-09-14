@@ -8,6 +8,7 @@ kafkaSchemaRegistryUsername:
 kafkaSchemaRegistryPassword:
 kafkaConsumerUsername:
 kafkaConsumerPassword:
+environment: "local"
 azure:
   keyvault:
     enabled: ${ENABLE_AZURE_VAULT}
@@ -51,9 +52,10 @@ management:
       enabled: true
     readinessstate:
       enabled: true
-  endpoint:
-    prometheus:
-      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
     health:
       show-details: always
       probes:
@@ -62,6 +64,16 @@ management:
         readiness:
           include: "readinessState,diskSpace,ping,kafka"
           show-details: always
+  metrics.export.datadog:
+    apiKey: externalapis-kv/data/sharedsecrets/datadog/apikey#apikey
+    enabled: true
+    uri: "https://app.datadoghq.eu"
+    application-key: externalapis-kv/data/sharedsecrets/datadog/application-key#application-key
+
+prometheus:
+  scrape: true
+  path: /actuator/prometheus
+  port: 8080
 
   endpoints:
     web:
