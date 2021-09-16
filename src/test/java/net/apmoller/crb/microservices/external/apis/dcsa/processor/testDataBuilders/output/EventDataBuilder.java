@@ -20,23 +20,23 @@ public final class EventDataBuilder {
 
 
     public static Event getEventForShipmentEventType() {
-        return getEventWithEventTypeAct(EventType.SHIPMENT, "2021-09-23 23:45", getParties(),getReferences());
+        return getEventWithEventTypeAct(EventType.SHIPMENT, "2021-09-23T23:45:11Z", getParties(),getReferences());
     }
 
     public static Event getEventForEquipmentEventType() {
-        return getEventWithEventTypeAct(EventType.EQUIPMENT, "2021-09-23 23:45", getParties(), getReferences());
+        return getEventWithEventTypeAct(EventType.EQUIPMENT, "2021-09-23T23:45:11Z", getParties(), getReferences());
     }
 
     public static Event getEventForTransportEventType() {
-        return getEventWithEventTypeAct(EventType.TRANSPORT, "2021-21-21 13:29", getParties2(), getReferences2());
+        return getEventWithEventTypeAct(EventType.TRANSPORT, "2021-07-21T13:29:11Z", getParties2(), getReferences2());
     }
 
     public static Event getEventForTransportEventACT() {
-        return getEventWithEventTypeAct(EventType.TRANSPORT,"2021-21-21 13:29", getParties3(), getReferences3());
+        return getEventWithEventTypeAct(EventType.TRANSPORT,"2021-07-21T13:29:11Z", getParties3(), getReferences3());
     }
 
     public static Event getEventForTransportEventTypeWithESTEventAct() {
-        return getEventWithEventTypeEst( "2021-21-21 13:29", getParties3(), getReferences3());
+        return getEventWithEventTypeEst( "2021-07-21T13:29:11Z", getParties3(), getReferences3());
     }
 
 
@@ -62,7 +62,7 @@ public final class EventDataBuilder {
                 .eventID("2537152461542365")
                 .eventType(eventType)
                 .eventDateTime(eventDateTime)
-                .eventCreatedDateTime("2021-09-23 23:45")
+                .eventCreatedDateTime("2021-09-23T23:45:11Z")
                 .references(references)
                 .carrierBookingReference("209989099")
                 .transportDocumentReference("293156737")

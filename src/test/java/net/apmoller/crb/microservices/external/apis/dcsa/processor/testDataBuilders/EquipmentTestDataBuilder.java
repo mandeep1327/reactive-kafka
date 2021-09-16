@@ -66,8 +66,8 @@ public final class EquipmentTestDataBuilder {
     private static MoveType commonMoveType() {
         MoveType moveType = new MoveType();
         moveType.setOperator("MSK");
-        moveType.setActDte("2021-09-23 ");
-        moveType.setActTim("23:45");
+        moveType.setActDte("2021-09-23");
+        moveType.setActTim("23:45:11");
         moveType.setLineCde("LineCode");
         return moveType;
     }

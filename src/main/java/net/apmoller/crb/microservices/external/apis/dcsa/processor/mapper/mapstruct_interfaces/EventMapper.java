@@ -2,11 +2,12 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapst
 
 import MSK.com.external.dcsa.EventClassifierCode;
 import MSK.com.gems.EquipmentType;
+import MSK.com.gems.EventType;
 import MSK.com.gems.GTTSVesselType;
 import MSK.com.gems.PubSetType;
 import MSK.com.gems.TransportPlanType;
-import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
+import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DCSAEventTypeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
@@ -28,6 +29,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstTransportPlanTypeWithPortOfLoad;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getLastTransportPlanWithPortOfDischarge;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getTimeStampInUTCFormat;
 
 @Mapper(componentModel = "spring",
         imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class, ServiceTypeMapper.class},
@@ -37,7 +39,7 @@ public interface EventMapper {
     @Mapping(target = "eventID", source = "event.eventId")
     @Mapping(target = "bookingReference", source = "shipment.bookNo")
     @Mapping(target = "eventDateTime", expression = "java(getDCSAEventDateTime(details))")
-    @Mapping(target = "eventCreatedDateTime", source = "event.gemstsutc")
+    @Mapping(target = "eventCreatedDateTime", expression = "java(getUTCFromNonFormattedTimestamp(details))")
     @Mapping(target = "eventType", source = "details.event.eventAct")
     @Mapping(target = "eventClassifierCode", expression = "java(getClassifierCode(details))")
     @Mapping(expression = "java(ReferenceMapper.getReferencesFromPubSetType(details))", target = "references")
@@ -53,7 +55,7 @@ public interface EventMapper {
     default String getDCSAEventDateTime(PubSetType pubSetType) {
         String eventAct = getEventAct(pubSetType);
         if (SHIPMENT_EVENTS.contains((eventAct))) {
-            return pubSetType.getEvent().getGemstsutc();
+            return getUTCFromNonFormattedTimestamp(pubSetType);
         } else if (TRANSPORT_EVENTS.contains((eventAct))) {
             return getEventDateTimeForTransportEvents(pubSetType, eventAct);
         } else if (EQUIPMENT_EVENTS.contains(eventAct)) {
@@ -62,6 +64,13 @@ public interface EventMapper {
         throw new MappingException("Could not map eventType");
     }
 
+    default String getUTCFromNonFormattedTimestamp(PubSetType pubSetType){
+        return Optional.ofNullable(pubSetType)
+                .map(PubSetType::getEvent)
+                .map(EventType::getGemstsutc)
+                .map(EventUtility::getTimeStampInUTCFormat)
+                .orElse(null);
+    }
 
     default EventClassifierCode getClassifierCode(PubSetType pubSetType) {
         var act = getEventAct(pubSetType);
@@ -86,11 +95,13 @@ public interface EventMapper {
     }
 
     private String getEventDateTimeForTransportEvents(PubSetType pubSetType, String eventAct) {
+        String eventDateTime;
         if (SHIPMENT_ETA.equals(eventAct) || SHIPMENT_ETD.equals(eventAct)) {
-            return getEventDateTimeForSpecialTransportEvents(pubSetType, eventAct);
+            eventDateTime = getEventDateTimeForSpecialTransportEvents(pubSetType, eventAct);
         } else {
-            return getEventDateTimeForOtherTransportEvents(pubSetType);
+            eventDateTime = getEventDateTimeForOtherTransportEvents(pubSetType);
         }
+        return getTimeStampInUTCFormat(eventDateTime);
     }
 
     private String getEventDateTimeForEquipmentEvents(PubSetType pubSetType) {
@@ -102,7 +113,7 @@ public interface EventMapper {
                 .orElseThrow(MappingException::new);
         var date = Optional.ofNullable(moveType.getActDte()).orElseThrow(MappingException::new);
         var time = Optional.ofNullable(moveType.getActTim()).orElseThrow(MappingException::new);
-        return date.concat(time);
+        return getTimeStampInUTCFormat(String.join("",date," ", time));
     }
 
     default String getEventDateTimeForSpecialTransportEvents(PubSetType pubSetType, String eventAct) {

@@ -14,9 +14,12 @@ import lombok.experimental.UtilityClass;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.PartyFunctionDTO;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -66,6 +69,16 @@ public final class EventUtility {
     public static final String STRIPPIN_Y = "STRIPPIN   Y";
     public static final String CONTAINER_ARRIVAL = "CONTAINER ARRIVAL";
     public static final String CONTAINER_DEPARTURE = "CONTAINER DEPARTURE";
+    public static final DateTimeFormatter OUTBOUND_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    public static final DateTimeFormatter INBOUND_TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public static String getTimeStampInUTCFormat(String originalTimestamp){
+        if (Objects.nonNull(originalTimestamp) && !originalTimestamp.isEmpty()) {
+            var parsedDate = LocalDateTime.parse(originalTimestamp, INBOUND_TIMESTAMP_FORMATTER);
+            return parsedDate.format(OUTBOUND_FORMATTER);
+        }
+        return null;
+    }
 
 
     public static final List<String> SHIPMENT_EVENTS = List.of(

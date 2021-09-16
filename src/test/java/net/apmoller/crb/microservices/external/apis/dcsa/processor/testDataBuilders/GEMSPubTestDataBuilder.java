@@ -101,7 +101,7 @@ public final class GEMSPubTestDataBuilder {
         PubSetType pubSetType = getCommonPubSetTypeWithVesselData(eventType, parties);
         var transportPlanWithEstimatedTime = getTransportPlan();
         transportPlanWithEstimatedTime.setGttsactArvTS(null);
-        transportPlanWithEstimatedTime.setGttsexpArvTS("2021-21-21 13:29");
+        transportPlanWithEstimatedTime.setGttsexpArvTS("2021-07-21 13:29:11");
         pubSetType.setTransportPlan(List.of(transportPlanWithEstimatedTime));
         return pubSetType;
 
@@ -111,7 +111,8 @@ public final class GEMSPubTestDataBuilder {
         var pubSetType = getCommonPubSetTypeWithVesselData(eventType, parties);
         var transportPlanWithEstimatedTime = getTransportPlan();
         transportPlanWithEstimatedTime.setGttsactArvTS(null);
-        transportPlanWithEstimatedTime.setGcssexpArvTS("2021-21-21 13:29");
+        //TODO: confirmation from Paulo is needed
+        transportPlanWithEstimatedTime.setGcssexpArvTS("2021-07-21 13:29:11");
         pubSetType.setTransportPlan(List.of(transportPlanWithEstimatedTime));
 
         return pubSetType;
@@ -127,7 +128,7 @@ public final class GEMSPubTestDataBuilder {
         var pubSetType = getPubSetWithTransportPlan(eventType, parties);
         var transportPlanWithEstimatedTime = getTransportPlanForDeparture("MVS");
         transportPlanWithEstimatedTime.setGttsactDepTS(null);
-        transportPlanWithEstimatedTime.setGttsexpDepTS("2021-21-21 13:29");
+        transportPlanWithEstimatedTime.setGttsexpDepTS("2021-07-21 13:29:11");
         pubSetType.setTransportPlan(List.of(transportPlanWithEstimatedTime));
 
         return pubSetType;
@@ -138,7 +139,7 @@ public final class GEMSPubTestDataBuilder {
         var pubSetType = getPubSetWithTransportPlan(eventType, parties);
         var transportPlanWithEstimatedTime = getTransportPlanForDeparture("MVS");
         transportPlanWithEstimatedTime.setGttsactDepTS(null);
-        transportPlanWithEstimatedTime.setGcssexpDepTS("2021-21-21 13:29");
+        transportPlanWithEstimatedTime.setGcssexpDepTS("2021-07-21 13:29:11");
         pubSetType.setTransportPlan(List.of(transportPlanWithEstimatedTime));
 
         return pubSetType;
@@ -204,7 +205,7 @@ public final class GEMSPubTestDataBuilder {
 
     private static TransportPlanType getTransportPlan() {
         TransportPlanType transportPlan = getCommonTransportPlanType(getStartLoc(), getEndLoc());
-        transportPlan.setGttsactArvTS("2021-21-21 13:29");
+        transportPlan.setGttsactArvTS("2021-07-21 13:29:11");
         transportPlan.setTransMode("MVS");
         return transportPlan;
     }
@@ -217,7 +218,7 @@ public final class GEMSPubTestDataBuilder {
 
     private static TransportPlanType getTransportPlanForDeparture(String transportMode) {
         TransportPlanType transportPlan = getCommonTransportPlanType(getStartLocWithCopenhagen(), getEndLocWithKolkata());
-        transportPlan.setGttsactDepTS("2021-21-21 13:29");
+        transportPlan.setGttsactDepTS("2021-07-21 13:29:11");
         transportPlan.setTransMode(transportMode);
         return transportPlan;
     }
@@ -257,8 +258,8 @@ public final class GEMSPubTestDataBuilder {
 
     private static GTTSVesselType getVesselData() {
         var vesselData = new GTTSVesselType();
-        vesselData.setGttsdte("2021-21-21 ");
-        vesselData.setGttstim("13:29");
+        vesselData.setGttsdte("2021-07-21 ");
+        vesselData.setGttstim("13:29:11");
         return vesselData;
     }
 
@@ -411,9 +412,9 @@ public final class GEMSPubTestDataBuilder {
         var eventType = new EventType();
         eventType.setEventId(2537152461542365L);
         eventType.setEventAct(eventAct);
-        eventType.setGemstsutc("2021-09-23 23:45");
+        eventType.setGemstsutc("2021-09-23 23:45:11");
         eventType.setSrcSys("GCSS");
-        eventType.setSrcSysTimestamp("2021-09-23 23:45");
+        eventType.setSrcSysTimestamp("2021-09-23 23:45:11");
         eventType.setRkemmove("DISCHARG   N");
         return eventType;
 
