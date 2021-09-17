@@ -10,7 +10,7 @@ kafka:
   publisherTopic: MSK.shipment.externalDcsaEvents.topic.internal.any.v1
   username: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/username#username
   password: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/password#password
-  consumerGroup: MSK.external.dcsa.consumerGroup.v1
+  consumerGroup: MSK.external.dcsa.consumerGroup.v2
   schemaRegistryUrl: https://psrc-4kk0p.westeurope.azure.confluent.cloud/
   schemaRegistryUsername: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/schemaRegistryUsername#schemaRegistryUsername
   schemaRegistryPassword: vault:externalapis-kv/data/preprod/services/dcsa-events-processor/kafka/schemaRegistryPassword#schemaRegistryPassword
@@ -21,3 +21,6 @@ resources:
   limits:
     memory: 512Mi
     cpu: 1000m
+datadog:
+  apikey: vault:externalapis-kv/data/sharedsecrets/datadog/apikey#apikey
+  applicationKey: vault:externalapis-kv/data/sharedsecrets/datadog/application-key#application-key

@@ -49,6 +49,10 @@ spec:
               value: {{ .Values.kafka.schemaRegistryPassword }}
             - name: KAFKA_PUBLISHER_TOPIC
               value: {{ .Values.kafka.publisherTopic}}
+            - name: MANAGEMENT_METRICS_EXPORT_DATADOG_APIKEY
+              value: {{ .Values.datadog.apikey}}
+            - name: MANAGEMENT_METRICS_EXPORT_DATADOG_APPLICATION-KEY
+              value: {{ .Values.datadog.applicationKey}}
           imagePullPolicy: Always
           ports:
             - name: http

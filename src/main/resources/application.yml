@@ -9,11 +9,12 @@ kafkaSchemaRegistryPassword:
 kafkaConsumerUsername:
 kafkaConsumerPassword:
 environment: "local"
+MANAGEMENT_METRICS_EXPORT_DATADOG_APIKEY: "DUMMY"
+MANAGEMENT_METRICS_EXPORT_DATADOG_APPLICATION-KEY: "DUMMY"
 azure:
   keyvault:
     enabled: ${ENABLE_AZURE_VAULT}
     uri: ${AZURE_VAULT_ADDRESS}
-
 kafka:
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
   schemaRegistry:
@@ -65,10 +66,10 @@ management:
           include: "readinessState,diskSpace,ping,kafka"
           show-details: always
   metrics.export.datadog:
-    apiKey: externalapis-kv/data/sharedsecrets/datadog/apikey#apikey
+    apiKey: ${MANAGEMENT_METRICS_EXPORT_DATADOG_APIKEY}
     enabled: true
     uri: "https://app.datadoghq.eu"
-    application-key: externalapis-kv/data/sharedsecrets/datadog/application-key#application-key
+    application-key: ${MANAGEMENT_METRICS_EXPORT_DATADOG_APPLICATION-KEY}
 
 prometheus:
   scrape: true
