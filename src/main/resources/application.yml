@@ -1,7 +1,7 @@
 ENABLE_AZURE_VAULT: false
 KAFKA_BOOTSTRAP_SERVERS: "localhost:9092"
 KAFKA_CONSUMER_TOPIC: MSK.shipment.test.miscellaneousEvents.topic.internal.any.v1
-KAFKA_CONSUMER_GROUP: MSK.external.dcsa.consumerGroup.v1
+KAFKA_CONSUMER_GROUP: MSK.external.dcsa.consumerGroup.v2
 KAFKA_PUBLISHER_TOPIC: MSK.shipment.test.externalDcsaEvents.topic.internal.any.v1
 KAFKA_SCHEMA_REGISTRY_URL: "http://localhost:8081"
 kafkaSchemaRegistryUsername:
