@@ -14,6 +14,7 @@ import java.util.List;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithARRIVECUIMPNEventAct;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -58,14 +59,6 @@ import static org.mockito.Mockito.when;
         when(kafkaReceiver.receive()).thenReturn(Flux.just(record));
         assertTrue(kafkaConsumer.startKafkaConsumer().isDisposed());
     }
-    @Disabled
-    @Test
-    void testReceiverWhenValueDoesNotGetMapped() {
-        var consumerRecord = new ConsumerRecord("dumyy-topic", 0, 0, null, "gemsData");
-        var receiverOffset = mock(ReceiverOffset.class);
-        var record = new ReceiverRecord(consumerRecord, receiverOffset);
-        when(kafkaReceiver.receive()).thenReturn(Flux.just(record));
-        assertFalse(kafkaConsumer.startKafkaConsumer().isDisposed());
-    }
+
 
 }

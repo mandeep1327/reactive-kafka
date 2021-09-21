@@ -16,6 +16,7 @@ import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.Ma
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,11 +72,17 @@ public final class EventUtility {
     public static final String CONTAINER_DEPARTURE = "CONTAINER DEPARTURE";
     public static final DateTimeFormatter OUTBOUND_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
     public static final DateTimeFormatter INBOUND_TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter INBOUND_SECONDARY_TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public static String getTimeStampInUTCFormat(String originalTimestamp){
         if (Objects.nonNull(originalTimestamp) && !originalTimestamp.isEmpty()) {
-            var parsedDate = LocalDateTime.parse(originalTimestamp, INBOUND_TIMESTAMP_FORMATTER);
-            return parsedDate.format(OUTBOUND_FORMATTER);
+            LocalDateTime parsedDateAndTime;
+            try {
+                parsedDateAndTime = LocalDateTime.parse(originalTimestamp, INBOUND_TIMESTAMP_FORMATTER);
+            } catch (DateTimeParseException e) {
+                parsedDateAndTime = LocalDateTime.parse(originalTimestamp,INBOUND_SECONDARY_TIMESTAMP_FORMATTER);
+            }
+            return parsedDateAndTime.format(OUTBOUND_FORMATTER);
         }
         return null;
     }

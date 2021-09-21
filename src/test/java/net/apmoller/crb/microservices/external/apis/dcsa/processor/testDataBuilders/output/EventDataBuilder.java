@@ -32,7 +32,7 @@ public final class EventDataBuilder {
     }
 
     public static Event getEventForTransportEventACT() {
-        return getEventWithEventTypeAct(EventType.TRANSPORT,"2021-07-21T13:29:11Z", getParties3(), getReferences3());
+        return getEventWithEventTypeAct(EventType.TRANSPORT,"2021-07-21T13:29:00Z", getParties3(), getReferences3());
     }
 
     public static Event getEventForTransportEventTypeWithESTEventAct() {
