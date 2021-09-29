@@ -43,6 +43,19 @@ public final class TransportCallMapper {
         return createTransportCall(transportPlan, equipmentFirstElement);
     }
 
+    public static String getVesselCode (PubSetType pubSetData) {
+        var equipmentFirstElement = getFirstEquipmentElement(pubSetData);
+        var transportPlan = getTransportPlanForTransportEvent(pubSetData, equipmentFirstElement);
+        return getVesselCodeFromTransportPlan(transportPlan);
+
+    }
+
+    public static TransportCall getTransportCallForEquipmentEvents(PubSetType pubSetType) {
+        var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
+        var transportPlan = getTransportPlanTypeForCommonEvents(pubSetType, equipmentFirstElement, false);
+        return createTransportCall(transportPlan, equipmentFirstElement);
+    }
+
     private TransportPlanType getTransportPlanForTransportEvent(PubSetType pubSetType, EquipmentType equipmentFirstElement) {
         var eventAct = getEventAct(pubSetType);
         if (isETAorETDEvent(eventAct)) {
@@ -56,12 +69,6 @@ public final class TransportCallMapper {
             return getLastTransportPlanWithPortOfDischarge(pubSetType).orElseThrow(() -> new MappingException(TRANSPORT_PLAN_EMPTY));
         }
         return getFirstTransportPlanTypeWithPortOfLoad(pubSetType).orElseThrow(() -> new MappingException(TRANSPORT_PLAN_EMPTY));
-    }
-
-    public static TransportCall getTransportCallForEquipmentEvents(PubSetType pubSetType) {
-        var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
-        var transportPlan = getTransportPlanTypeForCommonEvents(pubSetType, equipmentFirstElement, false);
-        return createTransportCall(transportPlan, equipmentFirstElement);
     }
 
 
@@ -98,9 +105,15 @@ public final class TransportCallMapper {
 
     private static String getVoyageNumberFromTransportPlan(TransportPlanType transportPlanMap) {
         return Optional.ofNullable(transportPlanMap)
-                .map(TransportPlanType::getVesselCde)
+                .map(TransportPlanType::getVoyage)
                 .orElse(null);
 
+    }
+
+    private static String getVesselCodeFromTransportPlan(TransportPlanType transportPlan) {
+        return Optional.ofNullable(transportPlan)
+                .map(TransportPlanType::getVesselCde)
+                .orElse(null);
     }
 
     private static String getLocation(EquipmentType equipmentTypeElement) {

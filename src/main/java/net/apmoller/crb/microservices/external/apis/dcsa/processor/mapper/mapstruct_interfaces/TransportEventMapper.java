@@ -16,6 +16,7 @@ public interface TransportEventMapper {
 
     @Mapping(expression = "java(EventUtility.getTPEventTypeFromPubSetType(pubSetType))", target = "transportEventTypeCode")
     @Mapping(expression = "java(TransportCallMapper.getTransportCallForTransportEvents(pubSetType))", target = "transportCall")
+    @Mapping(expression = "java(TransportCallMapper.getVesselCode(pubSetType))", target = "vesselCode")
     @Mapping(expression = "java(DocumentReferenceMapper.fromPubsetTypeToDocumentReferences(pubSetType))", target = "documentReferences")
     TransportEvent fromPubSetToTransportEvent(PubSetType pubSetType, Event baseEvent);
 

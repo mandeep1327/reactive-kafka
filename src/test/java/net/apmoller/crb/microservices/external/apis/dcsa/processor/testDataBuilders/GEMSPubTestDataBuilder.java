@@ -203,10 +203,11 @@ public final class GEMSPubTestDataBuilder {
         return pubSetType;
     }
 
-    private static TransportPlanType getTransportPlan() {
+    public static TransportPlanType getTransportPlan() {
         TransportPlanType transportPlan = getCommonTransportPlanType(getStartLoc(), getEndLoc());
         transportPlan.setGttsactArvTS("2021-07-21 13:29");
         transportPlan.setTransMode("MVS");
+        transportPlan.setVoyage("MRSK1235");
         return transportPlan;
     }
 
@@ -220,6 +221,7 @@ public final class GEMSPubTestDataBuilder {
         TransportPlanType transportPlan = getCommonTransportPlanType(getStartLocWithCopenhagen(), getEndLocWithKolkata());
         transportPlan.setGttsactDepTS("2021-07-21 13:29");
         transportPlan.setTransMode(transportMode);
+        transportPlan.setVoyage("MRSK1235");
         return transportPlan;
     }
 

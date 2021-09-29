@@ -123,7 +123,7 @@ class TransportEventMapperTest {
         var transportCall = new TransportCall();
 
         transportCall.setCarrierServiceCode("LineCode");
-        transportCall.setCarrierVoyageNumber("MUMMRSK");
+        transportCall.setCarrierVoyageNumber("MRSK1235");
         transportCall.setOtherFacility("Copenhagen");
         transportCall.setModeOfTransport(transportMode);
 
@@ -151,6 +151,7 @@ class TransportEventMapperTest {
         transportEvent.setSourceSystem(baseEventData.getSourceSystem());
         transportEvent.setServiceType(baseEventData.getServiceType());
         transportEvent.setCarrierCode(baseEventData.getCarrierCode());
+        transportEvent.setVesselCode("MUMMRSK");
         return transportEvent;
 
     }

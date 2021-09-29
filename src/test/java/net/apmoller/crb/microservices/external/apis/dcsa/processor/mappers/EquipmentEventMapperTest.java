@@ -33,11 +33,8 @@ import static MSK.com.external.dcsa.EquipmentEventType.DISC;
 import static MSK.com.external.dcsa.EquipmentEventType.GTIN;
 import static MSK.com.external.dcsa.EquipmentEventType.GTOT;
 import static MSK.com.external.dcsa.EquipmentEventType.LOAD;
-import static MSK.com.external.dcsa.EquipmentEventType.STRP;
 import static MSK.com.external.dcsa.EquipmentEventType.STUF;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithARRIVECUIMPNEventAct;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDEPARTCUEXPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDISCHARGE_NEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDemoEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_IN_EXPNEventAct;
@@ -46,7 +43,6 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDa
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithLOAD_NEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithOFF_RAILIMPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithON_RAIL_EXPNEventAct;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithSTRIPPIN_YEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithSTUFFINGEXPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithShipment_CancelledEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithoutTransportPlan;
@@ -110,7 +106,7 @@ class EquipmentEventMapperTest {
         var transportCall = new TransportCall();
         transportCall.setCarrierServiceCode("LineCode");
         transportCall.setOtherFacility("Copenhagen");
-        transportCall.setCarrierVoyageNumber("MUMMRSK");
+        transportCall.setCarrierVoyageNumber("MRSK1235");
         transportCall.setModeOfTransport(TransPortMode.VESSEL);
 
         return transportCall;
@@ -120,7 +116,7 @@ class EquipmentEventMapperTest {
 
         var transportCall = new TransportCall();
         transportCall.setCarrierServiceCode("LineCode");
-        transportCall.setCarrierVoyageNumber("MUMMRSK");
+        transportCall.setCarrierVoyageNumber("MRSK1235");
         transportCall.setOtherFacility("Kolkata");
         transportCall.setModeOfTransport(TransPortMode.VESSEL);
 

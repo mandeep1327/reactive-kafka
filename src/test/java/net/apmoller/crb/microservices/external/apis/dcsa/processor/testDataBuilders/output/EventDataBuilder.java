@@ -20,23 +20,23 @@ public final class EventDataBuilder {
 
 
     public static Event getEventForShipmentEventType() {
-        return getEventWithEventTypeAct(EventType.SHIPMENT, "2021-09-23T23:45:11Z", getParties(),getReferences());
+        return getEventWithEventTypeAct(EventType.SHIPMENT, 1632440711L, getParties(),getReferences());
     }
 
     public static Event getEventForEquipmentEventType() {
-        return getEventWithEventTypeAct(EventType.EQUIPMENT, "2021-09-23T23:45:11Z", getParties(), getReferences());
+        return getEventWithEventTypeAct(EventType.EQUIPMENT, 1632440711L, getParties(), getReferences());
     }
 
     public static Event getEventForTransportEventType() {
-        return getEventWithEventTypeAct(EventType.TRANSPORT, "2021-07-21T13:29:11Z", getParties2(), getReferences2());
+        return getEventWithEventTypeAct(EventType.TRANSPORT, 1626874151L, getParties2(), getReferences2());
     }
 
     public static Event getEventForTransportEventACT() {
-        return getEventWithEventTypeAct(EventType.TRANSPORT,"2021-07-21T13:29:00Z", getParties3(), getReferences3());
+        return getEventWithEventTypeAct(EventType.TRANSPORT,1626874140L, getParties3(), getReferences3());
     }
 
     public static Event getEventForTransportEventTypeWithESTEventAct() {
-        return getEventWithEventTypeEst( "2021-07-21T13:29:11Z", getParties3(), getReferences3());
+        return getEventWithEventTypeEst( 1626874151L, getParties3(), getReferences3());
     }
 
 
@@ -44,25 +44,25 @@ public final class EventDataBuilder {
         return getEventWithEventTypeEst( null, getParties3(), getReferences3());
     }
 
-    private static Event getEventWithEventTypeAct(EventType eventType, String eventDateTime, List<Party> parties, List<References> references) {
+    private static Event getEventWithEventTypeAct(EventType eventType, Long eventDateTime, List<Party> parties, List<References> references) {
         return getEventBuilder(eventType, eventDateTime, parties, references)
                 .eventClassifierCode(EventClassifierCode.ACT)
                 .build();
     }
 
-    private static Event getEventWithEventTypeEst( String eventDateTime ,List<Party> parties, List<References> references) {
+    private static Event getEventWithEventTypeEst( Long eventDateTime ,List<Party> parties, List<References> references) {
         return getEventBuilder(EventType.TRANSPORT, eventDateTime, parties, references)
                 .eventClassifierCode(EventClassifierCode.EST)
                 .build();
     }
 
-    private static Event.EventBuilder<?, ?> getEventBuilder(EventType eventType, String eventDateTime, List<Party> parties, List<References> references) {
+    private static Event.EventBuilder<?, ?> getEventBuilder(EventType eventType, Long eventDateTime, List<Party> parties, List<References> references) {
         return Event.builder()
                 .bookingReference("209989099")
                 .eventID("2537152461542365")
                 .eventType(eventType)
                 .eventDateTime(eventDateTime)
-                .eventCreatedDateTime("2021-09-23T23:45:11Z")
+                .eventCreatedDateTime(1632440711L)
                 .references(references)
                 .carrierBookingReference("209989099")
                 .transportDocumentReference("293156737")
