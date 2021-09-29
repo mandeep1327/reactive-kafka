@@ -22,5 +22,7 @@ resources:
     memory: 512Mi
     cpu: 1000m
 datadog:
-  apikey: vault:externalapis-kv/data/readable/datadog/apikey#apikey
-  applicationKey: vault:externalapis-kv/data/readable/datadog/applicationKey#applicationKey
+  apikey: vault:externalapis-kv/data/sharedsecrets/datadog/apikey#apikey
+  applicationKey: vault:externalapis-kv/data/sharedsecrets/datadog/applicationKey#applicationKey
+env:
+  environment: dev
