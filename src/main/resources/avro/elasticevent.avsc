@@ -29,8 +29,7 @@
             },
             {
               "name": "eventDateTime",
-              "type": ["null", "long"],
-              "logicalType": "timestamp-millis",
+              "type": ["null", "string"],
               "default": null
             },
             {
@@ -46,9 +45,8 @@
               "name": "eventType"
             },
             {
+              "type": ["null", "string"],
               "name": "eventCreatedDateTime",
-              "type": ["null", "long"],
-              "logicalType": "timestamp-millis",
               "default": null
             },
             {
@@ -255,8 +253,7 @@
             },
             {
               "name": "eventDateTime",
-              "type": ["null", "long"],
-              "logicalType": "timestamp-millis",
+              "type": ["null" ,"string"],
               "default": null
             },
             {
@@ -269,9 +266,8 @@
               "name": "eventType"
             },
             {
+              "type": ["null" ,"string"],
               "name": "eventCreatedDateTime",
-              "type": ["null", "long"],
-              "logicalType": "timestamp-millis",
               "default": null
             },
             {
@@ -436,7 +432,7 @@
                     "default": null
                   },
                   {
-                    "name": "facilityTypeCode",
+                    "name": "facilityType",
                     "type": ["null", {
                       "type": "enum",
                       "name": "FacilityType",
@@ -631,8 +627,7 @@
             },
             {
               "name": "eventDateTime",
-              "type": "long",
-              "logicalType": "timestamp-millis"
+              "type": "string"
             },
             {
               "name": "transportDocumentTypeCode",
@@ -644,9 +639,8 @@
               "name": "eventType"
             },
             {
+              "type": ["null", "string"],
               "name": "eventCreatedDateTime",
-              "type": ["null", "long"],
-              "logicalType": "timestamp-millis",
               "default": null
             },
             {

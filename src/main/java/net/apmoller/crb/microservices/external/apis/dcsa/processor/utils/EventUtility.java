@@ -3,28 +3,50 @@ package net.apmoller.crb.microservices.external.apis.dcsa.processor.utils;
 
 import MSK.com.external.dcsa.CarrierCode;
 import MSK.com.external.dcsa.TransportEventType;
-import MSK.com.gems.*;
+import MSK.com.gems.EquipmentType;
+import MSK.com.gems.EventType;
+import MSK.com.gems.MoveType;
+import MSK.com.gems.PubSetType;
+import MSK.com.gems.ShipmentType;
+import MSK.com.gems.TPDocType;
+import MSK.com.gems.TransportPlanType;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.PartyFunctionDTO;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
+import org.jetbrains.annotations.NotNull;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
-import java.util.*;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static MSK.com.external.dcsa.CarrierCode.*;
-import static MSK.com.external.dcsa.PartyFunctionCode.*;
-import static MSK.com.external.dcsa.TransportEventType.*;
+import static MSK.com.external.dcsa.CarrierCode.MAEU;
+import static MSK.com.external.dcsa.CarrierCode.MCCQ;
+import static MSK.com.external.dcsa.CarrierCode.SAFM;
+import static MSK.com.external.dcsa.CarrierCode.SEAU;
+import static MSK.com.external.dcsa.CarrierCode.SEJJ;
+import static MSK.com.external.dcsa.PartyFunctionCode.CN;
+import static MSK.com.external.dcsa.PartyFunctionCode.DDR;
+import static MSK.com.external.dcsa.PartyFunctionCode.DDS;
+import static MSK.com.external.dcsa.PartyFunctionCode.N1;
+import static MSK.com.external.dcsa.PartyFunctionCode.N2;
+import static MSK.com.external.dcsa.PartyFunctionCode.OS;
+import static MSK.com.external.dcsa.TransportEventType.ARRI;
+import static MSK.com.external.dcsa.TransportEventType.DEPA;
+import static MSK.com.external.dcsa.TransportEventType.OMIT;
 import static java.util.Map.entry;
 import static java.util.Objects.isNull;
 
 @UtilityClass
+@Slf4j
 public final class EventUtility {
 
     public static final String ARRANGE_CARGO_RELEASE_CLOSED = "Arrange_Cargo_Release_Closed";
@@ -52,33 +74,27 @@ public final class EventUtility {
     public static final String STRIPPIN_Y = "STRIPPIN   Y";
     public static final String CONTAINER_ARRIVAL = "CONTAINER ARRIVAL";
     public static final String CONTAINER_DEPARTURE = "CONTAINER DEPARTURE";
+    public static final DateTimeFormatter OUTBOUND_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
     public static final DateTimeFormatter INBOUND_TIMESTAMP_FORMATTER = new DateTimeFormatterBuilder()
             .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
             .toFormatter();
 
-    public static Long getTimeStampInEpochMillis(String originalTimestamp) {
+    public static String getTimeStampInUTCFormat(String originalTimestamp){
         if (Objects.nonNull(originalTimestamp) && !originalTimestamp.isEmpty()) {
-            var parsedDate = getLocalDateTimeFromTimestamp(originalTimestamp);
-            return getEpochSecondFromLocalDateTime(parsedDate);
+            LocalDateTime parsedDateAndTime = getLocalDateTime(originalTimestamp);
+            return parsedDateAndTime.format(OUTBOUND_FORMATTER);
         }
         return null;
     }
 
-    public static Long getTimeStampInEpochMillisFromDateAndTime(String date, String time) {
-        var localTime = LocalTime.parse(time);
-        var localDateTime = localTime.atDate(LocalDate.parse(date));
-        return getEpochSecondFromLocalDateTime(localDateTime);
-    }
-
-    private static long getEpochSecondFromLocalDateTime(LocalDateTime parsedDateAndTime) {
-        return parsedDateAndTime.toInstant(ZoneOffset.UTC).getEpochSecond();
-    }
-
-    private static LocalDateTime getLocalDateTimeFromTimestamp(String originalTimestamp) {
-        LocalDateTime parsedDateAndTime;
-        parsedDateAndTime = LocalDateTime.parse(originalTimestamp, INBOUND_TIMESTAMP_FORMATTER);
-        return parsedDateAndTime;
+    private static LocalDateTime getLocalDateTime(String originalTimestamp) {
+        try {
+            return LocalDateTime.parse(originalTimestamp, INBOUND_TIMESTAMP_FORMATTER);
+        } catch (DateTimeParseException e) {
+            log.error("Received an non-resolvable time and date from Gems {}", originalTimestamp );
+            throw e;
+        }
     }
 
 
@@ -191,7 +207,7 @@ public final class EventUtility {
             case STUFFINGEXPN:
                 return DEPA;
             default:
-                return OMIT;
+               return OMIT;
         }
     }
 
@@ -202,7 +218,7 @@ public final class EventUtility {
     }
 
 
-    public static EquipmentType getFirstEquipmentElement(PubSetType pubSetType) {
+    public static EquipmentType getFirstEquipmentElement (PubSetType pubSetType){
         return Optional.ofNullable(pubSetType)
                 .map(PubSetType::getEquipment)
                 .filter(equipmentTypes -> !equipmentTypes.isEmpty())
@@ -210,7 +226,7 @@ public final class EventUtility {
                 .orElse(new EquipmentType());
     }
 
-    public static Map<Integer, PartyFunctionDTO> getMapOfPartyRoleAndFunctions() {
+    public static Map<Integer, PartyFunctionDTO> getMapOfPartyRoleAndFunctions (){
         return Map.ofEntries(
                 entry(3, PartyFunctionDTO.builder().functionName("Shipper").functionCode(OS).build()),
                 entry(4, PartyFunctionDTO.builder().functionName("Consignee").functionCode(CN).build()),
@@ -251,7 +267,7 @@ public final class EventUtility {
     }
 
     private static Predicate<TransportPlanType> getTransportPlanTypePredicate() {
-        var transportPlanList = List.of("FEF", "FEO", "MVS", "VSF", "VSM", "VSL");
+        var transportPlanList  = List.of("FEF", "FEO", "MVS", "VSF", "VSM", "VSL");
         return transportPlanType -> transportPlanType.getTransMode() != null && transportPlanList.contains(transportPlanType.getTransMode());
     }
 

@@ -23,24 +23,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class EventUtilityTest {
 
     @Test
-    void testTimeStampInEpochMillis(){
+    void testTimeStampInISOFormat(){
         assertAll(
-                () -> assertNotNull(EventUtility.getTimeStampInEpochMillis("2021-12-12 12:23:59")),
-                () -> assertThrows(DateTimeParseException.class, () -> EventUtility.getTimeStampInEpochMillis("2021-12-12 12:2")),
-                () -> assertNull(EventUtility.getTimeStampInEpochMillis(null)),
-                () -> assertEquals(1639311839 ,EventUtility.getTimeStampInEpochMillis("2021-12-12 12:23:59"))
-        );
-    }
-
-    @Test
-    void testTimeStampInEpochMillisFromDateAndTime(){
-        assertAll(
-                () -> assertNotNull(EventUtility.getTimeStampInEpochMillisFromDateAndTime("2021-12-12", "10:12")),
-                () -> assertNotNull(EventUtility.getTimeStampInEpochMillisFromDateAndTime("2021-12-12", "10:12:32")),
-                () -> assertEquals(1639303920,EventUtility.getTimeStampInEpochMillisFromDateAndTime("2021-12-12", "10:12")),
-                () -> assertEquals(1639303952,EventUtility.getTimeStampInEpochMillisFromDateAndTime("2021-12-12", "10:12:32")),
-                () -> assertThrows(DateTimeParseException.class ,() -> EventUtility.getTimeStampInEpochMillisFromDateAndTime("2021-12", "10:12:32")),
-                () -> assertThrows(DateTimeParseException.class ,() -> EventUtility.getTimeStampInEpochMillisFromDateAndTime("2021-12-21", "10:1"))
+                () -> assertNotNull(EventUtility.getTimeStampInUTCFormat("2021-12-12 12:23:59")),
+                () -> assertThrows(DateTimeParseException.class, () -> EventUtility.getTimeStampInUTCFormat("2021-12-12 12:2")),
+                () -> assertNull(EventUtility.getTimeStampInUTCFormat(null)),
+                () -> assertEquals("2021-12-12T12:23:59Z" ,EventUtility.getTimeStampInUTCFormat("2021-12-12 12:23:59"))
         );
     }
 

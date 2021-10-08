@@ -111,7 +111,6 @@ public final class GEMSPubTestDataBuilder {
         var pubSetType = getCommonPubSetTypeWithVesselData(eventType, parties);
         var transportPlanWithEstimatedTime = getTransportPlan();
         transportPlanWithEstimatedTime.setGttsactArvTS(null);
-        //TODO: confirmation from Paulo is needed
         transportPlanWithEstimatedTime.setGcssexpArvTS("2021-07-21 13:29:11");
         pubSetType.setTransportPlan(List.of(transportPlanWithEstimatedTime));
 

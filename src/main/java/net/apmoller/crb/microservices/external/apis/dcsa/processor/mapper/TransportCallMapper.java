@@ -13,10 +13,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -154,7 +151,6 @@ public final class TransportCallMapper {
                 Objects.nonNull(equipment.getMove().getLineCde())) {
             return equipment.getMove().getLineCde();
         }
-        log.error("Could not Map the carrier service code");
         return null;
     }
 
@@ -185,7 +181,7 @@ public final class TransportCallMapper {
         } else if (typeOfTransport.equals(DEPA)) {
             return createMapOfStartLocationAndTransportPlans(transportPlans);
         }
-        return null;
+        return Collections.emptyMap();
     }
 
     private static Map<String, TransportPlanType> createMapOfStartLocationAndTransportPlans(List<TransportPlanType> transportPlans) {

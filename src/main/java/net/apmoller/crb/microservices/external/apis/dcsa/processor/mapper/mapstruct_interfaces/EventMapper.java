@@ -1,11 +1,7 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces;
 
 import MSK.com.external.dcsa.EventClassifierCode;
-import MSK.com.gems.EquipmentType;
-import MSK.com.gems.EventType;
-import MSK.com.gems.GTTSVesselType;
-import MSK.com.gems.PubSetType;
-import MSK.com.gems.TransportPlanType;
+import MSK.com.gems.*;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DCSAEventTypeMapper;
@@ -13,7 +9,6 @@ import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.PartyM
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ReferenceMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.ServiceTypeMapper;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility;
-import org.jetbrains.annotations.NotNull;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -30,8 +25,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstTransportPlanTypeWithPortOfLoad;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getLastTransportPlanWithPortOfDischarge;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getTimeStampInEpochMillis;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getTimeStampInEpochMillisFromDateAndTime;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getTimeStampInUTCFormat;
 
 @Mapper(componentModel = "spring",
         imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class, ServiceTypeMapper.class},
@@ -54,10 +48,10 @@ public interface EventMapper {
     @Mapping(expression = "java(ServiceTypeMapper.getServiceTypeFromPubSetType(details))", target = "serviceType")
     Event fromPubSetTypeToEvent(PubSetType details);
 
-    default Long getDCSAEventDateTime(PubSetType pubSetType) {
+    default String getDCSAEventDateTime(PubSetType pubSetType) {
         String eventAct = getEventAct(pubSetType);
         if (SHIPMENT_EVENTS.contains((eventAct))) {
-            return getIsoFormatTimestamp(pubSetType);
+            return getUTCFromNonFormattedTimestamp(pubSetType);
         } else if (TRANSPORT_EVENTS.contains((eventAct))) {
             return getEventDateTimeForTransportEvents(pubSetType, eventAct);
         } else if (EQUIPMENT_EVENTS.contains(eventAct)) {
@@ -66,23 +60,12 @@ public interface EventMapper {
         throw new MappingException("Could not map eventType");
     }
 
-    default Long getUTCFromNonFormattedTimestamp(PubSetType pubSetType){
-        return getGemsUTCTimestamp(pubSetType)
-                .map(EventUtility::getTimeStampInEpochMillis)
-                .orElse(null);
-    }
-
-    default Long getIsoFormatTimestamp(PubSetType pubSetType){
-        return getGemsUTCTimestamp(pubSetType)
-                .map(EventUtility::getTimeStampInEpochMillis)
-                .orElse(null);
-    }
-
-    @NotNull
-    private Optional<String> getGemsUTCTimestamp(PubSetType pubSetType) {
+    default String getUTCFromNonFormattedTimestamp(PubSetType pubSetType){
         return Optional.ofNullable(pubSetType)
                 .map(PubSetType::getEvent)
-                .map(EventType::getGemstsutc);
+                .map(EventType::getGemstsutc)
+                .map(EventUtility::getTimeStampInUTCFormat)
+                .orElse(null);
     }
 
     default EventClassifierCode getClassifierCode(PubSetType pubSetType) {
@@ -107,26 +90,34 @@ public interface EventMapper {
         }
     }
 
-    private Long getEventDateTimeForTransportEvents(PubSetType pubSetType, String eventAct) {
+    private String getEventDateTimeForTransportEvents(PubSetType pubSetType, String eventAct) {
         String eventDateTime;
         if (SHIPMENT_ETA.equals(eventAct) || SHIPMENT_ETD.equals(eventAct)) {
             eventDateTime = getEventDateTimeForSpecialTransportEvents(pubSetType, eventAct);
         } else {
             eventDateTime = getEventDateTimeForOtherTransportEvents(pubSetType);
         }
-        return getTimeStampInEpochMillis(eventDateTime);
+        return getTimeStampInUTCFormat(eventDateTime);
     }
 
-    private Long getEventDateTimeForEquipmentEvents(PubSetType pubSetType) {
-        final var moveType = Optional.ofNullable(pubSetType)
+    private String getEventDateTimeForEquipmentEvents(PubSetType pubSetType) {
+        var moveType = getMoveType(pubSetType);
+        var date = Optional.ofNullable(moveType.getActDte()).orElseThrow(MappingException::new);
+        var time = Optional.ofNullable(moveType.getActTim()).orElseThrow(MappingException::new);
+        return getTimeStampInUTCFormat(concatDateAndTimeToFormACustomTimeStamp(date, time));
+    }
+
+    private MoveType getMoveType(PubSetType pubSetType) {
+        return Optional.ofNullable(pubSetType)
                 .map(PubSetType::getEquipment)
                 .filter(list -> !list.isEmpty())
                 .map(equipmentTypes -> equipmentTypes.get(0))
                 .map(EquipmentType::getMove)
                 .orElseThrow(MappingException::new);
-        var date = Optional.ofNullable(moveType.getActDte()).orElseThrow(MappingException::new);
-        var time = Optional.ofNullable(moveType.getActTim()).orElseThrow(MappingException::new);
-        return getTimeStampInEpochMillisFromDateAndTime(date, time);
+    }
+
+    private String concatDateAndTimeToFormACustomTimeStamp(String date, String time) {
+        return String.join("", date," ", time);
     }
 
     default String getEventDateTimeForSpecialTransportEvents(PubSetType pubSetType, String eventAct) {

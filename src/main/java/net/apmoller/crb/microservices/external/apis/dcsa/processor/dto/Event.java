@@ -20,9 +20,9 @@ public class Event {
 
     private String eventID;
     private String bookingReference;
-    private Long eventDateTime;
+    private String eventDateTime;
     private EventType eventType;
-    private Long eventCreatedDateTime;
+    private String eventCreatedDateTime;
     private EventClassifierCode eventClassifierCode;
     private List<Party> parties;
     private List<References> references;
