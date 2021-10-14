@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.5.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>net.apmoller.crb.microservices</groupId>
     <artifactId>external-dcsa-events-processor</artifactId>
-    <version>0.0.16-SNAPSHOT</version>
+    <version>0.0.16</version>
     <description>Processor for GEMS events for the external track and trace service</description>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -33,7 +32,7 @@
     </properties>
     <scm>
         <connection>scm:git:https://github.com/Maersk-Global/external-dcsa-events-processor.git</connection>
-        <tag>HEAD</tag>
+        <tag>external-dcsa-events-processor-0.0.16</tag>
     </scm>
     <repositories>
         <repository>
