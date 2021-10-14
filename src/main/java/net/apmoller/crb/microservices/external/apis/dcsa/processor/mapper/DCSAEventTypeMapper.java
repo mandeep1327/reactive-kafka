@@ -9,7 +9,6 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 
 @Component
 public class DCSAEventTypeMapper {
-
     public EventType asDCSAEventType(String act) {
         if (SHIPMENT_EVENTS.contains(act)) {
             return EventType.SHIPMENT;
