@@ -34,6 +34,9 @@ import static MSK.com.external.dcsa.EquipmentEventType.GTIN;
 import static MSK.com.external.dcsa.EquipmentEventType.GTOT;
 import static MSK.com.external.dcsa.EquipmentEventType.LOAD;
 import static MSK.com.external.dcsa.EquipmentEventType.STUF;
+import static MSK.com.external.dcsa.TransPortMode.RAIL;
+import static MSK.com.external.dcsa.TransPortMode.TRUCK;
+import static MSK.com.external.dcsa.TransPortMode.VESSEL;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDISCHARGE_NEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDemoEventAct;
@@ -77,14 +80,14 @@ class EquipmentEventMapperTest {
 
     private static Stream<Arguments> createEquipmentEventTestData() {
         return Stream.of(
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithOFF_RAILIMPNEventAct(null))), getEquipmentEventTestData(GTIN, getTransportCall())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithDISCHARGE_NEventAct(null))), getEquipmentEventTestData(DISC, getTransportCall())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_IN_EXPNEventAct(null))), getEquipmentEventTestData(GTIN, getTransportCallForKolkata())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithSTUFFINGEXPNEventAct(null))), getEquipmentEventTestData(STUF, getTransportCallForKolkata())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithON_RAIL_EXPNEventAct(null))), getEquipmentEventTestData(GTOT, getTransportCallForKolkata())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventAct(null))), getEquipmentEventTestData(GTOT, getTransportCallForKolkata())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventActAndSeals())), getEquipmentEventTestDataWithSeals(GTOT, getTransportCallForKolkata())),
-                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithLOAD_NEventAct(null))), getEquipmentEventTestData(LOAD, getTransportCallForKolkata()))
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithOFF_RAILIMPNEventAct(null))), getEquipmentEventTestData(GTIN, getTransportCall(RAIL))),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithDISCHARGE_NEventAct(null))), getEquipmentEventTestData(DISC, getTransportCall(VESSEL))),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_IN_EXPNEventAct(null))), getEquipmentEventTestData(GTIN, getTransportCallForKolkata(TRUCK))),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithSTUFFINGEXPNEventAct(null))), getEquipmentEventTestData(STUF, getTransportCallForKolkata(TRUCK))),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithON_RAIL_EXPNEventAct(null))), getEquipmentEventTestData(GTOT, getTransportCallForKolkata(RAIL))),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventAct(null))), getEquipmentEventTestData(GTOT, getTransportCallForKolkata(TRUCK))),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventActAndSeals())), getEquipmentEventTestDataWithSeals(GTOT, getTransportCallForKolkata(TRUCK))),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithLOAD_NEventAct(null))), getEquipmentEventTestData(LOAD, getTransportCallForKolkata(VESSEL)))
         );
     }
 
@@ -101,24 +104,24 @@ class EquipmentEventMapperTest {
         );
     }
 
-    private static TransportCall getTransportCall() {
+    private static TransportCall getTransportCall(TransPortMode mode) {
 
         var transportCall = new TransportCall();
         transportCall.setCarrierServiceCode("LineCode");
         transportCall.setOtherFacility("Copenhagen");
         transportCall.setCarrierVoyageNumber("MRSK1235");
-        transportCall.setModeOfTransport(TransPortMode.VESSEL);
+        transportCall.setModeOfTransport(mode);
 
         return transportCall;
     }
 
-    private static TransportCall getTransportCallForKolkata() {
+    private static TransportCall getTransportCallForKolkata(TransPortMode mode ) {
 
         var transportCall = new TransportCall();
         transportCall.setCarrierServiceCode("LineCode");
         transportCall.setCarrierVoyageNumber("MRSK1235");
         transportCall.setOtherFacility("Kolkata");
-        transportCall.setModeOfTransport(TransPortMode.VESSEL);
+        transportCall.setModeOfTransport(mode);
 
         return transportCall;
     }

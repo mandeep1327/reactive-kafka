@@ -74,6 +74,18 @@ public final class EventUtility {
     public static final String STRIPPIN_Y = "STRIPPIN   Y";
     public static final String CONTAINER_ARRIVAL = "CONTAINER ARRIVAL";
     public static final String CONTAINER_DEPARTURE = "CONTAINER DEPARTURE";
+
+    public static final String ARRIVECU = "ARRIVECU";
+    public static final String DEPARTCU = "DEPARTCU";
+    public static final String DISCHARG = "DISCHARG";
+    public static final String GATE_IN = "GATE-IN";
+    public static final String GATE_OUT = "GATE-OUT";
+    public static final String LOAD = "LOAD";
+    public static final String OFF_RAIL = "OFF-RAIL";
+    public static final String ON_RAIL = "ON-RAIL";
+    public static final String STRIPPIN = "STRIPPIN";
+    public static final String STUFFING = "STUFFING";
+
     public static final DateTimeFormatter OUTBOUND_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
     public static final DateTimeFormatter INBOUND_TIMESTAMP_FORMATTER = new DateTimeFormatterBuilder()
             .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))

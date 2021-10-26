@@ -13,14 +13,32 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static MSK.com.external.dcsa.TransportEventType.ARRI;
 import static MSK.com.external.dcsa.TransportEventType.DEPA;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.ARRIVECU;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.CONTAINER_ARRIVAL;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.CONTAINER_DEPARTURE;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.DEPARTCU;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.DISCHARG;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.GATE_IN;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.GATE_OUT;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.LOAD;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.OFF_RAIL;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.ON_RAIL;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.RAIL_ARRIVAL_AT_DESTINATION;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.RAIL_DEPARTURE;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETA;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETD;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.STRIPPIN;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.STUFFING;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDepartureEquipmentEvent;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDepartureEventType;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getEventAct;
@@ -37,7 +55,8 @@ public final class TransportCallMapper {
     public static TransportCall getTransportCallForTransportEvents(PubSetType pubSetType) {
         var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
         var transportPlan = getTransportPlanForTransportEvent(pubSetType, equipmentFirstElement);
-        return createTransportCall(transportPlan, equipmentFirstElement);
+        var eventAct = getEventAct(pubSetType);
+        return createTransportCall(transportPlan, equipmentFirstElement, eventAct);
     }
 
     public static String getVesselCode (PubSetType pubSetData) {
@@ -50,7 +69,8 @@ public final class TransportCallMapper {
     public static TransportCall getTransportCallForEquipmentEvents(PubSetType pubSetType) {
         var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
         var transportPlan = getTransportPlanTypeForCommonEvents(pubSetType, equipmentFirstElement, false);
-        return createTransportCall(transportPlan, equipmentFirstElement);
+        var eventAct = getEventAct(pubSetType);
+        return createTransportCall(transportPlan, equipmentFirstElement, eventAct);
     }
 
     private TransportPlanType getTransportPlanForTransportEvent(PubSetType pubSetType, EquipmentType equipmentFirstElement) {
@@ -91,11 +111,11 @@ public final class TransportCallMapper {
         return SHIPMENT_ETA.equals(eventAct) || SHIPMENT_ETD.equals(eventAct);
     }
 
-    private static TransportCall createTransportCall(TransportPlanType transportPlan, EquipmentType equipmentFirstElement) {
+    private static TransportCall createTransportCall(TransportPlanType transportPlan, EquipmentType equipmentFirstElement, String eventType) {
         var transportCall = new TransportCall();
         transportCall.setCarrierServiceCode(getCarrierServiceCode(equipmentFirstElement));
         transportCall.setCarrierVoyageNumber(getVoyageNumberFromTransportPlan(transportPlan));
-        transportCall.setModeOfTransport(getModeOfTransport(transportPlan));
+        transportCall.setModeOfTransport(getModeOfTransport(eventType));
         transportCall.setOtherFacility(getLocation(equipmentFirstElement));
         return transportCall;
     }
@@ -119,32 +139,32 @@ public final class TransportCallMapper {
                 .orElse(null);
     }
 
-
-    private static TransPortMode getModeOfTransport(TransportPlanType transportPlanType) {
-        var transportModeCode = Optional.ofNullable(transportPlanType)
-                .map(TransportPlanType::getTransMode)
-                .orElse("DEFAULT");
-        switch (transportModeCode.toUpperCase()) {
-            case "BAR":
-            case "BCO":
-                return TransPortMode.BARGE;
-            case "MVS":
-            case "FEO":
-            case "FEF":
-            case "VSL":
-            case "VSF":
-            case "VSM":
-                return TransPortMode.VESSEL;
-            case "TRK":
-                return TransPortMode.TRUCK;
-            case "RR":
-            case "RCO":
-                return TransPortMode.RAIL;
-            default:
-                return null;
+    private static TransPortMode getModeOfTransport(String eventAct) {
+        if (isVesselEvent(eventAct)) {
+            return TransPortMode.VESSEL;
+        } else if (isRailEvent(eventAct)) {
+            return TransPortMode.RAIL;
+        } else if (isTruckEvent(eventAct)) {
+            return TransPortMode.TRUCK;
+        } else {
+            return null;
         }
     }
 
+    private static boolean isVesselEvent(String eventAct) {
+        return eventAct.startsWith(LOAD) || eventAct.startsWith(DISCHARG) || eventAct.equals(CONTAINER_ARRIVAL) ||
+                eventAct.equals(CONTAINER_DEPARTURE) || eventAct.equals(SHIPMENT_ETD) || eventAct.equals(SHIPMENT_ETA);
+    }
+
+    private static boolean isRailEvent(String eventAct) {
+        return eventAct.equals(RAIL_ARRIVAL_AT_DESTINATION) || eventAct.equals(RAIL_DEPARTURE) ||
+                eventAct.startsWith(OFF_RAIL) || eventAct.startsWith(ON_RAIL) ;
+    }
+
+    private static boolean isTruckEvent(String eventAct) {
+        return eventAct.startsWith(ARRIVECU) || eventAct.startsWith(DEPARTCU) || eventAct.startsWith(GATE_IN) ||
+                eventAct.startsWith(GATE_OUT) || eventAct.startsWith(STRIPPIN) || eventAct.startsWith(STUFFING);
+    }
 
     private static String getCarrierServiceCode(EquipmentType equipment) {
         if (Objects.nonNull(equipment.getMove()) &&
