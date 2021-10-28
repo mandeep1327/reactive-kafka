@@ -2,6 +2,7 @@ package util;
 
 import MSK.com.external.dcsa.DcsaTrackTraceEvent;
 import MSK.com.external.dcsa.EventClassifierCode;
+import MSK.com.external.dcsa.TransPortMode;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -58,6 +59,14 @@ public class DcsaStepDefinition extends CucumberSpringConfiguration {
     @And("the event id should be {string}")
     public void theEventIdShouldBe(String eventId) {
         assertEquals(this.event.get("eventID"), eventId);
+    }
+
+    @And("the mode of transport should be {string}")
+    public void theModeOfTransportShouldBe(String modeOfTransport) {
+        if(!modeOfTransport.isBlank()) {
+            TransPortMode transportMode =(TransPortMode) ((SpecificRecordBase) this.event.get("transportCall")).get("modeOfTransport");
+            assertEquals(modeOfTransport, transportMode.toString());
+        }
     }
 
     @And("the eventClassifierCode should be {string}")

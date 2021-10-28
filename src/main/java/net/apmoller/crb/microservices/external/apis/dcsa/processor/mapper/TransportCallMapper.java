@@ -56,10 +56,10 @@ public final class TransportCallMapper {
         var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
         var transportPlan = getTransportPlanForTransportEvent(pubSetType, equipmentFirstElement);
         var eventAct = getEventAct(pubSetType);
-        return createTransportCall(transportPlan, equipmentFirstElement, eventAct);
+        return createTransportCall(transportPlan, equipmentFirstElement, eventAct, pubSetType.getTransportPlan());
     }
 
-    public static String getVesselCode (PubSetType pubSetData) {
+    public static String getVesselCode(PubSetType pubSetData) {
         var equipmentFirstElement = getFirstEquipmentElement(pubSetData);
         var transportPlan = getTransportPlanForTransportEvent(pubSetData, equipmentFirstElement);
         return getVesselCodeFromTransportPlan(transportPlan);
@@ -70,7 +70,8 @@ public final class TransportCallMapper {
         var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
         var transportPlan = getTransportPlanTypeForCommonEvents(pubSetType, equipmentFirstElement, false);
         var eventAct = getEventAct(pubSetType);
-        return createTransportCall(transportPlan, equipmentFirstElement, eventAct);
+
+        return createTransportCall(transportPlan, equipmentFirstElement, eventAct, pubSetType.getTransportPlan());
     }
 
     private TransportPlanType getTransportPlanForTransportEvent(PubSetType pubSetType, EquipmentType equipmentFirstElement) {
@@ -111,11 +112,11 @@ public final class TransportCallMapper {
         return SHIPMENT_ETA.equals(eventAct) || SHIPMENT_ETD.equals(eventAct);
     }
 
-    private static TransportCall createTransportCall(TransportPlanType transportPlan, EquipmentType equipmentFirstElement, String eventType) {
+    private static TransportCall createTransportCall(TransportPlanType transportPlan, EquipmentType equipmentFirstElement, String eventType, List<TransportPlanType> transportPlanList) {
         var transportCall = new TransportCall();
         transportCall.setCarrierServiceCode(getCarrierServiceCode(equipmentFirstElement));
         transportCall.setCarrierVoyageNumber(getVoyageNumberFromTransportPlan(transportPlan));
-        transportCall.setModeOfTransport(getModeOfTransport(eventType));
+        transportCall.setModeOfTransport(getModeOfTransport(eventType, equipmentFirstElement, transportPlanList));
         transportCall.setOtherFacility(getLocation(equipmentFirstElement));
         return transportCall;
     }
@@ -139,16 +140,46 @@ public final class TransportCallMapper {
                 .orElse(null);
     }
 
-    private static TransPortMode getModeOfTransport(String eventAct) {
+    private static TransPortMode getModeOfTransport(String eventAct, EquipmentType equipmentFirstElement, List<TransportPlanType> transportPlanTypeList) {
         if (isVesselEvent(eventAct)) {
             return TransPortMode.VESSEL;
         } else if (isRailEvent(eventAct)) {
             return TransPortMode.RAIL;
-        } else if (isTruckEvent(eventAct)) {
+        } else if (isTruckOrBargeEvent(eventAct)) {
+            if (isBargeEvent(eventAct, equipmentFirstElement, transportPlanTypeList))
+                return TransPortMode.BARGE;
             return TransPortMode.TRUCK;
         } else {
             return null;
         }
+    }
+
+    private static boolean isBargeEvent(String eventAct, EquipmentType equipmentFirstElement, List<TransportPlanType> transportPlanTypeList) {
+        for (TransportPlanType transportPlanType : transportPlanTypeList) {
+            var transportModeCode = Optional.ofNullable(transportPlanType)
+                    .map(TransportPlanType::getTransMode)
+                    .orElse("DEFAULT");
+            if (eventAct.startsWith(GATE_IN)) {
+                var endLoc = Optional.ofNullable(transportPlanType)
+                        .map(TransportPlanType::getEndLoc)
+                        .orElse(null);
+                if (isBargeTransportMode(transportModeCode, getEndLocation(endLoc), equipmentFirstElement))
+                    return true;
+
+            } else if (eventAct.startsWith(GATE_OUT)) {
+                var startLoc = Optional.ofNullable(transportPlanType)
+                        .map(TransportPlanType::getStartLoc)
+                        .orElse(null);
+                if (isBargeTransportMode(transportModeCode, getStartLocation(startLoc), equipmentFirstElement))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isBargeTransportMode(String transportModeCode, String location, EquipmentType equipmentFirstElement) {
+        return transportModeCode.equalsIgnoreCase("BAR") && Objects.nonNull(equipmentFirstElement.getMove()) &&
+                Objects.nonNull(equipmentFirstElement.getMove().getActLoc()) && location.equalsIgnoreCase(equipmentFirstElement.getMove().getActLoc());
     }
 
     private static boolean isVesselEvent(String eventAct) {
@@ -158,10 +189,10 @@ public final class TransportCallMapper {
 
     private static boolean isRailEvent(String eventAct) {
         return eventAct.equals(RAIL_ARRIVAL_AT_DESTINATION) || eventAct.equals(RAIL_DEPARTURE) ||
-                eventAct.startsWith(OFF_RAIL) || eventAct.startsWith(ON_RAIL) ;
+                eventAct.startsWith(OFF_RAIL) || eventAct.startsWith(ON_RAIL);
     }
 
-    private static boolean isTruckEvent(String eventAct) {
+    private static boolean isTruckOrBargeEvent(String eventAct) {
         return eventAct.startsWith(ARRIVECU) || eventAct.startsWith(DEPARTCU) || eventAct.startsWith(GATE_IN) ||
                 eventAct.startsWith(GATE_OUT) || eventAct.startsWith(STRIPPIN) || eventAct.startsWith(STUFFING);
     }

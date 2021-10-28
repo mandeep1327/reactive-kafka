@@ -1,0 +1,541 @@
+{
+  "partner": {
+    "ampscntlNo": "30011564765307",
+    "ampsmsgType": "XML*GEMS",
+    "ampsrcvrID": "ALWAYSON",
+    "ampssndrID": "GEMS",
+    "gemssubID": "DCSA_03_GATE_IN",
+    "languageCode": null,
+    "sendAMPSIsaCntlNoToGEMS": "N"
+  },
+  "pubSet": [
+    {
+      "cargo": {
+        "totCargQuan": 1,
+        "totCargVol": [
+          {
+            "qual": "CBM",
+            "value": 0
+          },
+          {
+            "qual": "CBS",
+            "value": 0
+          }
+        ],
+        "totCargWgt": [
+          {
+            "qual": "KGS",
+            "value": 26500
+          },
+          {
+            "qual": "LBS",
+            "value": 58422
+          }
+        ]
+      },
+      "customs": [],
+      "deadline": null,
+      "equipment": [
+        {
+          "beamHgt": "N",
+          "cargo": [
+            {
+              "cargoUVol": [
+                {
+                  "qual": "CBM",
+                  "value": 0
+                },
+                {
+                  "qual": "CBS",
+                  "value": 0
+                }
+              ],
+              "cargoUWgt": [
+                {
+                  "qual": "KGS",
+                  "value": 26500
+                },
+                {
+                  "qual": "LBS",
+                  "value": 58422.4
+                }
+              ],
+              "pkgQuan": 1,
+              "reference": [
+                {
+                  "name": "6 digit HS code",
+                  "typ": "NOJLSID2CX2JB",
+                  "value": ""
+                }
+              ]
+            }
+          ],
+          "eqcolFld": null,
+          "eqcollap": null,
+          "eqctlAtm": null,
+          "eqptCargo": {
+            "cargoUVol": [
+              {
+                "qual": "CBM",
+                "value": 0
+              },
+              {
+                "qual": "CBS",
+                "value": 0
+              }
+            ],
+            "cargoUWgt": [
+              {
+                "qual": "KGS",
+                "value": 26500
+              },
+              {
+                "qual": "LBS",
+                "value": 58422.4
+              }
+            ],
+            "pkgQuan": 1,
+            "reference": []
+          },
+          "eqptNo": "MRKU9269015",
+          "isocode": "22G1",
+          "material": "STL",
+          "miscInfo": null,
+          "move": {
+            "actArvDestTS": null,
+            "actCntry": "123",
+            "actDiscTS": null,
+            "actDte": "2021-10-27",
+            "actFor": "EXP",
+            "actGateInTS": null,
+            "actGateOutTS": null,
+            "actLoadTS": null,
+            "actLoc": "PLSLW02",
+            "actSysLCTS": "2021-10-27 11:56:16",
+            "actSysLCUsr": "AMPSEM",
+            "actTim": "13:45:00",
+            "actVesAtvTS": null,
+            "actVesDepTS": null,
+            "carrier": "MHATRK",
+            "chassis": null,
+            "delTS": null,
+            "estArvDestTS": "2021-12-11 19:00:00",
+            "fdiscTS": null,
+            "finalDestLoc": "DJJIBT1",
+            "fportDisc": "DJJIBT1",
+            "grossWgt": [
+              {
+                "qual": "KGS",
+                "value": 28670
+              },
+              {
+                "qual": "LBS",
+                "value": 63206
+              }
+            ],
+            "imo1": null,
+            "imo2": null,
+            "imo3": null,
+            "lineCde": "Z4",
+            "loadPort": "PLGDNDCT",
+            "loadTS": null,
+            "offRailPort": null,
+            "offRailPortTS": null,
+            "operator": "MSK",
+            "partnerRailInfo": [],
+            "placeDel": "DJJIBT1",
+            "portDisc": "NLROTTM",
+            "portLoad": "PLGDNDCT",
+            "portReceipt": "PLSLW02",
+            "receiptTS": "2021-10-27 13:45:00",
+            "refNo": null,
+            "seal": [
+              {
+                "typ": "MAERSK",
+                "value": "PL0321121"
+              }
+            ],
+            "statEmpty": "N",
+            "statLivReef": "N",
+            "statOOG": "N",
+            "statSound": "Y",
+            "tcn": null,
+            "tcnGroup": null,
+            "transDay": "003",
+            "truckerReference": null,
+            "unNum1": null,
+            "unNum2": null,
+            "unNum3": null,
+            "vesselCde": "1PM",
+            "voyage": "144E",
+            "workOrd": null
+          },
+          "outHgt": 2591,
+          "outHgtUnit": "8 6",
+          "ownTyp": "OWN",
+          "reference": [],
+          "rkembolNo": null,
+          "rkemshipNo": "212735077",
+          "size": "20",
+          "subType": "DRY",
+          "type": "CONT",
+          "vent": "N",
+          "vgmmethod": null,
+          "vgmsourceFlag": null,
+          "vgmwgt": []
+        }
+      ],
+      "event": {
+        "eventAct": "GATE-IN EXPN",
+        "eventId": 8051828887,
+        "gemstsutc": "2021-10-27 11:56:16",
+        "reasons": null,
+        "rkemmove": "GATE-IN EXPN",
+        "srcSys": "RKEM",
+        "srcSysTimestamp": "2021-10-27 11:56:16"
+      },
+      "gttsvessel": null,
+      "hermesEvent": null,
+      "initialTransportPlan": [],
+      "lctransportPlan": [],
+      "motherTransportPlan": [],
+      "operationalCAT": [],
+      "productCAT": [],
+      "referenceShipments": [],
+      "shipment": {
+        "bookNo": "212735077",
+        "breakBulk": "N",
+        "cargoTypes": null,
+        "cargoes": null,
+        "delSvc": "CY",
+        "equipmentAssignments": null,
+        "haulageArrangements": null,
+        "historyOfReasonsForTransportPlan": null,
+        "milTStamp": null,
+        "operationalRouteRef": null,
+        "operator": "MSL",
+        "party": [
+          {
+            "addrLn1": "UL. FRYDERYKA CHOPINA",
+            "addrLn2": null,
+            "addrLn3": null,
+            "city": "PRUSZCZ GDANSKI",
+            "cntry": "Poland",
+            "concernCode": null,
+            "custName": "ESSPEE ZLOM SP.Z.O.O.",
+            "custNo": "12300217139",
+            "custRefNo": [],
+            "dodaac": null,
+            "postCde": "83-000",
+            "roletyp": "3",
+            "state": null
+          },
+          {
+            "addrLn1": "UL. FRYDERYKA CHOPINA",
+            "addrLn2": null,
+            "addrLn3": null,
+            "city": "PRUSZCZ GDANSKI",
+            "cntry": "Poland",
+            "concernCode": null,
+            "custName": "ESSPEE ZLOM SP.Z.O.O.",
+            "custNo": "12300217139",
+            "custRefNo": [],
+            "dodaac": null,
+            "postCde": "83-000",
+            "roletyp": "2",
+            "state": null
+          },
+          {
+            "addrLn1": "UL. FRYDERYKA CHOPINA",
+            "addrLn2": null,
+            "addrLn3": null,
+            "city": "PRUSZCZ GDANSKI",
+            "cntry": "Poland",
+            "concernCode": null,
+            "custName": "ESSPEE ZLOM SP.Z.O.O.",
+            "custNo": "12300217139",
+            "custRefNo": [
+              "212735077"
+            ],
+            "dodaac": null,
+            "postCde": "83-000",
+            "roletyp": "1",
+            "state": null
+          },
+          {
+            "addrLn1": "UL. FRYDERYKA CHOPINA",
+            "addrLn2": null,
+            "addrLn3": null,
+            "city": "PRUSZCZ GDANSKI",
+            "cntry": "Poland",
+            "concernCode": null,
+            "custName": "ESSPEE ZLOM SP.Z.O.O.",
+            "custNo": "12300217139",
+            "custRefNo": [],
+            "dodaac": null,
+            "postCde": "83-000",
+            "roletyp": "44",
+            "state": null
+          }
+        ],
+        "pcfn": "212735077",
+        "publishSpotROTPNotification": null,
+        "publishSpotTPNotification": null,
+        "rcvSvc": "CY",
+        "reference": [
+          {
+            "name": null,
+            "typ": "9",
+            "value": "298146373"
+          },
+          {
+            "name": null,
+            "typ": "195",
+            "value": "298146373"
+          },
+          {
+            "name": null,
+            "typ": "201",
+            "value": "N"
+          },
+          {
+            "name": null,
+            "typ": "196",
+            "value": "298146373"
+          },
+          {
+            "name": null,
+            "typ": "419",
+            "value": "e4a2be46-d623-4d4a-a978-4c7257"
+          },
+          {
+            "name": null,
+            "typ": "1",
+            "value": "212735077"
+          },
+          {
+            "name": "SSIB Reference Number",
+            "typ": "1078",
+            "value": "1630746854345"
+          }
+        ],
+        "tpchangeReason": null,
+        "tpinfo": []
+      },
+      "tpdoc": [
+        {
+          "bolNo": "212735077",
+          "documentProperties": null,
+          "haulageArrangements": null,
+          "operator": null,
+          "party": [
+            {
+              "addrLn1": "UL. FRYDERYKA CHOPINA",
+              "addrLn2": null,
+              "addrLn3": null,
+              "city": "PRUSZCZ GDANSKI",
+              "cntry": "Poland",
+              "concernCode": null,
+              "custName": "ESSPEE ZLOM SP.Z.O.O.",
+              "custNo": "12300217139",
+              "custRefNo": [],
+              "dodaac": null,
+              "postCde": "83-000",
+              "roletyp": "15",
+              "state": null
+            },
+            {
+              "addrLn1": "UL. FRYDERYKA CHOPINA",
+              "addrLn2": null,
+              "addrLn3": null,
+              "city": "PRUSZCZ GDANSKI",
+              "cntry": "Poland",
+              "concernCode": null,
+              "custName": "ESSPEE ZLOM SP.Z.O.O.",
+              "custNo": "12300217139",
+              "custRefNo": [],
+              "dodaac": null,
+              "postCde": "83-000",
+              "roletyp": "22",
+              "state": null
+            }
+          ],
+          "reference": [
+            {
+              "name": null,
+              "typ": "5",
+              "value": "212735077"
+            }
+          ]
+        }
+      ],
+      "transportPlan": [
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "",
+            "value": "PLGDNDCT"
+          },
+          "endLocCntry": "PL",
+          "endState": null,
+          "endTerm": "DCT Gdansk SA",
+          "gcssexpArvTS": "2021-11-08 08:00:00",
+          "gcssexpArvTSUTC": "2021-11-08 07:00:00",
+          "gcssexpDepTS": "2021-11-05 08:00:00",
+          "gcssexpDepTSUTC": "2021-11-05 07:00:00",
+          "gsisexpArvTS": null,
+          "gsisexpDepTS": null,
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": null,
+          "gttsexpDepTS": null,
+          "legSeq": "1",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "1",
+            "value": "PLSLW02"
+          },
+          "startLocCntry": "PL",
+          "startState": null,
+          "startTerm": "EUROTERMINAL SLAWKOW",
+          "transMode": "RR",
+          "vesselCde": null,
+          "voyDoc": null,
+          "voyage": null
+        },
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "",
+            "value": "NLROTTM"
+          },
+          "endLocCntry": "NL",
+          "endState": "ZH",
+          "endTerm": "APM 2 Terminal Maasvlakte II",
+          "gcssexpArvTS": "2021-11-14 10:00:00",
+          "gcssexpArvTSUTC": "2021-11-14 09:00:00",
+          "gcssexpDepTS": "2021-11-10 20:00:00",
+          "gcssexpDepTSUTC": "2021-11-10 19:00:00",
+          "gsisexpArvTS": "2021-11-13 22:00:00",
+          "gsisexpDepTS": "2021-11-09 14:00:00",
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": "2021-11-13 22:00:00",
+          "gttsexpDepTS": "2021-11-09 14:00:00",
+          "legSeq": "2",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "",
+            "value": "PLGDNDCT"
+          },
+          "startLocCntry": "PL",
+          "startState": null,
+          "startTerm": "DCT Gdansk SA",
+          "transMode": "MVS",
+          "vesselCde": "1PM",
+          "voyDoc": null,
+          "voyage": "144E"
+        },
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "",
+            "value": "NLROT01"
+          },
+          "endLocCntry": "NL",
+          "endState": "ZH",
+          "endTerm": "Hutchison Ports Delta II",
+          "gcssexpArvTS": "2021-11-16 20:01:00",
+          "gcssexpArvTSUTC": "2021-11-16 19:01:00",
+          "gcssexpDepTS": "2021-11-15 20:01:00",
+          "gcssexpDepTSUTC": "2021-11-15 19:01:00",
+          "gsisexpArvTS": null,
+          "gsisexpDepTS": null,
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": null,
+          "gttsexpDepTS": null,
+          "legSeq": "3",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "",
+            "value": "NLROTTM"
+          },
+          "startLocCntry": "NL",
+          "startState": "ZH",
+          "startTerm": "APM 2 Terminal Maasvlakte II",
+          "transMode": "BAR",
+          "vesselCde": null,
+          "voyDoc": null,
+          "voyage": null
+        },
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "",
+            "value": "ESALRTM"
+          },
+          "endLocCntry": "ES",
+          "endState": null,
+          "endTerm": "Algeciras - ML Terminal",
+          "gcssexpArvTS": "2021-11-22 20:00:00",
+          "gcssexpArvTSUTC": "2021-11-22 19:00:00",
+          "gcssexpDepTS": "2021-11-18 15:00:00",
+          "gcssexpDepTSUTC": "2021-11-18 14:00:00",
+          "gsisexpArvTS": "2021-11-22 20:00:00",
+          "gsisexpDepTS": "2021-11-18 15:00:00",
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": "2021-11-22 20:00:00",
+          "gttsexpDepTS": "2021-11-18 15:00:00",
+          "legSeq": "4",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "",
+            "value": "NLROT01"
+          },
+          "startLocCntry": "NL",
+          "startState": "ZH",
+          "startTerm": "Hutchison Ports Delta II",
+          "transMode": "MVS",
+          "vesselCde": "I3L",
+          "voyDoc": "E2698",
+          "voyage": "215S"
+        },
+        {
+          "endCustomsLoc": null,
+          "endLoc": {
+            "func": "2",
+            "value": "DJJIBT1"
+          },
+          "endLocCntry": "DJ",
+          "endState": null,
+          "endTerm": "Djibouti Container Terminal SGTD",
+          "gcssexpArvTS": "2021-12-11 19:00:00",
+          "gcssexpArvTSUTC": "2021-12-11 19:00:00",
+          "gcssexpDepTS": "2021-12-06 08:00:00",
+          "gcssexpDepTSUTC": "2021-12-06 08:00:00",
+          "gsisexpArvTS": "2021-12-11 19:00:00",
+          "gsisexpDepTS": "2021-12-03 08:00:00",
+          "gttsactArvTS": null,
+          "gttsactDepTS": null,
+          "gttsexpArvTS": "2021-12-11 19:00:00",
+          "gttsexpDepTS": "2021-12-03 08:00:00",
+          "legSeq": "5",
+          "startCustomsLoc": null,
+          "startLoc": {
+            "func": "",
+            "value": "ESALRTM"
+          },
+          "startLocCntry": "ES",
+          "startState": null,
+          "startTerm": "Algeciras - ML Terminal",
+          "transMode": "MVS",
+          "vesselCde": "E5O",
+          "voyDoc": null,
+          "voyage": "144E"
+        }
+      ]
+    }
+  ]
+}
