@@ -224,6 +224,14 @@ public final class GEMSPubTestDataBuilder {
         return transportPlan;
     }
 
+    private static TransportPlanType getTransportPlanWithoutVoyageForDeparture(String transportMode) {
+        TransportPlanType transportPlan = getCommonTransportPlanType(getStartLocWithCopenhagen(), getEndLocWithKolkata());
+        transportPlan.setGttsactDepTS("2021-07-21 13:29");
+        transportPlan.setTransMode(transportMode);
+        transportPlan.setVoyage("");
+        return transportPlan;
+    }
+
     @NotNull
     private static TransportPlanType getCommonTransportPlanType(StartLocType startLocWithCopenhagen, EndLocType endLocWithKolkata) {
         var transportPlan = new TransportPlanType();
@@ -304,6 +312,13 @@ public final class GEMSPubTestDataBuilder {
     public static PubSetType getPubSetTypeWithGATE_IN_EXPNEventAct(List<PartyType> partiesInformation){
         return getPubSetWithTransportPlanWithStartLocationKolkata(getEventTypeData("GATE-IN EXPN"), partiesInformation);
     }
+
+    public static PubSetType getPubSetTypeWithBarGATE_IN_EXPNEventAct(List<PartyType> partiesInformation){
+        var pubSetType = getPubSetWithTransportPlanWithStartLocationKolkata(getEventTypeData("GATE-IN EXPN"), partiesInformation);
+        pubSetType.setTransportPlan(List.of(getTransportPlanWithoutVoyageForDeparture("BAR")));
+        return pubSetType;
+    }
+
     public static PubSetType getPubSetTypeWithGATE_OUTEXPYEventAct(List<PartyType> partiesInformation){
         return getPubSetWithTransportPlanWithStartLocationKolkata(getEventTypeData("GATE-OUTEXPY"), partiesInformation);
     }

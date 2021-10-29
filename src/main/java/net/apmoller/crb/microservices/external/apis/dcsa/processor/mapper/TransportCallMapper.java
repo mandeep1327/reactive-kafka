@@ -163,14 +163,14 @@ public final class TransportCallMapper {
                 var endLoc = Optional.ofNullable(transportPlanType)
                         .map(TransportPlanType::getEndLoc)
                         .orElse(null);
-                if (isBargeTransportMode(transportModeCode, getEndLocation(endLoc), equipmentFirstElement))
+                if (Objects.nonNull(getEndLocation(endLoc)) && isBargeTransportMode(transportModeCode, getEndLocation(endLoc), equipmentFirstElement))
                     return true;
 
             } else if (eventAct.startsWith(GATE_OUT)) {
                 var startLoc = Optional.ofNullable(transportPlanType)
                         .map(TransportPlanType::getStartLoc)
                         .orElse(null);
-                if (isBargeTransportMode(transportModeCode, getStartLocation(startLoc), equipmentFirstElement))
+                if (Objects.nonNull(getStartLocation(startLoc)) && isBargeTransportMode(transportModeCode, getStartLocation(startLoc), equipmentFirstElement))
                     return true;
             }
         }
@@ -254,14 +254,14 @@ public final class TransportCallMapper {
     }
 
     private static String getEndLocation(EndLocType endLocType) {
-        if (!Objects.isNull(endLocType)) {
+        if (Objects.nonNull(endLocType)) {
             return (endLocType.getValue());
         }
         return null;
     }
 
     private static String getStartLocation(StartLocType startLocType) {
-        if (!Objects.isNull(startLocType)) {
+        if (Objects.nonNull(startLocType)) {
             return startLocType.getValue();
         }
         return null;

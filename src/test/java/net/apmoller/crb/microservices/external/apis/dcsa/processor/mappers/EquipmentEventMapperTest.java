@@ -37,10 +37,12 @@ import static MSK.com.external.dcsa.EquipmentEventType.STUF;
 import static MSK.com.external.dcsa.TransPortMode.RAIL;
 import static MSK.com.external.dcsa.TransPortMode.TRUCK;
 import static MSK.com.external.dcsa.TransPortMode.VESSEL;
+import static MSK.com.external.dcsa.TransPortMode.BARGE;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getGemsData;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDISCHARGE_NEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithDemoEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_IN_EXPNEventAct;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithBarGATE_IN_EXPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_OUTEXPYEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithGATE_OUTEXPYEventActAndSeals;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithLOAD_NEventAct;
@@ -87,6 +89,7 @@ class EquipmentEventMapperTest {
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithON_RAIL_EXPNEventAct(null))), getEquipmentEventTestData(GTOT, getTransportCallForKolkata(RAIL))),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventAct(null))), getEquipmentEventTestData(GTOT, getTransportCallForKolkata(TRUCK))),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithGATE_OUTEXPYEventActAndSeals())), getEquipmentEventTestDataWithSeals(GTOT, getTransportCallForKolkata(TRUCK))),
+                Arguments.arguments(getGemsData(List.of(getPubSetTypeWithBarGATE_IN_EXPNEventAct(null))), getEquipmentEventTestData(GTIN, getTransportCallWithoutVoyageForKolkata(BARGE))),
                 Arguments.arguments(getGemsData(List.of(getPubSetTypeWithLOAD_NEventAct(null))), getEquipmentEventTestData(LOAD, getTransportCallForKolkata(VESSEL)))
         );
     }
@@ -120,6 +123,16 @@ class EquipmentEventMapperTest {
         var transportCall = new TransportCall();
         transportCall.setCarrierServiceCode("LineCode");
         transportCall.setCarrierVoyageNumber("MRSK1235");
+        transportCall.setOtherFacility("Kolkata");
+        transportCall.setModeOfTransport(mode);
+
+        return transportCall;
+    }
+    private static TransportCall getTransportCallWithoutVoyageForKolkata(TransPortMode mode ) {
+
+        var transportCall = new TransportCall();
+        transportCall.setCarrierServiceCode("LineCode");
+        transportCall.setCarrierVoyageNumber(null);
         transportCall.setOtherFacility("Kolkata");
         transportCall.setModeOfTransport(mode);
 
