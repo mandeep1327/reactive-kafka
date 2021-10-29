@@ -458,16 +458,19 @@
                   },
                   {
                     "name": "modeOfTransport",
-                    "type": {
-                      "type": "enum",
-                      "name": "TransPortMode",
-                      "symbols": [
-                        "VESSEL",
-                        "RAIL",
-                        "TRUCK",
-                        "BARGE"
-                      ]
-                    }
+                    "default": null,
+                    "type": ["null",
+                      {
+                        "type": "enum",
+                        "name": "TransPortMode",
+                        "symbols": [
+                          "VESSEL",
+                          "RAIL",
+                          "TRUCK",
+                          "BARGE"
+                        ]
+                      }
+                    ]
                   },
                   {
                     "name": "carrierCode",
