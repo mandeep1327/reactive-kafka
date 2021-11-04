@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 import static MSK.com.external.dcsa.TransportEventType.*;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.EquipmentTestDataBuilder.getEquipmentList;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithARRIVECUIMPNEventAct;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getTransportPlan;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getValidTransportPlan;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -164,13 +164,13 @@ class EventUtilityTest {
     @Test
     void testLastTransportPlanWithPortOfDischarge(){
         var pubSetType = getPubSetTypeWithARRIVECUIMPNEventAct();
-        assertEquals(Optional.of(getTransportPlan()),EventUtility.getLastTransportPlanWithPortOfDischarge(pubSetType));
+        assertEquals(Optional.of(getValidTransportPlan()),EventUtility.getLastTransportPlanWithPortOfDischarge(pubSetType));
     }
 
     @Test
     void testFirstTransportPlanTypeWithPortOfLoad(){
         var pubSetType = getPubSetTypeWithARRIVECUIMPNEventAct();
-        assertEquals(Optional.of(getTransportPlan()),EventUtility.getFirstTransportPlanTypeWithPortOfLoad(pubSetType));
+        assertEquals(Optional.of(getValidTransportPlan()),EventUtility.getFirstTransportPlanTypeWithPortOfLoad(pubSetType));
     }
 
     @Test

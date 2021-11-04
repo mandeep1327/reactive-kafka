@@ -62,7 +62,7 @@ public final class GEMSPubTestDataBuilder {
         pubSetType.setShipment(getShipmentValue(party));
         pubSetType.setEquipment(getEquipmentList1());
         pubSetType.setTpdoc(getTPDocList());
-        pubSetType.setTransportPlan(List.of(getTransportPlan()));
+        pubSetType.setTransportPlan(List.of(getValidTransportPlan()));
         return pubSetType;
 
     }
@@ -74,7 +74,7 @@ public final class GEMSPubTestDataBuilder {
         pubSetType.setShipment(getShipmentValue(getPartyList()));
         pubSetType.setEquipment(getEquipmentTypeWithSeal());
         pubSetType.setTpdoc(getTPDocList());
-        pubSetType.setTransportPlan(List.of(getTransportPlan()));
+        pubSetType.setTransportPlan(List.of(getValidTransportPlan()));
         return pubSetType;
 
     }
@@ -83,7 +83,7 @@ public final class GEMSPubTestDataBuilder {
     public static PubSetType getPubSetWithTransportPlan(EventType eventType, List<PartyType> parties) {
 
         PubSetType pubSetType = getCommonPubSetTypeWithVesselData(eventType, parties);
-        pubSetType.setTransportPlan(List.of(getTransportPlan()));
+        pubSetType.setTransportPlan(List.of(getValidTransportPlan()));
         return pubSetType;
 
     }
@@ -99,7 +99,7 @@ public final class GEMSPubTestDataBuilder {
     public static PubSetType getPubSetWithTransportPlanEst(EventType eventType, List<PartyType> parties) {
 
         PubSetType pubSetType = getCommonPubSetTypeWithVesselData(eventType, parties);
-        var transportPlanWithEstimatedTime = getTransportPlan();
+        var transportPlanWithEstimatedTime = getValidTransportPlan();
         transportPlanWithEstimatedTime.setGttsactArvTS(null);
         transportPlanWithEstimatedTime.setGttsexpArvTS("2021-07-21 13:29:11");
         pubSetType.setTransportPlan(List.of(transportPlanWithEstimatedTime));
@@ -109,7 +109,7 @@ public final class GEMSPubTestDataBuilder {
 
     private static PubSetType getPubSetForDepartureWithTransportPlanWithGcssEstimatedArrival(EventType eventType, List<PartyType> parties) {
         var pubSetType = getCommonPubSetTypeWithVesselData(eventType, parties);
-        var transportPlanWithEstimatedTime = getTransportPlan();
+        var transportPlanWithEstimatedTime = getValidTransportPlan();
         transportPlanWithEstimatedTime.setGttsactArvTS(null);
         transportPlanWithEstimatedTime.setGcssexpArvTS("2021-07-21 13:29:11");
         pubSetType.setTransportPlan(List.of(transportPlanWithEstimatedTime));
@@ -202,11 +202,13 @@ public final class GEMSPubTestDataBuilder {
         return pubSetType;
     }
 
-    public static TransportPlanType getTransportPlan() {
+    public static TransportPlanType getValidTransportPlan() {
         TransportPlanType transportPlan = getCommonTransportPlanType(getStartLoc(), getEndLoc());
         transportPlan.setGttsactArvTS("2021-07-21 13:29");
         transportPlan.setTransMode("MVS");
         transportPlan.setVoyage("MRSK1235");
+        transportPlan.setLegSeq("1");
+        transportPlan.setGcssexpDepTS("2021-07-21 13:29");
         return transportPlan;
     }
 
@@ -233,10 +235,10 @@ public final class GEMSPubTestDataBuilder {
     }
 
     @NotNull
-    private static TransportPlanType getCommonTransportPlanType(StartLocType startLocWithCopenhagen, EndLocType endLocWithKolkata) {
+    private static TransportPlanType getCommonTransportPlanType(StartLocType startLoc, EndLocType endLoc) {
         var transportPlan = new TransportPlanType();
-        transportPlan.setStartLoc(startLocWithCopenhagen);
-        transportPlan.setEndLoc(endLocWithKolkata);
+        transportPlan.setStartLoc(startLoc);
+        transportPlan.setEndLoc(endLoc);
         transportPlan.setVesselCde("MUMMRSK");
         return transportPlan;
     }
@@ -419,7 +421,7 @@ public final class GEMSPubTestDataBuilder {
     }
     public static PubSetType getPubSetTypeWithoutVesselData(){
         var pubSetData= getPubSet(getEventTypeData("Shipment_ETD"));
-        pubSetData.setTransportPlan(List.of(getTransportPlan()));
+        pubSetData.setTransportPlan(List.of(getValidTransportPlan()));
         return pubSetData;
     }
 
