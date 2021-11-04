@@ -147,6 +147,14 @@
               "default": null
             },
             {
+              "type": ["null", {
+                "type": "array",
+                "items": "string"
+              }],
+              "name": "equipmentReferences",
+              "default": null
+            },
+            {
               "type": ["null" ,"string"],
               "name": "carrierBookingReference",
               "default": null
@@ -247,6 +255,11 @@
               "default": null
             },
             {
+              "name": "transportCallSequenceNumber",
+              "type": ["null", "int"],
+              "default": null
+            },
+            {
               "name": "bookingReference",
               "type": ["null" ,"string"],
               "default": null
@@ -293,6 +306,14 @@
             {
               "type": ["null", "string"],
               "name": "equipmentReference",
+              "default": null
+            },
+            {
+              "type": ["null", {
+                "type": "array",
+                "items": "string"
+              }],
+              "name": "equipmentReferences",
               "default": null
             },
             {
@@ -624,6 +645,16 @@
               "default": null
             },
             {
+                "name" : "isActiveEstimatedEvent",
+                "type" : "boolean",
+                "default": false
+            },
+            {
+              "name": "transportCallSequenceNumber",
+              "type": ["null", "int"],
+              "default": null
+            },
+            {
               "name": "bookingReference",
               "type": ["null", "string"],
               "default": null
@@ -669,6 +700,14 @@
             {
               "type": ["null", "string"],
               "name": "equipmentReference",
+              "default": null
+            },
+            {
+              "type": ["null", {
+                "type": "array",
+                "items": "string"
+              }],
+              "name": "equipmentReferences",
               "default": null
             },
             {
