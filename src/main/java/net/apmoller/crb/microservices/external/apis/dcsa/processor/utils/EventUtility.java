@@ -14,7 +14,6 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.PartyFunctionDTO;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +22,6 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -43,7 +41,7 @@ import static MSK.com.external.dcsa.TransportEventType.ARRI;
 import static MSK.com.external.dcsa.TransportEventType.DEPA;
 import static MSK.com.external.dcsa.TransportEventType.OMIT;
 import static java.util.Map.entry;
-import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @UtilityClass
 @Slf4j
@@ -62,16 +60,6 @@ public final class EventUtility {
     public static final String SHIPMENT_ETD = "Shipment_ETD";
     public static final String RAIL_ARRIVAL_AT_DESTINATION = "RAIL_ARRIVAL_AT_DESTINATION";
     public static final String RAIL_DEPARTURE = "RAIL_DEPARTURE";
-    public static final String ARRIVECUIMPN = "ARRIVECUIMPN";
-    public static final String GATE_IN_EXPN = "GATE-IN EXPN";
-    public static final String OFF_RAILIMPN = "OFF-RAILIMPN";
-    public static final String DEPARTCUEXPN = "DEPARTCUEXPN";
-    public static final String GATE_OUTEXPY = "GATE-OUTEXPY";
-    public static final String ON_RAIL_EXPN = "ON-RAIL EXPN";
-    public static final String LOAD_N = "LOAD       N";
-    public static final String STUFFINGEXPN = "STUFFINGEXPN";
-    public static final String DISCHARG_N = "DISCHARG   N";
-    public static final String STRIPPIN_Y = "STRIPPIN   Y";
     public static final String CONTAINER_ARRIVAL = "CONTAINER ARRIVAL";
     public static final String CONTAINER_DEPARTURE = "CONTAINER DEPARTURE";
 
@@ -93,7 +81,7 @@ public final class EventUtility {
             .toFormatter();
 
     public static String getTimeStampInUTCFormat(String originalTimestamp){
-        if (Objects.nonNull(originalTimestamp) && !originalTimestamp.isEmpty()) {
+        if (nonNull(originalTimestamp) && !originalTimestamp.isEmpty()) {
             LocalDateTime parsedDateAndTime = getLocalDateTime(originalTimestamp);
             return parsedDateAndTime.format(OUTBOUND_FORMATTER);
         }
@@ -134,17 +122,17 @@ public final class EventUtility {
     );
 
 
-    public static final List<String> EQUIPMENT_EVENTS = List.of(
-            ARRIVECUIMPN,
-            DEPARTCUEXPN,
-            DISCHARG_N,
-            GATE_IN_EXPN,
-            GATE_OUTEXPY,
-            LOAD_N,
-            OFF_RAILIMPN,
-            ON_RAIL_EXPN,
-            STRIPPIN_Y,
-            STUFFINGEXPN
+    public static final List<String> EQUIPMENT_EVENTS_PREFIX = List.of(
+            ARRIVECU,
+            DEPARTCU,
+            DISCHARG,
+            GATE_IN,
+            GATE_OUT,
+            LOAD,
+            OFF_RAIL,
+            ON_RAIL,
+            STRIPPIN,
+            STUFFING
     );
 
     public static final List<String> EST_EVENTS = List.of(
@@ -152,81 +140,34 @@ public final class EventUtility {
             SHIPMENT_ETD
     );
 
-    public static final List<String> ACT_EVENTS = List.of(
-            RAIL_ARRIVAL_AT_DESTINATION,
-            ARRIVECUIMPN,
-            DEPARTCUEXPN,
-            RAIL_DEPARTURE,
-            ARRANGE_CARGO_RELEASE_CLOSED,
-            CONFIRM_SHIPMENT_CLOSED,
-            SHIPMENT_CANCELLED,
-            RECEIVE_TRANSPORT_DOCUMENT_INSTRUCTIONS_CLOSED,
-            ISSUE_ORIGINAL_TPDOC_CLOSED,
-            ISSUE_VERIFY_COPY_OF_TPDOC_CLOSED,
-            RELEASE,
-            ARRANGE_CARGO_RELEASE_OPEN,
-            ARRIVAL_NOTICE,
-            DISCHARG_N,
-            GATE_OUTEXPY,
-            LOAD_N,
-            GATE_IN_EXPN,
-            OFF_RAILIMPN,
-            ON_RAIL_EXPN,
-            ARRIVECUIMPN,
-            DEPARTCUEXPN,
-            STUFFINGEXPN,
-            STRIPPIN_Y,
-            CONTAINER_ARRIVAL,
-            CONTAINER_DEPARTURE
-    );
-
-    public static TransportEventType getArrivalOrDepartureEventType(String eventAct) {
-
-        if (isNull(eventAct)) {
-            throw new MappingException("Null Event Act");
-        }
-
-        switch (eventAct) {
-            case ARRIVECUIMPN:
-            case CONTAINER_ARRIVAL:
-            case RAIL_ARRIVAL_AT_DESTINATION:
-            case SHIPMENT_ETA:
+    public static TransportEventType getArrivalOrDeparture(String eventAct) {
+        if (nonNull(eventAct)) {
+            if (isARRI(eventAct)) {
                 return ARRI;
-            case CONTAINER_DEPARTURE:
-            case DEPARTCUEXPN:
-            case RAIL_DEPARTURE:
-            case SHIPMENT_ETD:
+            } else if (isDEPA(eventAct)) {
                 return DEPA;
-            default:
-                throw new MappingException("Could not map Transport Event Type of ".concat(eventAct));
+            }
         }
+        return OMIT;
     }
 
-    public static TransportEventType getArrivalOrDepartureEquipmentEvent(String eventAct) {
-
-        if (isNull(eventAct)) {
-            throw new MappingException("Null Event Act");
-        }
-
-        switch (eventAct) {
-            case DISCHARG_N:
-            case OFF_RAILIMPN:
-                return ARRI;
-            case GATE_IN_EXPN:
-            case GATE_OUTEXPY:
-            case LOAD_N:
-            case ON_RAIL_EXPN:
-            case STUFFINGEXPN:
-                return DEPA;
-            default:
-               return OMIT;
-        }
+    private static boolean isARRI(String eventAct) {
+        return SHIPMENT_ETA.equals(eventAct) || RAIL_ARRIVAL_AT_DESTINATION.equals(eventAct) ||
+                CONTAINER_ARRIVAL.equals(eventAct) || eventAct.startsWith(ARRIVECU) ||
+                eventAct.startsWith(DISCHARG) || eventAct.startsWith(OFF_RAIL);
     }
 
+    private static boolean isDEPA(String eventAct) {
+        return SHIPMENT_ETD.equals(eventAct) || RAIL_DEPARTURE.equals(eventAct) ||
+                CONTAINER_DEPARTURE.equals(eventAct) || eventAct.startsWith(DEPARTCU) ||
+                eventAct.startsWith(GATE_IN) || eventAct.startsWith(GATE_OUT) ||
+                eventAct.startsWith(STUFFING) || eventAct.startsWith(LOAD) ||
+                eventAct.startsWith(ON_RAIL);
+    }
 
     public static TransportEventType getTPEventTypeFromPubSetType(PubSetType pubSetType) {
         var eventAct = getEventAct(pubSetType);
-        return getArrivalOrDepartureEventType(eventAct);
+        return getArrivalOrDeparture(eventAct);
     }
 
 
@@ -336,4 +277,13 @@ public final class EventUtility {
                 .orElseThrow(() -> new MappingException("The pubset data does not contain any Event Act"));
     }
 
+    /**
+     * To be classified as an equipment event it is enough that the
+     * event start with a string in the defined list. The end of the
+     * event string defines a sub event type, we are only interested in
+     * the main event here
+     */
+    public static boolean isEquipmentEvent(String string) {
+        return EQUIPMENT_EVENTS_PREFIX.stream().anyMatch(string::startsWith);
+    }
 }

@@ -13,12 +13,23 @@ import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static MSK.com.external.dcsa.TransportEventType.*;
+import static MSK.com.external.dcsa.TransportEventType.ARRI;
+import static MSK.com.external.dcsa.TransportEventType.DEPA;
+import static MSK.com.external.dcsa.TransportEventType.OMIT;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.EquipmentTestDataBuilder.getEquipmentList;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getPubSetTypeWithARRIVECUIMPNEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.testDataBuilders.GEMSPubTestDataBuilder.getValidTransportPlan;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.EST_EVENTS;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_EVENTS;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.TRANSPORT_EVENTS;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 class EventUtilityTest {
 
@@ -59,19 +70,11 @@ class EventUtilityTest {
         );
     }
 
-    @Test
-    void testActEvents(){
-        assertAll(
-                () -> assertNotEquals(0, ACT_EVENTS.size()),
-                () -> assertFalse(ACT_EVENTS.isEmpty()),
-                () -> assertEquals(25, ACT_EVENTS.size())
-        );
-    }
 
     @ParameterizedTest
     @MethodSource("createEventTypes")
     void testArrivalOrDepartureEventType(String eventType, TransportEventType transportEventType){
-        assertEquals(transportEventType, EventUtility.getArrivalOrDepartureEventType(eventType));
+        assertEquals(transportEventType, EventUtility.getArrivalOrDeparture(eventType));
     }
 
     static Stream<Arguments> createEventTypes() {
@@ -83,7 +86,9 @@ class EventUtilityTest {
                 Arguments.of("CONTAINER DEPARTURE", DEPA),
                 Arguments.of("RAIL_DEPARTURE", DEPA),
                 Arguments.of("DEPARTCUEXPN", DEPA),
-                Arguments.of("Shipment_ETD", DEPA)
+                Arguments.of("Shipment_ETD", DEPA),
+                Arguments.of("ARRIVECUEXPY", ARRI),
+                Arguments.of("DEPARTCUIMPY", DEPA)
                 );
     }
 
@@ -91,7 +96,7 @@ class EventUtilityTest {
     @NullSource
     @MethodSource("createBadEventTypes")
     void testArrivalOrDepartureEventType(String eventType){
-        assertThrows(MappingException.class, () ->  EventUtility.getArrivalOrDepartureEventType(eventType));
+        assertEquals(OMIT, EventUtility.getArrivalOrDeparture(eventType));
     }
 
     static Stream<Arguments> createBadEventTypes() {
@@ -104,7 +109,7 @@ class EventUtilityTest {
     @ParameterizedTest
     @MethodSource("createEquipmentEventTypes")
     void testArrivalOrDepartureEquipmentEvent(String eventType, TransportEventType transportEventType){
-        assertEquals(transportEventType, EventUtility.getArrivalOrDepartureEquipmentEvent(eventType));
+        assertEquals(transportEventType, EventUtility.getArrivalOrDeparture(eventType));
     }
 
     static Stream<Arguments> createEquipmentEventTypes() {
@@ -116,16 +121,21 @@ class EventUtilityTest {
                 Arguments.of("LOAD       N", DEPA),
                 Arguments.of("ON-RAIL EXPN", DEPA),
                 Arguments.of("STUFFINGEXPN", DEPA),
-                Arguments.of("", OMIT),
-                Arguments.of("DISCHARG N", OMIT),
-                Arguments.of("dghftghj", OMIT)
+                Arguments.of("DISCHARG   Y", ARRI),
+                Arguments.of("OFF-RAILEXPN", ARRI),
+                Arguments.of("GATE-IN IMPN", DEPA),
+                Arguments.of("GATE-OUTIMPN", DEPA),
+                Arguments.of("LOAD    VSAN", DEPA),
+                Arguments.of("ON-RAIL DOMN", DEPA),
+                Arguments.of("STUFFINGIMPN", DEPA),
+                Arguments.of("", OMIT)
                 );
     }
 
     @ParameterizedTest
     @NullSource
     void testArrivalOrDepartureEquipmentEvent(String eventType){
-        assertThrows(MappingException.class, () ->  EventUtility.getArrivalOrDepartureEquipmentEvent(eventType));
+        assertEquals(OMIT, EventUtility.getArrivalOrDeparture(eventType));
     }
 
     @Test

@@ -83,7 +83,7 @@ class EventMapperTest {
     @MethodSource("testDataForEquipmentEventActs")
     void testEventDataForEquipmentEvent(PubSetType pubSetData, Event eventData){
         var actual = eventMapper.fromPubSetTypeToEvent(pubSetData);
-        assertEquals(eventData, actual, "Event does not match for Shipment Events");
+        assertEquals(eventData, actual, "Event does not match for Equipment Events");
     }
 
     private static Stream<Arguments> testDataForEquipmentEventActs() {
@@ -105,7 +105,7 @@ class EventMapperTest {
     @MethodSource("testEventDataForTransportEventActs")
     void testEventDataForTransportEvent(PubSetType pubSetData, Event eventData){
         var actual = eventMapper.fromPubSetTypeToEvent(pubSetData);
-        assertEquals(eventData, actual, "Event does not match for Shipment Events");
+        assertEquals(eventData, actual, "Event does not match for Transport Events");
     }
 
     private static Stream<Arguments> testEventDataForTransportEventActs() {

@@ -1,7 +1,12 @@
 package net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.mapstruct_interfaces;
 
 import MSK.com.external.dcsa.EventClassifierCode;
-import MSK.com.gems.*;
+import MSK.com.gems.EquipmentType;
+import MSK.com.gems.EventType;
+import MSK.com.gems.GTTSVesselType;
+import MSK.com.gems.MoveType;
+import MSK.com.gems.PubSetType;
+import MSK.com.gems.TransportPlanType;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.dto.Event;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.exceptions.MappingException;
 import net.apmoller.crb.microservices.external.apis.dcsa.processor.mapper.DCSAEventTypeMapper;
@@ -15,8 +20,6 @@ import org.mapstruct.Mapping;
 import java.util.Optional;
 
 import static MSK.com.external.dcsa.EventClassifierCode.ACT;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.ACT_EVENTS;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.EQUIPMENT_EVENTS;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.EST_EVENTS;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETA;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETD;
@@ -26,6 +29,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstTransportPlanTypeWithPortOfLoad;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getLastTransportPlanWithPortOfDischarge;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getTimeStampInUTCFormat;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.isEquipmentEvent;
 
 @Mapper(componentModel = "spring",
         imports = {EventUtility.class, PartyMapper.class, ReferenceMapper.class, ServiceTypeMapper.class},
@@ -54,7 +58,7 @@ public interface EventMapper {
             return getUTCFromNonFormattedTimestamp(pubSetType);
         } else if (TRANSPORT_EVENTS.contains((eventAct))) {
             return getEventDateTimeForTransportEvents(pubSetType, eventAct);
-        } else if (EQUIPMENT_EVENTS.contains(eventAct)) {
+        } else if (isEquipmentEvent(eventAct)) {
             return getEventDateTimeForEquipmentEvents(pubSetType);
         }
         throw new MappingException("Could not map eventType");
@@ -72,10 +76,9 @@ public interface EventMapper {
         var act = getEventAct(pubSetType);
         if (EST_EVENTS.contains(act)) {
             return getEventClassifierCodeForESTEvents(pubSetType, act);
-        } else if (ACT_EVENTS.contains(act)) {
+        } else {
             return ACT;
         }
-        throw new MappingException("Could not map EventClassifierCode");
     }
 
     private EventClassifierCode getEventClassifierCodeForESTEvents(PubSetType pubSetType, String act) {

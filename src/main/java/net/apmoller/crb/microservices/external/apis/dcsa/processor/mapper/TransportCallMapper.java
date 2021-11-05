@@ -39,8 +39,7 @@ import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.SHIPMENT_ETD;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.STRIPPIN;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.STUFFING;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDepartureEquipmentEvent;
-import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDepartureEventType;
+import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getArrivalOrDeparture;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getEventAct;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstEquipmentElement;
 import static net.apmoller.crb.microservices.external.apis.dcsa.processor.utils.EventUtility.getFirstTransportPlanTypeWithPortOfLoad;
@@ -68,7 +67,7 @@ public final class TransportCallMapper {
 
     public static TransportCall getTransportCallForEquipmentEvents(PubSetType pubSetType) {
         var equipmentFirstElement = getFirstEquipmentElement(pubSetType);
-        var transportPlan = getTransportPlanTypeForCommonEvents(pubSetType, equipmentFirstElement, false);
+        var transportPlan = getTransportPlanTypeForCommonEvents(pubSetType, equipmentFirstElement);
         var eventAct = getEventAct(pubSetType);
 
         return createTransportCall(transportPlan, equipmentFirstElement, eventAct, pubSetType.getTransportPlan());
@@ -79,7 +78,7 @@ public final class TransportCallMapper {
         if (isETAorETDEvent(eventAct)) {
             return getTransportPlanTypeForShipmentEtaOrEtd(pubSetType, eventAct);
         }
-        return getTransportPlanTypeForCommonEvents(pubSetType, equipmentFirstElement, true);
+        return getTransportPlanTypeForCommonEvents(pubSetType, equipmentFirstElement);
     }
 
     private TransportPlanType getTransportPlanTypeForShipmentEtaOrEtd(PubSetType pubSetType, String eventAct) {
@@ -90,22 +89,17 @@ public final class TransportCallMapper {
     }
 
 
-    private TransportPlanType getTransportPlanTypeForCommonEvents(PubSetType pubSetType, EquipmentType equipmentFirstElement, boolean isTransportEvent) {
+    private TransportPlanType getTransportPlanTypeForCommonEvents(PubSetType pubSetType, EquipmentType equipmentFirstElement) {
         var transportPlanTypeList = pubSetType.getTransportPlan();
-        var mapOfTransportPlan = isTransportEvent
-                ? fetchForTransportEvents(pubSetType, transportPlanTypeList)
-                : fetchForEquipmentEvents(pubSetType, transportPlanTypeList);
+        var mapOfTransportPlan = fetchForTransportEvents(pubSetType, transportPlanTypeList);
+
         return mapOfTransportPlan
                 .map(e -> e.get(getActLocation(equipmentFirstElement)))
                 .orElse(null);
     }
 
     private Optional<Map<String, TransportPlanType>> fetchForTransportEvents(PubSetType pubSetType, List<TransportPlanType> transportPlanTypeList) {
-        return Optional.ofNullable(getLocationAndTransportPlanForTransportEvents(transportPlanTypeList, pubSetType.getEvent()));
-    }
-
-    private Optional<Map<String, TransportPlanType>> fetchForEquipmentEvents(PubSetType pubSetType, List<TransportPlanType> transportPlanTypeList) {
-        return Optional.ofNullable(getLocationAndTransportPlanForEquipmentEvents(transportPlanTypeList, pubSetType.getEvent()));
+        return Optional.ofNullable(getLocationAndTransportPlan(transportPlanTypeList, pubSetType.getEvent()));
     }
 
     private boolean isETAorETDEvent(String eventAct) {
@@ -213,16 +207,10 @@ public final class TransportCallMapper {
         return null;
     }
 
-    private static Map<String, TransportPlanType> getLocationAndTransportPlanForTransportEvents(List<TransportPlanType> transportPlan, EventType eventType) {
-        var typeOfTransport = getArrivalOrDepartureEventType(eventType.getEventAct());
+    private static Map<String, TransportPlanType> getLocationAndTransportPlan(List<TransportPlanType> transportPlan, EventType eventType) {
+        var typeOfTransport = getArrivalOrDeparture(eventType.getEventAct());
         var transportPlans = getNonNullTransportPlans(transportPlan);
         return getTransportPlanMapBasedOnArrivalOrDepartureEvents(typeOfTransport, transportPlans);
-    }
-
-    private static Map<String, TransportPlanType> getLocationAndTransportPlanForEquipmentEvents(List<TransportPlanType> transportPlan, EventType eventType) {
-        var arrivalOrDeparture = getArrivalOrDepartureEquipmentEvent(eventType.getEventAct());
-        var transportPlans = getNonNullTransportPlans(transportPlan);
-        return getTransportPlanMapBasedOnArrivalOrDepartureEvents(arrivalOrDeparture, transportPlans);
     }
 
     private static Map<String, TransportPlanType> getTransportPlanMapBasedOnArrivalOrDepartureEvents

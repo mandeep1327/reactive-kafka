@@ -73,11 +73,9 @@ class TransportEventMapperTest {
     private static Stream<Arguments> createTransportEventBadTestData(){
         return Stream.of(
                 //test invalid event
-                Arguments.arguments("Could not map Transport Event Type of NA_Event_Act", getPubSetTypeWithDemoEventAct()),
+                Arguments.arguments("TransportPlan can not be empty for the Transport Event", getPubSetTypeWithDemoEventAct()),
                 //test shipment event
-                Arguments.arguments("Could not map Transport Event Type of Shipment_Cancelled", getPubSetTypeWithShipment_CancelledEventAct()),
-                //test equipment event
-                Arguments.arguments("Could not map Transport Event Type of OFF-RAILIMPN", getPubSetTypeWithOFF_RAILIMPNEventAct(null)),
+                Arguments.arguments("TransportPlan can not be empty for the Transport Event", getPubSetTypeWithShipment_CancelledEventAct()),
                 //test with payload having no transport plan
                 Arguments.arguments("TransportPlan can not be empty for the Transport Event", getPubSetTypeWithoutTransportPlan())
         );
