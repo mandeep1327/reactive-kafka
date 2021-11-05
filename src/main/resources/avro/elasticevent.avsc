@@ -255,11 +255,6 @@
               "default": null
             },
             {
-              "name": "transportCallSequenceNumber",
-              "type": ["null", "int"],
-              "default": null
-            },
-            {
               "name": "bookingReference",
               "type": ["null" ,"string"],
               "default": null
@@ -648,11 +643,6 @@
                 "name" : "isActiveEstimatedEvent",
                 "type" : "boolean",
                 "default": false
-            },
-            {
-              "name": "transportCallSequenceNumber",
-              "type": ["null", "int"],
-              "default": null
             },
             {
               "name": "bookingReference",
