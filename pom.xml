@@ -325,47 +325,42 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <argLine>-Dspring.profiles.active=test</argLine>
+                    <skipTests>${integration-tests.skip}</skipTests>
+                    <includes>
+                        <include>**/*IT.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*Test.java</exclude>
+                    </excludes>
+                    <systemPropertyVariables>
+                        <cucumber.publish.quiet>true</cucumber.publish.quiet>
+                    </systemPropertyVariables>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M4</version>
+                <configuration>
+                    <skipTests>${unit-tests.skip}</skipTests>
+                    <excludes>
+                        <exclude>**/*IT.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
-
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.0.0-M5</version>
-                    <configuration>
-                        <argLine>-Dspring.profiles.active=test</argLine>
-                        <skipTests>${integration-tests.skip}</skipTests>
-                        <includes>
-                            <include>**/*IT.java</include>
-                        </includes>
-                        <excludes>
-                            <exclude>**/*Test.java</exclude>
-                        </excludes>
-                        <systemPropertyVariables>
-                            <cucumber.publish.quiet>true</cucumber.publish.quiet>
-                        </systemPropertyVariables>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>integration-test</id>
-                            <goals>
-                                <goal>integration-test</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M4</version>
-                    <configuration>
-                        <skipTests>${unit-tests.skip}</skipTests>
-                        <excludes>
-                            <exclude>**/*IT.java</exclude>
-                        </excludes>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 
 </project>

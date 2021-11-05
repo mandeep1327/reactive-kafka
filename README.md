@@ -14,6 +14,11 @@ If you are using Lombok 1.18.16 or newer you also need to add lombok-mapstruct-b
         </dependency>
 ```
 
+#### Build application:
+Build: `mvn clean install`
+Build without running integration test: `mvn clean install -Dintegration-tests.skip`
+Build without running unit test: `mvn clean install -Dunit-tests.skip `
+
 ### Running Integration Test
 
 > mvn install failsafe:integration-test
