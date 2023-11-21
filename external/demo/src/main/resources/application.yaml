@@ -1,0 +1,9 @@
+server:
+  port: 8080
+spring:
+  main:
+    banner-mode: CONSOLE
+  jackson:
+    default-property-inclusion: non_null
+  application:
+    name: demo
