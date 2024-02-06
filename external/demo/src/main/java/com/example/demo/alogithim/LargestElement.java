@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public class LargestElement {
     public static void main(String[] args) {
-        int[] num={4,-2};
+        int[] num={4,-3,2};
         int largest=IntStream.range(0,num.length)
                 .mapToObj(i->num[num.length-i-1])
                 .sorted()

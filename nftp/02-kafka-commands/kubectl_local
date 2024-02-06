@@ -1,0 +1,17 @@
+docker build . -t hotel:1.0
+docker run -p 8080:8080 hotel:1.0
+
+minikube start
+minikube dashboard
+kubectl apply -f deployments/hotel-pod.yaml
+kubectl apply -f deployments/service.yaml
+kubectl apply -f deployments/deployment.yaml
+kubectl apply -f deployments/ingres.yaml
+kubectl port-forward service/hotel-service 8080:8080
+
+ kubectl expose deployment hotel-service --type=NodePort --port=80
+
+kubectl create deployment hotel-minikube1 --image=hotel:1.0
+kubectl expose deployment hotel-svc --type=LoadBalancer --port=8082
+
+ kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
